@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity]
-#[ORM\Table('questions')]
+#[ORM\Table('question')]
 #[ORM\HasLifecycleCallbacks]
 class Question
 {

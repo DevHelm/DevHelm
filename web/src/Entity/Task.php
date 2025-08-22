@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity]
-#[ORM\Table('tasks')]
+#[ORM\Table('task')]
 #[ORM\HasLifecycleCallbacks]
 class Task
 {
