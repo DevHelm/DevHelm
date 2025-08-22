@@ -29,6 +29,7 @@
         "friends-of-behat/mink-extension": "^2.7",
         "friends-of-behat/symfony-extension": "^2.3",
         "friendsofphp/php-cs-fixer": "^3.11",
+        "phpunit/phpunit": "^12.3",
         "symfony/web-profiler-bundle": "^v7.2.0"
     },
     "config": {

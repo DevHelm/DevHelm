@@ -33,3 +33,7 @@ yarn-error.log
 composer.lock
 yarn.lock
 symfony.lock
+###> phpunit/phpunit ###
+/phpunit.xml
+/.phpunit.cache/
+###< phpunit/phpunit ###

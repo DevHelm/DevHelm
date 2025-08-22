@@ -7,6 +7,44 @@
 web/vendor
 web/var
 
+###> symfony/framework-bundle ###
+/web/.env.local
+/web/.env.local.php
+/web/.env.*.local
+/web/config/secrets/prod/prod.decrypt.private.php
+/web/public/bundles/
+/web/var/
+/web/vendor/
+###< symfony/framework-bundle ###
+
+# dev
+
+/web/docker/nginx/logs/
+/web/docker/database/data/
+###> symfony/webpack-encore-bundle ###
+/web/node_modules/
+/web/public/build/
+/web/npm-debug.log
+/web/yarn-error.log
+###< symfony/webpack-encore-bundle ###
+
+###> friends-of-behat/symfony-extension ###
+/web/behat.yml
+###< friends-of-behat/symfony-extension ###
+
+###> friendsofphp/php-cs-fixer ###
+/web/.php-cs-fixer.php
+/web/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+/web/composer.lock
+/web/yarn.lock
+/web/symfony.lock
+###> phpunit/phpunit ###
+/web/phpunit.xml
+/web/.phpunit.cache/
+###< phpunit/phpunit ###
+
 # Go (mcp) Ignores
 # Build artifacts and binaries
 mcp/mcp-server
