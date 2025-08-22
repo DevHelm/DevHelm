@@ -1,0 +1,62 @@
+name: Web PHP CI
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'web/**'
+      - '.github/workflows/web-php.yml'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'web/**'
+      - '.github/workflows/web-php.yml'
+
+jobs:
+  php-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    env:
+      APP_ENV: test
+      SYMFONY_DEPRECATIONS_HELPER: disabled
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+          tools: composer:v2
+          extensions: ctype, iconv, mbstring, intl, json
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Code style (PHP-CS-Fixer dry-run)
+        run: |
+          vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --allow-risky=yes --rules='@Symfony' src tests || (echo "Code style violations detected" && exit 1);
+
+      - name: PHPUnit
+        run: |
+          vendor/bin/phpunit --colors=always
+
+      - name: Behat
+        run: |
+            vendor/bin/behat --no-interaction --colors --format=progress || (echo "Behat failures" && exit 1)
