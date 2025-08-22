@@ -13,6 +13,7 @@ mcp/mcp-server
 mcp/bin/
 mcp/build/
 mcp/dist/
+mcp/mcp
 
 # OS/IDE for mcp
 mcp/.idea/
