@@ -2,7 +2,6 @@
 
 namespace App\Tests\Behat;
 
-use App\Repository\Orm\InviteCodeRepository;
 use App\Repository\Orm\TeamInviteCodeRepository;
 use App\Repository\Orm\TeamRepository;
 use Behat\Behat\Context\Context;
@@ -17,9 +16,8 @@ class TeamContext implements Context
     public function __construct(
         private Session $session,
         private TeamRepository $teamRepository,
-        private TeamInviteCodeRepository $inviteCodeRepository
+        private TeamInviteCodeRepository $inviteCodeRepository,
     ) {
-
     }
 
     /**
