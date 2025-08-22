@@ -1,0 +1,8 @@
+# Global
+
+.idea
+
+# Web Ignores
+
+web/vendor
+web/var

@@ -1,0 +1,68 @@
+parthenon:
+  user:
+    enabled: true
+    user_class: App\Entity\User
+    team_class: App\Entity\Team
+    user_invites_enabled: true
+    teams_enabled: true
+    login_route: "parthenon_user_login"
+    teams_invites_enabled: true
+  notification:
+    enabled: true
+    email:
+      from_name: 'Parthenon'
+      from_address: 'support@example.org'
+      provider: symfony
+  billing:
+    enabled: true
+    billabear:
+      enabled: false
+    plan_management: config
+    payments:
+      provider: stripe
+      stripe:
+        private_api_key: '%env(resolve:STRIPE_PRIVATE_API_KEY)%'
+        public_api_key: '%env(resolve:STRIPE_PUBLIC_API_KEY)%'
+        webhook_secret: '%env(resolve:STRIPE_WEBHOOK_SECRET)%'
+    plan:
+      Free:
+        is_free: true
+        user_count: 1
+        features:
+          - send_pdf
+        limit:
+          team_invite:
+            limit: 1
+            description: "Number of users"
+      Basic:
+        prices:
+          year:
+            USD:
+              amount: 100
+              price_id: xxx
+          month:
+            USD:
+              amount: 10
+              price_id: xxx
+        user_count: 1
+        features:
+          - send_pdf
+        limit:
+          team_invite:
+            limit: 10
+            description: "Number of users"
+      Standard:
+        user_count: 5
+        prices:
+          month:
+            USD:
+              amount: 25
+              price_id: xxx
+          year:
+            USD:
+              amount: 250
+              price_id: xxx
+        limit:
+          team_invite:
+            limit: 5
+            description: "Number of users"
