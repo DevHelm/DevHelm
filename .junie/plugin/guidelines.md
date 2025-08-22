@@ -1,0 +1,2 @@
+ComControl Plugin Development Guidelines
+========================================

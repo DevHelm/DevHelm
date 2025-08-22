@@ -34,7 +34,11 @@ jobs:
 
       - name: Build
         run: |
-          go build ./...
+          go build -mod=vendor ./...
+
+      - name: Test
+        run: |
+          go test -mod=vendor ./... -v
 
       - name: Vet
         run: |

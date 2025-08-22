@@ -18,3 +18,11 @@ The project is structured as follows:
 * `mcp/` - Contains the Model Context Provider (MCP) server code
 * `web/` - Contains the web application code
 * `plugin/` - Containers the plugin code
+
+## Model Context Provider (MCP)
+
+All the information about the MCP server is contained in the `mcp/` directory and ".junie/mcp". This includes the server code, configuration files, and any related documentation.
+
+## Web Application
+
+All the information about the web application is contained in the `web/` directory and ".junie/web". This includes the web application code, configuration files, and any related documentation.
