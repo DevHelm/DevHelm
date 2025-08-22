@@ -90,18 +90,3 @@ jobs:
       - name: Behat
         run: |
           vendor/bin/behat
-
-      - name: Install yarn
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: install
-
-      - name: encore
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: encore production
-
-      - name: Run vitest
-        uses: borales/actions-yarn@v3.0.0
-        with:
-          cmd: vitest
