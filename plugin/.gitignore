@@ -1,0 +1,13 @@
+# Gradle
+.gradle/
+build/
+out/
+.idea/
+*.iml
+
+# IntelliJ run configs cache
+.idea/**/workspace.xml
+.idea/**/shelf/
+
+# Plugin sandbox
+.idea-sandbox/
