@@ -11,8 +11,9 @@ The JIRA for this project is BillaBear. The project key is BB.
 
 When you are told to work on a ticket you should first research the ticket to understand what it is about. This includes:
 
-* YOU MUST Assign the ticket to yourself if it is not already assigned.
+* YOU MUST Assign the ticket to github.bot.marcus.vance@icambridge.me if it is not already assigned.
 * Reading the ticket description.
+* The label for the ticket is important, it will tell you what type of ticket it is. For example, if the label is "web" then then the work belongs to the web project. If the label is "mcp" then the work belongs to the MCP project. If the label is "plugin" then the work belongs to the plugin project.
 * Checking the comments for any additional context or updates.
 * Reviewing any attachments or linked issues for relevant information.
 * Understanding the acceptance criteria and any dependencies.
