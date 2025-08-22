@@ -6,3 +6,29 @@
 
 web/vendor
 web/var
+
+# Go (mcp) Ignores
+# Build artifacts and binaries
+mcp/mcp-server
+mcp/bin/
+mcp/build/
+mcp/dist/
+
+# OS/IDE for mcp
+mcp/.idea/
+mcp/.vscode/
+
+# Go compiler/test outputs
+mcp/*.exe
+mcp/*.exe~
+mcp/*.dll
+mcp/*.so
+mcp/*.dylib
+mcp/*.test
+mcp/*.out
+mcp/coverage.out
+mcp/coverage.txt
+mcp/profile.out
+
+# Vendored dependencies (if used)
+mcp/vendor/
