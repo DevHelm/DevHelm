@@ -106,7 +106,7 @@ class Lead
         if ($this->agents->removeElement($agent)) {
             if ($agent->getLead() === $this) {
                 $agent->setLead(null);
-            }
+            $agent->setLead(null);
         }
 
         return $this;
