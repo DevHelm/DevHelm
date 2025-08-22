@@ -11,6 +11,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    testImplementation(kotlin("test"))
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(providers.gradleProperty("javaVersion").get()))
@@ -43,6 +47,9 @@ tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = providers.gradleProperty("javaVersion").get()
         kotlinOptions.freeCompilerArgs += listOf("-Xjvm-default=all")
+    }
+    test {
+        useJUnitPlatform()
     }
     runIde {
         // Useful defaults; can be customized
