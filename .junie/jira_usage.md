@@ -1,0 +1,22 @@
+JIRA Usage
+==========
+
+This document provides a quick reference for how we use JIRA.
+
+# Project
+
+The JIRA for this project is BillaBear. The project key is BB.
+
+# Ticket Research
+
+When you are told to work on a ticket you should first research the ticket to understand what it is about. This includes:
+
+* YOU MUST Assign the ticket to yourself if it is not already assigned.
+* Reading the ticket description.
+* Checking the comments for any additional context or updates.
+* Reviewing any attachments or linked issues for relevant information.
+* Understanding the acceptance criteria and any dependencies.
+* Reading the ticket history to see how it has evolved.
+* Reading any relating confluence pages or documentation that may provide additional context.
+* YOU MUST COMMENT THAT YOU'VE STARTED WORKING ON THE TICKET IN THE COMMENTS SECTION OF THE TICKET AND MOVE THE TICKET TO "IN PROGRESS".
+* YOU MUST COMMENT WHEN YOU'VE FINISHED WORKING ON THE TICKET IN THE COMMENTS SECTION OF THE TICKET WITH A LINK TO THE PULL REQUEST AND MOVE THE TICKET TO "IN REVIEW".
