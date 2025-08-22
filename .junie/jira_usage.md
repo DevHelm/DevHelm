@@ -5,7 +5,7 @@ This document provides a quick reference for how we use JIRA.
 
 # Project
 
-The JIRA for this project is BillaBear. The project key is BB.
+The JIRA for this project is ComCon. The project key is CNC.
 
 # Ticket Research
 
