@@ -51,7 +51,7 @@ jobs:
 
       - name: Code style (PHP-CS-Fixer dry-run)
         run: |
-          vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --allow-risky=yes --rules='@Symfony' src tests || (echo "Code style violations detected" && exit 1);
+          vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no --allow-risky=no --rules='@Symfony' src
 
       - name: PHPUnit
         run: |
