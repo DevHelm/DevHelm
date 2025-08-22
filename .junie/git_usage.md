@@ -22,7 +22,7 @@ Basic Flow for a feature is as follows:
 When committing changes, ensure that:
 
 * If there are PHP changes run `vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes` to ensure the code style is correct
-* The commit message MUST start with a prefix for the JIRA ticket if there is one if not BB-NIL
+* The commit message MUST start with a prefix for the JIRA ticket if there is one if not CNC-NIL
 * The commit message is clear and descriptive.
 * That you're committing using the ssh key that is located at ~/agent
 * That you're committing using the name and email located in ~/agent_info.txt
@@ -35,7 +35,3 @@ When creating a pull request, follow these guidelines:
 * It should reference the JIRA ticket if applicable.
 * It should be assigned to the appropriate reviewer (that-guy-iain).
 * It should be linked to the relevant JIRA ticket.
-* It should include the task list. For each task, check it off as you complete it. The task list should include:
-    * Translations
-    * Documentation updates
-    * Change log
