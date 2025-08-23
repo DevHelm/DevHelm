@@ -1,0 +1,4 @@
+# Optional: install dependencies via pip without building the package
+pyautogui>=0.9.54
+opencv-python>=4.5.0
+pillow>=9.0.0

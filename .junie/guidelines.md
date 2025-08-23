@@ -11,13 +11,13 @@ There are three main components in the ComControl project:
 
 * Model Context Provider (MCP) - A server that provides a context for the models used in the ComControl project.
 * Web Application - A web-based interface for interacting with the ComControl project and the APIs
-* Plugin - An JetBrain's IDE plugin that integrates with the ComControl project to provide a better development experience.
+* Agent - The agent that is to run on the user's machine to interact with the IntelliJ
 
 The project is structured as follows:
 
 * `mcp/` - Contains the Model Context Provider (MCP) server code
 * `web/` - Contains the web application code
-* `plugin/` - Containers the plugin code
+* `agent/` - Containers the agent code
 
 ## Model Context Provider (MCP)
 

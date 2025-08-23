@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "devhelm-agent"
+version = "0.1.0"
+description = "Screen automation agent for DevHelm"
+readme = "README.md"
+authors = [
+  { name = "DevHelm Team" }
+]
+license = { file = "../LICENSE.md" }
+requires-python = ">=3.8"
+dependencies = [
+  "pyautogui>=0.9.54",
+  "opencv-python>=4.5.0",
+  "pillow>=9.0.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/devhelm/devhelm-monorepo"
+
+[project.scripts]
+devhelm-agent = "main:main"
+
+[tool.setuptools]
+# We have a single module (main.py) rather than a package directory
+py-modules = ["main"]
