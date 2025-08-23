@@ -13,5 +13,6 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow factoryClass="ai.devhelm.plugins.junie.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
         <postStartupActivity implementation="ai.devhelm.plugins.junie.startup.MyProjectActivity" />
+        <notificationGroup id="Junie Notifications" displayType="BALLOON" isLogByDefault="true"/>
     </extensions>
 </idea-plugin>
