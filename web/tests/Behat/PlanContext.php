@@ -4,7 +4,6 @@ namespace App\Tests\Behat;
 
 use Behat\Behat\Context\Context;
 use Behat\Mink\Session;
-use Doctrine\ORM\EntityManagerInterface;
 use Parthenon\Billing\Plan\PlanManager;
 
 class PlanContext implements Context
@@ -32,15 +31,14 @@ class PlanContext implements Context
 
         $plans = $this->planManager->getPlans();
 
-        foreach ($plans as $plan)
-        {
+        foreach ($plans as $plan) {
             $name = $plan->getName();
             if (!isset($content['plans'][$name])) {
-                throw new \Exception("Can't see plan ". $name);
+                throw new \Exception("Can't see plan ".$name);
             }
 
             if ($content['plans'][$name]['limits'] != $plan->getLimits()) {
-                throw new \Exception("Plan for ". $plan->getLimits());
+                throw new \Exception('Plan for '.$plan->getLimits());
             }
         }
     }
