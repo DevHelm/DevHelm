@@ -10,7 +10,7 @@ from logger_factory import LoggerFactory
 # Logger will be initialized after environment variables are read
 
 
-def get_environment_variables() -> Tuple[str, str, Dict[str, str]]:
+def get_config() -> Tuple[str, str, Dict[str, str]]:
     """
     Read required environment variables for ComControl API access and logging configuration.
     
@@ -83,7 +83,7 @@ def main():
     - Sleeps 60 seconds between loop iterations
     """
     # Read environment variables
-    api_url, api_key, logging_env = get_environment_variables()
+    api_url, api_key, logging_env = get_config()
     
     # Initialize logger with environment variables
     logger = LoggerFactory.get_logger(logging_env)
