@@ -78,20 +78,61 @@ class UIInteraction:
     
     def givePrompt(self, prompt: str):
         """
-        Enter the provided prompt string into the prompt box and press enter.
+        Find the input box, click it, and enter the provided prompt string.
+        
+        This method now handles the complete flow:
+        1. Checks if UI is ready for prompt
+        2. Finds and clicks the input box
+        3. Enters the prompt text and presses enter
         
         Args:
             prompt (str): The prompt text to enter
             
-        This method assumes the prompt box is already active/focused.
+        Returns:
+            bool: True if successful, False if input box could not be found or clicked
         """
         try:
             if not isinstance(prompt, str):
                 raise ValueError("Prompt must be a string")
             
-            pyautogui.write(prompt, interval=0.1)
-            pyautogui.press('enter')
+            # Check if we're ready for prompt first
+            if not self.isReadyForPrompt():
+                return False
             
+            # Look for the "Type your" label
+            type_your_path = self.images_dir / "type_your.png"
+            if not type_your_path.exists():
+                raise FileNotFoundError(f"type_your.png not found in {self.images_dir}")
+            
+            input_label_location = pyautogui.locateOnScreen(
+                str(type_your_path),
+                confidence=0.9,
+                grayscale=True
+            )
+            
+            if input_label_location:
+                # Calculate the click position to the right of the label
+                x_offset = input_label_location.width + 10
+                center_x, center_y = pyautogui.center(input_label_location)
+                click_x = center_x + x_offset
+                click_y = center_y
+                
+                # Click the input box
+                pyautogui.click(click_x, click_y)
+                
+                # Add a short delay to allow the system to register the click
+                time.sleep(1)
+                
+                # Now write the prompt and press enter
+                pyautogui.write(prompt, interval=0.1)
+                pyautogui.press('enter')
+                
+                return True
+            
+            return False
+            
+        except pyautogui.ImageNotFoundException:
+            return False
         except Exception as e:
             # Re-raise the exception to let the caller handle it
             raise e
