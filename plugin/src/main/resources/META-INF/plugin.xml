@@ -4,7 +4,9 @@
     <name>DevHelm for Junie</name>
     <vendor>DevHelm</vendor>
 
+    <!-- Ensure plugin is loaded in PhpStorm and IDEs with PHP module -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.php</depends>
 
     <resource-bundle>messages.MyBundle</resource-bundle>
 
