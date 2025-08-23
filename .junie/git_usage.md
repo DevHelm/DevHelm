@@ -24,10 +24,25 @@ When committing changes, ensure that:
 * If there are PHP changes run `vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes` to ensure the code style is correct
 * The commit message MUST start with a prefix for the JIRA ticket if there is one if not DH-NIL
 * The commit message is clear and descriptive.
-* That you're committing using the ssh key that is located at ~/agent.signing
+* That you're committing using the gpg key that is located at ~/agent.signing
 * That you're committing using the name and email located in ~/agent_info.txt
 
 # Pull Requests
+
+You only create pull requests for new tasks. When handling code review for existing pull requests, you do not create new pull requests. Instead, you update the existing pull request by pushing additional commits to the same branch that the pull request was created from.
+
+## Updating Existing Pull Requests
+
+* YOU MUST SWTICH TO THE FEATURE BRANCH WITH `git checkout feature/DH-3-a-feature` BEFORE MAKING ANY CHANGES TO AN EXISTING PULL REQUEST.
+* YOU MUST PULL THE LATEST CHANGES FROM THE FEATURE BRANCH WITH `git pull --rebase origin feature/DH-3-a-feature` BEFORE PUSHING ANY NEW COMMITS TO AN EXISTING PULL REQUEST.
+* Make any necessary changes or additions to the code.
+* Stage the changes with `git add .` or `git add <specific files>`.
+* Commit the changes with a descriptive message using `git commit -m "Your message here"
+* Push the changes to the remote repository with `git push origin <branch-name>` using the ssh key located at `~/agent`.
+* The existing pull request will automatically update with the new commits
+* You will check the status of the build with a 1 minute pause inbetween checks and address any issues that arise
+
+## Create Pull Requests
 
 When creating a pull request, follow these guidelines:
 
@@ -37,3 +52,4 @@ When creating a pull request, follow these guidelines:
 * It should be linked to the relevant JIRA ticket.
 * If there is already a pull request for the same branch, you should not create a new one. Instead, update the existing pull request with your changes.
 * There should only be one pull request per JIRA ticket.
+* * You will check the status of the build with a 1 minute pause inbetween checks and address any issues that arise
