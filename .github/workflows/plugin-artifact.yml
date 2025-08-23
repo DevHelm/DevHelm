@@ -63,7 +63,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.artifact.outputs.filename }}
-          path: ./build/distributions/content/*/*
+          path: ${{ github.workspace }}/plugin/build/distributions
+
+      - name: Upload Plugin Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: devhelm-plugin-${{ github.sha }}
+          path: ${{ github.workspace }}/plugin/build/distributions/*.zip
+          if-no-files-found: error
 
   # Run tests and upload a code coverage report
   test:
