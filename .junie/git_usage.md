@@ -29,6 +29,20 @@ When committing changes, ensure that:
 
 # Pull Requests
 
+You only create pull requests for new tasks. When handling code review for existing pull requests, you do not create new pull requests. Instead, you update the existing pull request by pushing additional commits to the same branch that the pull request was created from.
+
+## Updating Existing Pull Requests
+
+* YOU MUST SWTICH TO THE FEATURE BRANCH WITH `git checkout feature/DH-3-a-feature` BEFORE MAKING ANY CHANGES TO AN EXISTING PULL REQUEST.
+* YOU MUST PULL THE LATEST CHANGES FROM THE FEATURE BRANCH WITH `git pull --rebase origin feature/DH-3-a-feature` BEFORE PUSHING ANY NEW COMMITS TO AN EXISTING PULL REQUEST.
+* Make any necessary changes or additions to the code.
+* Stage the changes with `git add .` or `git add <specific files>`.
+* Commit the changes with a descriptive message using `git commit -m "Your message here"
+* Push the changes to the remote repository with `git push origin <branch-name>` using the ssh key located at `~/agent`.
+* The existing pull request will automatically update with the new commits
+
+## Create Pull Requests
+
 When creating a pull request, follow these guidelines:
 
 * It should include a clear title and description of the changes made.
