@@ -9,7 +9,7 @@ from ui_interaction import UIInteraction
 
 def get_environment_variables() -> Tuple[str, str]:
     """
-    Read required environment variables for DevHelm API access.
+    Read required environment variables for ComControl API access.
     
     Returns:
         tuple: (api_url, api_key) from environment variables
@@ -17,15 +17,15 @@ def get_environment_variables() -> Tuple[str, str]:
     Raises:
         SystemExit: If required environment variables are not set
     """
-    api_url = os.getenv('DEVHELM_API_URL')
-    api_key = os.getenv('DEVHELM_API_KEY')
+    api_url = os.getenv('COMCONTROL_API_URL')
+    api_key = os.getenv('COMCONTROL_API_KEY')
     
     if not api_url:
-        print("Error: DEVHELM_API_URL environment variable is not set")
+        print("Error: COMCONTROL_API_URL environment variable is not set")
         sys.exit(1)
         
     if not api_key:
-        print("Error: DEVHELM_API_KEY environment variable is not set")
+        print("Error: COMCONTROL_API_KEY environment variable is not set")
         sys.exit(1)
     
     return api_url, api_key
