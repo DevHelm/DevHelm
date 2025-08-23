@@ -33,6 +33,7 @@ You only create pull requests for new tasks. When handling code review for exist
 
 ## Updating Existing Pull Requests
 
+* YOU MUST SWTICH TO THE FEATURE BRANCH WITH `git checkout feature/DH-3-a-feature` BEFORE MAKING ANY CHANGES TO AN EXISTING PULL REQUEST.
 * YOU MUST PULL THE LATEST CHANGES FROM THE FEATURE BRANCH WITH `git pull --rebase origin feature/DH-3-a-feature` BEFORE PUSHING ANY NEW COMMITS TO AN EXISTING PULL REQUEST.
 * Make any necessary changes or additions to the code.
 * Stage the changes with `git add .` or `git add <specific files>`.
