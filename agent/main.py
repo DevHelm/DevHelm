@@ -5,10 +5,9 @@ from ui_interaction import UIInteraction
 def find_and_click_input_box():
     """
     Searches for a UI element with the text "Start Again".
-    If found, it then looks for the text "Type your" and clicks
-    to the right of it, assuming an input box is there.
+    If found, it then uses givePrompt to find the input box, click it, and enter text.
     
-    Now refactored to use the UIInteraction class.
+    Now refactored to use the UIInteraction class with integrated input box logic.
     """
     ui = UIInteraction()
     
@@ -17,12 +16,9 @@ def find_and_click_input_box():
         if ui.isReadyForPrompt():
             print("'Start Again' button found - UI is ready for prompt")
             
-            # Try to find and click the input box
-            if ui._find_and_click_input_box():
-                print("Successfully clicked the input box")
-                
-                # Example: You can now use the UI interaction methods
-                ui.givePrompt('Hello, World!')
+            # Give prompt now handles finding, clicking input box, and entering text
+            if ui.givePrompt('Hello, World!'):
+                print("Successfully found input box and entered prompt")
             else:
                 print("Could not find or click the input box")
                 time.sleep(60)
