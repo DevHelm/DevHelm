@@ -21,5 +21,13 @@ When you are told to work on a ticket you should first research the ticket to un
 * Understanding the acceptance criteria and any dependencies.
 * Reading the ticket history to see how it has evolved.
 * Reading any relating confluence pages or documentation that may provide additional context.
-* YOU MUST COMMENT THAT YOU'VE STARTED WORKING ON THE TICKET IN THE COMMENTS SECTION OF THE TICKET AND MOVE THE TICKET TO "IN PROGRESS".
+
+# New Task
+
+* YOU MUST MOVE THE TICKET TO "IN PROGRESS".
 * YOU MUST COMMENT WHEN YOU'VE FINISHED WORKING ON THE TICKET IN THE COMMENTS SECTION OF THE TICKET WITH A LINK TO THE PULL REQUEST AND MOVE THE TICKET TO "IN REVIEW".
+
+
+# Code Review
+
+* YOU MUST COMMENT WHEN YOU'VE FINISHED WORKINGON THE TICKET IN THE COMMENT SECTION OF THE TICKET WITH A LINK TO THE PULL REQUEST AND MOVE THE TICKET TO "IN REVIEW"
