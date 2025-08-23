@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\AgentStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,7 +10,6 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 #[ORM\Entity]
 #[ORM\Table('agent')]
-#[ORM\HasLifecycleCallbacks]
 class Agent
 {
     #[ORM\Id]
@@ -22,8 +22,21 @@ class Agent
     #[ORM\JoinColumn(name: 'lead_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Lead $lead = null;
 
+    /**
+     * The team this agent belongs to.
+     */
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'agents')]
+    #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id', nullable: false)]
+    private Team $team;
+
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
+
+    /**
+     * The project identifier this agent is associated with.
+     */
+    #[ORM\Column(type: 'string', length: 10)]
+    private string $project;
 
     #[ORM\Column(name: 'github_profile', type: 'string', length: 255, nullable: true)]
     private ?string $githubProfile = null;
@@ -31,8 +44,8 @@ class Agent
     #[ORM\Column(name: 'jira_profile', type: 'string', length: 255, nullable: true)]
     private ?string $jiraProfile = null;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private string $status = 'inactive';
+    #[ORM\Column(type: 'string', enumType: AgentStatus::class)]
+    private AgentStatus $status = AgentStatus::Enabled;
 
     #[ORM\Column(name: 'last_seen', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $lastSeen = null;
@@ -114,12 +127,12 @@ class Agent
         return $this;
     }
 
-    public function getStatus(): string
+    public function getStatus(): AgentStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(AgentStatus $status): self
     {
         $this->status = $status;
 
@@ -146,6 +159,50 @@ class Agent
     public function setServerAddress(?string $serverAddress): self
     {
         $this->serverAddress = $serverAddress;
+
+        return $this;
+    }
+
+    /**
+     * Get the project identifier.
+     *
+     * @return string The project identifier
+     */
+    public function getProject(): string
+    {
+        return $this->project;
+    }
+
+    /**
+     * Set the project identifier.
+     *
+     * @param string $project The project identifier
+     */
+    public function setProject(string $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * Get the team this agent belongs to.
+     *
+     * @return Team The team entity
+     */
+    public function getTeam(): Team
+    {
+        return $this->team;
+    }
+
+    /**
+     * Set the team this agent belongs to.
+     *
+     * @param Team $team The team entity
+     */
+    public function setTeam(Team $team): self
+    {
+        $this->team = $team;
 
         return $this;
     }
@@ -182,6 +239,31 @@ class Agent
         return $this;
     }
 
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function setTasks(Collection $tasks): void
+    {
+        $this->tasks = $tasks;
+    }
+
+    public function setApiKeys(Collection $apiKeys): void
+    {
+        $this->apiKeys = $apiKeys;
+    }
+
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
@@ -202,19 +284,5 @@ class Agent
         $this->deletedAt = $deletedAt;
 
         return $this;
-    }
-
-    #[ORM\PrePersist]
-    public function onPrePersist(): void
-    {
-        $now = new \DateTimeImmutable('now');
-        $this->createdAt = $now;
-        $this->updatedAt = $now;
-    }
-
-    #[ORM\PreUpdate]
-    public function onPreUpdate(): void
-    {
-        $this->updatedAt = new \DateTimeImmutable('now');
     }
 }

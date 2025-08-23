@@ -56,7 +56,6 @@ services:
     app.repository.orm.team_invite_code:
         class: App\Repository\Orm\TeamInviteCodeRepository
 
-
     parthenon.user.repository.forgot_password_code_repository:
         class: Parthenon\User\Repository\ForgotPasswordCodeRepository
         arguments:

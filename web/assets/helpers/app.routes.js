@@ -7,6 +7,7 @@ import Billing from "../views/App/Billing/Billing";
 import BillingAddress from "../views/App/Billing/BillingAddress";
 import BillingMethods from "../views/App/Billing/BillingMethods";
 import BillingInvoices from "../views/App/Billing/BillingInvoices.vue";
+import Agents from "../views/App/Agents";
 
 // All paths have the prefix /app/.
 export const APP_ROUTES = [
@@ -19,6 +20,11 @@ export const APP_ROUTES = [
         name: 'app.team',
         path: "team",
         component: TeamSettings,
+    },
+    {
+        name: 'app.agents',
+        path: "agents",
+        component: Agents,
     },
     {
         name: 'app.plan',
