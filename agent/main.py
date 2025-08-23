@@ -6,40 +6,11 @@ from typing import Optional, Tuple, Dict
 from task_requester import TaskRequester, Task, TaskStatus, TaskRequesterException
 from ui_interaction import UIInteraction
 from logger_factory import LoggerFactory
+from config import get_config
 
 # Logger will be initialized after environment variables are read
 
 
-def get_config() -> Tuple[str, str, Dict[str, str]]:
-    """
-    Read required environment variables for ComControl API access and logging configuration.
-    
-    Returns:
-        tuple: (api_url, api_key, logging_env) from environment variables
-        
-    Raises:
-        SystemExit: If required environment variables are not set
-    """
-    api_url = os.getenv('BASE_URL')
-    api_key = os.getenv('API_KEY')
-    
-    # Fetch logging environment variables
-    logging_env = {
-        'LOG_FORMAT': os.getenv('LOG_FORMAT', ''),
-        'LOG_FILE': os.getenv('LOG_FILE', '')
-    }
-    
-    if not api_url:
-        # Note: We can't use logger here yet since it needs the logging_env
-        print("Error: BASE_URL environment variable is not set")
-        sys.exit(1)
-        
-    if not api_key:
-        # Note: We can't use logger here yet since it needs the logging_env
-        print("Error: API_KEY environment variable is not set")
-        sys.exit(1)
-    
-    return api_url, api_key, logging_env
 
 
 def fetch_initial_task(task_requester: TaskRequester, logger) -> Task:
@@ -82,16 +53,16 @@ def main():
     - Requests new tasks and handles responses appropriately
     - Sleeps 60 seconds between loop iterations
     """
-    # Read environment variables
-    api_url, api_key, logging_env = get_config()
+    # Read configuration
+    config = get_config()
     
     # Initialize logger with environment variables
-    logger = LoggerFactory.get_logger(logging_env)
+    logger = LoggerFactory.get_logger(config.logging_env)
     
     logger.info("Starting DevHelm Agent...")
     
     # Initialize components
-    task_requester = TaskRequester(api_url, api_key)
+    task_requester = TaskRequester(config.api_url, config.api_key)
     ui = UIInteraction()
     
     # Fetch initial task (exit if none available)
