@@ -2,6 +2,7 @@ import os
 import sys
 from loguru import logger
 from typing import Optional
+from config import Config
 
 
 class LoggerFactory:
@@ -14,13 +15,12 @@ class LoggerFactory:
     """
     
     @staticmethod
-    def create_logger(log_format: str, log_file: str) -> logger:
+    def create_logger(config: Config) -> logger:
         """
-        Create and configure a loguru logger based on provided parameters.
+        Create and configure a loguru logger based on provided Config object.
         
         Args:
-            log_format: If 'json', uses JSON formatter; otherwise uses pretty formatter
-            log_file: If empty/unset, logs to stdout; otherwise logs to specified file
+            config: Config object containing log_format and log_file settings
         
         Returns:
             logger: Configured loguru logger instance
@@ -28,8 +28,9 @@ class LoggerFactory:
         # Remove default handler first
         logger.remove()
         
-        # Process the format parameter
-        log_format = log_format.lower()
+        # Process the format parameter from config
+        log_format = config.log_format.lower()
+        log_file = config.log_file
         
         # Determine format based on LOG_FORMAT env var
         if log_format == 'json':
@@ -60,16 +61,15 @@ class LoggerFactory:
         return logger
     
     @staticmethod
-    def get_logger(log_format: str, log_file: str) -> logger:
+    def get_logger(config: Config) -> logger:
         """
         Get a configured logger instance.
         This is a convenience method that calls create_logger().
         
         Args:
-            log_format: If 'json', uses JSON formatter; otherwise uses pretty formatter
-            log_file: If empty/unset, logs to stdout; otherwise logs to specified file
+            config: Config object containing log_format and log_file settings
         
         Returns:
             logger: Configured loguru logger instance
         """
-        return LoggerFactory.create_logger(log_format, log_file)
+        return LoggerFactory.create_logger(config)

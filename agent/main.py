@@ -57,7 +57,7 @@ def main():
     config = get_config()
     
     # Initialize logger with configuration
-    logger = LoggerFactory.get_logger(config.log_format, config.log_file)
+    logger = LoggerFactory.get_logger(config)
     
     logger.info("Starting DevHelm Agent...")
     
