@@ -1,22 +1,21 @@
 import os
 import sys
 import time
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Dict
 
 from task_requester import TaskRequester, Task, TaskStatus, TaskRequesterException
 from ui_interaction import UIInteraction
 from logger_factory import LoggerFactory
 
-# Initialize logger using the factory
-logger = LoggerFactory.get_logger()
+# Logger will be initialized after environment variables are read
 
 
-def get_environment_variables() -> Tuple[str, str]:
+def get_environment_variables() -> Tuple[str, str, Dict[str, str]]:
     """
-    Read required environment variables for ComControl API access.
+    Read required environment variables for ComControl API access and logging configuration.
     
     Returns:
-        tuple: (api_url, api_key) from environment variables
+        tuple: (api_url, api_key, logging_env) from environment variables
         
     Raises:
         SystemExit: If required environment variables are not set
@@ -24,23 +23,32 @@ def get_environment_variables() -> Tuple[str, str]:
     api_url = os.getenv('BASE_URL')
     api_key = os.getenv('API_KEY')
     
+    # Fetch logging environment variables
+    logging_env = {
+        'LOG_FORMAT': os.getenv('LOG_FORMAT', ''),
+        'LOG_FILE': os.getenv('LOG_FILE', '')
+    }
+    
     if not api_url:
-        logger.error("BASE_URL environment variable is not set")
+        # Note: We can't use logger here yet since it needs the logging_env
+        print("Error: BASE_URL environment variable is not set")
         sys.exit(1)
         
     if not api_key:
-        logger.error("API_KEY environment variable is not set")
+        # Note: We can't use logger here yet since it needs the logging_env
+        print("Error: API_KEY environment variable is not set")
         sys.exit(1)
     
-    return api_url, api_key
+    return api_url, api_key, logging_env
 
 
-def fetch_initial_task(task_requester: TaskRequester) -> Task:
+def fetch_initial_task(task_requester: TaskRequester, logger) -> Task:
     """
     Fetch the initial task on startup.
     
     Args:
         task_requester: TaskRequester instance for API calls
+        logger: Logger instance for logging
         
     Returns:
         Task: The initial task to process
@@ -74,17 +82,20 @@ def main():
     - Requests new tasks and handles responses appropriately
     - Sleeps 60 seconds between loop iterations
     """
-    logger.info("Starting DevHelm Agent...")
-    
     # Read environment variables
-    api_url, api_key = get_environment_variables()
+    api_url, api_key, logging_env = get_environment_variables()
+    
+    # Initialize logger with environment variables
+    logger = LoggerFactory.get_logger(logging_env)
+    
+    logger.info("Starting DevHelm Agent...")
     
     # Initialize components
     task_requester = TaskRequester(api_url, api_key)
     ui = UIInteraction()
     
     # Fetch initial task (exit if none available)
-    current_task = fetch_initial_task(task_requester)
+    current_task = fetch_initial_task(task_requester, logger)
     
     logger.info("Entering main runtime loop...")
     
