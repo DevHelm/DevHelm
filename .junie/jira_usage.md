@@ -5,7 +5,7 @@ This document provides a quick reference for how we use JIRA.
 
 # Project
 
-The JIRA for this project is ComCon. The project key is CNC.
+The JIRA for this project is DevHelm. The project key is DH.
 
 # Ticket Research
 
