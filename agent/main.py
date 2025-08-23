@@ -17,15 +17,15 @@ def get_environment_variables() -> Tuple[str, str]:
     Raises:
         SystemExit: If required environment variables are not set
     """
-    api_url = os.getenv('COMCONTROL_API_URL')
-    api_key = os.getenv('COMCONTROL_API_KEY')
+    api_url = os.getenv('BASE_URL')
+    api_key = os.getenv('API_KEY')
     
     if not api_url:
-        print("Error: COMCONTROL_API_URL environment variable is not set")
+        print("Error: BASE_URL environment variable is not set")
         sys.exit(1)
         
     if not api_key:
-        print("Error: COMCONTROL_API_KEY environment variable is not set")
+        print("Error: API_KEY environment variable is not set")
         sys.exit(1)
     
     return api_url, api_key
