@@ -1,23 +1,15 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.comcontrol</id>
-    <name>ComControl</name>
-    <vendor email="iain@iain.rocks" url="https://iain.rocks">ComControl</vendor>
-    <description>
-        <![CDATA[
-        <p>Plugin for ComControl integration with JetBrains IDEs.</p>
-        ]]>
-    </description>
+    <id>org.jetbrains.plugins.template</id>
+    <name>IntelliJ Platform Plugin Template</name>
+    <vendor>JetBrains</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
-    <idea-version since-build="241"/>
+    <resource-bundle>messages.MyBundle</resource-bundle>
 
-    <actions>
-        <action id="com.comcontrol.actions.SayHelloAction"
-                class="com.comcontrol.ide.actions.SayHelloAction"
-                text="ComControl: Say Hello"
-                description="A sample action from ComControl plugin">
-            <add-to-group group-id="ToolsMenu" anchor="last"/>
-        </action>
-    </actions>
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow factoryClass="org.jetbrains.plugins.template.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
+        <postStartupActivity implementation="org.jetbrains.plugins.template.startup.MyProjectActivity" />
+    </extensions>
 </idea-plugin>
