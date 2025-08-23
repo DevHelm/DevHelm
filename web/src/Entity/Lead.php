@@ -103,11 +103,8 @@ class Lead
 
     public function removeAgent(Agent $agent): self
     {
-        if ($this->agents->removeElement($agent)) {
-            if ($agent->getLead() === $this) {
-                $agent->setLead(null);
-            $agent->setLead(null);
-        }
+        $this->agents->removeElement($agent);
+        $agent->setLead(null);
 
         return $this;
     }
