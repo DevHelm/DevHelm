@@ -1,42 +1,25 @@
 import os
 import sys
 import time
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Dict
 
 from task_requester import TaskRequester, Task, TaskStatus, TaskRequesterException
 from ui_interaction import UIInteraction
+from logger_factory import LoggerFactory
+from config import get_config
+
+# Logger will be initialized after environment variables are read
 
 
-def get_environment_variables() -> Tuple[str, str]:
-    """
-    Read required environment variables for ComControl API access.
-    
-    Returns:
-        tuple: (api_url, api_key) from environment variables
-        
-    Raises:
-        SystemExit: If required environment variables are not set
-    """
-    api_url = os.getenv('BASE_URL')
-    api_key = os.getenv('API_KEY')
-    
-    if not api_url:
-        print("Error: BASE_URL environment variable is not set")
-        sys.exit(1)
-        
-    if not api_key:
-        print("Error: API_KEY environment variable is not set")
-        sys.exit(1)
-    
-    return api_url, api_key
 
 
-def fetch_initial_task(task_requester: TaskRequester) -> Task:
+def fetch_initial_task(task_requester: TaskRequester, logger) -> Task:
     """
     Fetch the initial task on startup.
     
     Args:
         task_requester: TaskRequester instance for API calls
+        logger: Logger instance for logging
         
     Returns:
         Task: The initial task to process
@@ -48,14 +31,14 @@ def fetch_initial_task(task_requester: TaskRequester) -> Task:
         result = task_requester.request_task()
         
         if isinstance(result, Task):
-            print(f"Initial task received: {result.ticket_id} - {result.prompt}")
+            logger.info(f"Initial task received: {result.ticket_id} - {result.prompt}")
             return result
         else:
-            print(f"No initial task available: {result.value}")
+            logger.warning(f"No initial task available: {result.value}")
             sys.exit(1)
             
     except TaskRequesterException as e:
-        print(f"Error fetching initial task: {e}")
+        logger.error(f"Error fetching initial task: {e}")
         sys.exit(1)
 
 
@@ -70,19 +53,22 @@ def main():
     - Requests new tasks and handles responses appropriately
     - Sleeps 60 seconds between loop iterations
     """
-    print("Starting DevHelm Agent...")
+    # Read configuration
+    config = get_config()
     
-    # Read environment variables
-    api_url, api_key = get_environment_variables()
+    # Initialize logger with configuration
+    logger = LoggerFactory.get_logger(config)
+    
+    logger.info("Starting DevHelm Agent...")
     
     # Initialize components
-    task_requester = TaskRequester(api_url, api_key)
+    task_requester = TaskRequester(config.api_url, config.api_key)
     ui = UIInteraction()
     
     # Fetch initial task (exit if none available)
-    current_task = fetch_initial_task(task_requester)
+    current_task = fetch_initial_task(task_requester, logger)
     
-    print("Entering main runtime loop...")
+    logger.info("Entering main runtime loop...")
     
     # Counter for consecutive continue prompts (DH-8: Continue limit)
     consecutive_continue_count = 0
@@ -93,7 +79,7 @@ def main():
         try:
             # Check if UI is ready for a prompt (looking for "Start Again" button)
             if ui.isReadyForPrompt():
-                print("UI is ready for prompt - 'Start Again' button detected")
+                logger.debug("UI is ready for prompt - 'Start Again' button detected")
                 
                 # Sleep to avoid race conditions as specified in business logic
                 time.sleep(60)
@@ -105,20 +91,20 @@ def main():
                     if isinstance(result, Task):
                         # New task received - update current task and give prompt
                         current_task = result
-                        print(f"New task received: {current_task.ticket_id} - {current_task.prompt}")
+                        logger.info(f"New task received: {current_task.ticket_id} - {current_task.prompt}")
                         
                         # Reset continue counter when new task is received (DH-8: Continue limit)
                         consecutive_continue_count = 0
                         
                         success = ui.givePrompt(current_task.prompt)
                         if success:
-                            print("Successfully entered new task prompt")
+                            logger.info("Successfully entered new task prompt")
                         else:
-                            print("Failed to enter task prompt")
+                            logger.error("Failed to enter task prompt")
                             
                     elif result == TaskStatus.BUSY:
                         # DevHelm says still busy - tell Junie to continue
-                        print("DevHelm indicates task still in progress - telling Junie to continue")
+                        logger.info("DevHelm indicates task still in progress - telling Junie to continue")
                         
                         # Check continue limit before sending continue prompt (DH-8: Continue limit)
                         consecutive_continue_count += 1
@@ -130,29 +116,29 @@ def main():
                         
                         success = ui.givePrompt("continue")
                         if success:
-                            print("Successfully entered 'continue' prompt")
+                            logger.info("Successfully entered 'continue' prompt")
                         else:
-                            print("Failed to enter 'continue' prompt")
+                            logger.error("Failed to enter 'continue' prompt")
                             
                     elif result == TaskStatus.NONE:
                         # DevHelm has no tasks - do nothing
-                        print("DevHelm has no tasks available - doing nothing")
+                        logger.debug("DevHelm has no tasks available - doing nothing")
                         
                 except TaskRequesterException as e:
-                    print(f"Error requesting task: {e}")
+                    logger.error(f"Error requesting task: {e}")
                     
             else:
                 # UI not ready - just wait
-                print("UI not ready for prompt - waiting...")
+                logger.debug("UI not ready for prompt - waiting...")
             
             # Sleep for 60 seconds as specified in acceptance criteria
             time.sleep(60)
             
         except KeyboardInterrupt:
-            print("\nShutting down agent...")
+            logger.info("Shutting down agent...")
             break
         except Exception as e:
-            print(f"Unexpected error in main loop: {e}")
+            logger.error(f"Unexpected error in main loop: {e}")
             time.sleep(60)  # Continue after error
 
 
