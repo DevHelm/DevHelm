@@ -1,13 +1,13 @@
 import os
 import sys
 import time
-from typing import Optional
+from typing import Optional, Tuple
 
 from task_requester import TaskRequester, Task, TaskStatus, TaskRequesterException
 from ui_interaction import UIInteraction
 
 
-def get_environment_variables() -> tuple[str, str]:
+def get_environment_variables() -> Tuple[str, str]:
     """
     Read required environment variables for DevHelm API access.
     
