@@ -8,7 +8,7 @@ and ensure it handles different response scenarios correctly.
 import json
 import unittest
 from unittest.mock import Mock, patch
-from task_requester import TaskRequester, Task, TaskRequesterException
+from task_requester import TaskRequester, Task, TaskRequesterException, TaskStatus
 
 
 class TestTaskRequester(unittest.TestCase):
@@ -71,7 +71,7 @@ class TestTaskRequester(unittest.TestCase):
     
     @patch('urllib3.PoolManager')
     def test_request_task_conflict(self, mock_pool_manager):
-        """Test task request returns None on 409 conflict."""
+        """Test task request returns TaskStatus.BUSY on 409 conflict."""
         mock_response = Mock()
         mock_response.status = 409
         mock_response.data = json.dumps({"type": "Task already in progress"}).encode('utf-8')
@@ -83,11 +83,11 @@ class TestTaskRequester(unittest.TestCase):
         task_requester = TaskRequester(self.base_url, self.api_key)
         result = task_requester.request_task()
         
-        self.assertIsNone(result)
+        self.assertEqual(result, TaskStatus.BUSY)
     
     @patch('urllib3.PoolManager')
     def test_request_task_no_content(self, mock_pool_manager):
-        """Test task request returns None on 204 no content."""
+        """Test task request returns TaskStatus.NONE on 204 no content."""
         mock_response = Mock()
         mock_response.status = 204
         mock_response.data = b""
@@ -99,7 +99,7 @@ class TestTaskRequester(unittest.TestCase):
         task_requester = TaskRequester(self.base_url, self.api_key)
         result = task_requester.request_task()
         
-        self.assertIsNone(result)
+        self.assertEqual(result, TaskStatus.NONE)
     
     @patch('urllib3.PoolManager')
     def test_request_task_invalid_json(self, mock_pool_manager):

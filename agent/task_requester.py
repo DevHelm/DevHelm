@@ -7,8 +7,21 @@ the DevHelm API to fetch new tasks for the agent.
 
 import json
 from dataclasses import dataclass
-from typing import Optional
+from enum import Enum
+from typing import Optional, Union
 import urllib3
+
+
+class TaskStatus(Enum):
+    """
+    Enum representing the status when no task is available.
+    
+    Values:
+        BUSY: Indicates there is already a task in progress
+        NONE: Indicates there are no tasks available to work on
+    """
+    BUSY = "busy"
+    NONE = "none"
 
 
 @dataclass
@@ -51,7 +64,7 @@ class TaskRequester:
         self.api_key = api_key
         self.http = urllib3.PoolManager()
     
-    def request_task(self) -> Optional[Task]:
+    def request_task(self) -> Union[Task, TaskStatus]:
         """
         Request a new task from the DevHelm API.
         
@@ -60,7 +73,8 @@ class TaskRequester:
         
         Returns:
             Task: A Task object if a new task is available (HTTP 200)
-            None: If no task is available or task already in progress (HTTP 409)
+            TaskStatus.BUSY: If there is already a task in progress (HTTP 409)
+            TaskStatus.NONE: If no tasks are available to work on (HTTP 204)
             
         Raises:
             TaskRequesterException: If the server returns an invalid response
@@ -108,11 +122,11 @@ class TaskRequester:
             
             # Handle conflict response (task already in progress)
             elif response.status == 409:
-                return None
+                return TaskStatus.BUSY
             
             # Handle no valid tickets response
             elif response.status == 204:
-                return None
+                return TaskStatus.NONE
             
             # Handle other HTTP status codes as errors
             else:
