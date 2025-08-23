@@ -40,6 +40,7 @@ You only create pull requests for new tasks. When handling code review for exist
 * Commit the changes with a descriptive message using `git commit -m "Your message here"
 * Push the changes to the remote repository with `git push origin <branch-name>` using the ssh key located at `~/agent`.
 * The existing pull request will automatically update with the new commits
+* You will check the status of the build with a 1 minute pause inbetween checks and address any issues that arise
 
 ## Create Pull Requests
 
@@ -49,3 +50,4 @@ When creating a pull request, follow these guidelines:
 * It should reference the JIRA ticket if applicable.
 * It should be assigned to the appropriate reviewer (that-guy-iain).
 * It should be linked to the relevant JIRA ticket.
+* * You will check the status of the build with a 1 minute pause inbetween checks and address any issues that arise
