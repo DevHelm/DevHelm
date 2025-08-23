@@ -71,3 +71,12 @@ services:
         class: Redis
         calls:
             - connect: ['%env(REDIS_HOST)%']
+
+    # Jira Integration Services
+    LessTif\JiraCloud\JiraClient:
+        arguments:
+            $host: '%env(JIRA_HOST)%'
+            $username: '%env(JIRA_USERNAME)%'
+            $password: '%env(JIRA_PERSONAL_ACCESS_TOKEN)%'
+
+    App\Interface\TicketProviderInterface: '@App\Service\JiraTicketProvider'

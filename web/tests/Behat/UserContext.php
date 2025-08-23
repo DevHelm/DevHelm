@@ -7,8 +7,8 @@ use App\Entity\InviteCode;
 use App\Entity\Subscription;
 use App\Entity\Team;
 use App\Entity\User;
-use App\Repository\Orm\InviteCodeRepository;
 use App\Repository\Orm\ForgotPasswordCodeRepository;
+use App\Repository\Orm\InviteCodeRepository;
 use App\Repository\Orm\TeamRepository;
 use App\Repository\Orm\UserRepository;
 use Behat\Behat\Context\Context;
@@ -19,7 +19,6 @@ use Parthenon\Athena\Entity\Link;
 use Parthenon\Athena\Entity\Notification;
 use Parthenon\Billing\Entity\EmbeddedSubscription;
 use Parthenon\Billing\Enum\SubscriptionStatus;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 class UserContext implements Context
@@ -36,13 +35,13 @@ class UserContext implements Context
     private string $passwordHash;
 
     public function __construct(
-        private Session                        $session,
-        private UserRepository                 $repository,
-        private EntityManagerInterface         $entityManager,
+        private Session $session,
+        private UserRepository $repository,
+        private EntityManagerInterface $entityManager,
         private PasswordHasherFactoryInterface $hasherFactory,
-        private ForgotPasswordCodeRepository   $passwordResetRepository,
-        private InviteCodeRepository           $inviteCodeRepository,
-        private TeamRepository                 $teamRepository
+        private ForgotPasswordCodeRepository $passwordResetRepository,
+        private InviteCodeRepository $inviteCodeRepository,
+        private TeamRepository $teamRepository,
     ) {
     }
 
@@ -109,6 +108,7 @@ class UserContext implements Context
 
     /**
      * @When I login as :username with the password :password
+     *
      * @Given I have logged in as :username with the password :password
      */
     public function iLoginAsWithThePassword($username, $password)
@@ -369,8 +369,6 @@ class UserContext implements Context
     }
 
     /**
-     * @param $email
-     *
      * @return User|null
      *
      * @throws \Doctrine\ORM\ORMException
@@ -757,7 +755,7 @@ class UserContext implements Context
         $subscription = new Subscription();
         $subscription->setCustomer($team);
         $subscription->setPlanName($plan);
-        $subscription->setValidUntil(new \DateTime("+7 days"));
+        $subscription->setValidUntil(new \DateTime('+7 days'));
         $subscription->setActive(true);
         $subscription->setCreatedAt(new \DateTime());
         $subscription->setStatus(SubscriptionStatus::ACTIVE);
@@ -767,7 +765,6 @@ class UserContext implements Context
 
         $this->teamRepository->getEntityManager()->flush();
     }
-
 
     /**
      * @When I sent an invite to :arg1
