@@ -1,27 +1,26 @@
 import os
 import sys
 from loguru import logger
-from typing import Optional, Dict
+from typing import Optional
 
 
 class LoggerFactory:
     """
     Factory class for creating and configuring loguru logger instances.
     
-    Supports configuration via environment variables:
-    - LOG_FORMAT: 'json' for JSON formatting, anything else for pretty formatting
-    - LOG_FILE: File path for logging output, empty/unset means stdout
+    Supports configuration via parameters:
+    - log_format: 'json' for JSON formatting, anything else for pretty formatting
+    - log_file: File path for logging output, empty/unset means stdout
     """
     
     @staticmethod
-    def create_logger(logging_env: Dict[str, str]) -> logger:
+    def create_logger(log_format: str, log_file: str) -> logger:
         """
-        Create and configure a loguru logger based on provided environment variables.
+        Create and configure a loguru logger based on provided parameters.
         
         Args:
-            logging_env: Dictionary containing logging environment variables
-                - LOG_FORMAT: If 'json', uses JSON formatter; otherwise uses pretty formatter
-                - LOG_FILE: If empty/unset, logs to stdout; otherwise logs to specified file
+            log_format: If 'json', uses JSON formatter; otherwise uses pretty formatter
+            log_file: If empty/unset, logs to stdout; otherwise logs to specified file
         
         Returns:
             logger: Configured loguru logger instance
@@ -29,9 +28,8 @@ class LoggerFactory:
         # Remove default handler first
         logger.remove()
         
-        # Get environment variables from provided dictionary
-        log_format = logging_env.get('LOG_FORMAT', '').lower()
-        log_file = logging_env.get('LOG_FILE', '')
+        # Process the format parameter
+        log_format = log_format.lower()
         
         # Determine format based on LOG_FORMAT env var
         if log_format == 'json':
@@ -62,15 +60,16 @@ class LoggerFactory:
         return logger
     
     @staticmethod
-    def get_logger(logging_env: Dict[str, str]) -> logger:
+    def get_logger(log_format: str, log_file: str) -> logger:
         """
         Get a configured logger instance.
         This is a convenience method that calls create_logger().
         
         Args:
-            logging_env: Dictionary containing logging environment variables
+            log_format: If 'json', uses JSON formatter; otherwise uses pretty formatter
+            log_file: If empty/unset, logs to stdout; otherwise logs to specified file
         
         Returns:
             logger: Configured loguru logger instance
         """
-        return LoggerFactory.create_logger(logging_env)
+        return LoggerFactory.create_logger(log_format, log_file)

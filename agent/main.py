@@ -56,8 +56,8 @@ def main():
     # Read configuration
     config = get_config()
     
-    # Initialize logger with environment variables
-    logger = LoggerFactory.get_logger(config.logging_env)
+    # Initialize logger with configuration
+    logger = LoggerFactory.get_logger(config.log_format, config.log_file)
     
     logger.info("Starting DevHelm Agent...")
     
