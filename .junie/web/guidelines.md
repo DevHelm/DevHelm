@@ -451,10 +451,11 @@ The list should be the generic ListResponse.
 
 ### Frontend
 
-* Within the Frontend submit buttons should use the Parthenon SubmitButton component.
-* When loading pages or changing views it should use LoadingScreen component.
+* Within the Frontend, submit buttons should use the Parthenon SubmitButton component.
+* When loading pages or changing views, it should use LoadingScreen component.
 * THERE SHOULD NEVER BE RAW STRINGS IN THE TEMPLATE. EVERYTHING *MUST* BE A LOCALISATION ID
-* Translations
+* Translations should be in British English, American English, and German
+* CSS should use tailwind utils
 
 ## Development Workflow
 
