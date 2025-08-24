@@ -55,9 +55,7 @@ class AgentController
             $agent = $agentFactory->createFromDto($dto, $team);
             $agentRepository->save($agent);
 
-            // Generate an API key for the agent
             $apiKey = $apiKeyGenerator->generateForAgent($agent);
-
             $responseData = $serializer->serialize([
                 'id' => (string) $agent->getId(),
                 'name' => $agent->getName(),
