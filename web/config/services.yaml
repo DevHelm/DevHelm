@@ -85,4 +85,9 @@ services:
         arguments:
             $configuration: '@jira.configuration'
 
+    App\Service\JiraTicketProvider:
+        arguments:
+            $jiraClient: '@JiraCloud\JiraClient'
+            $targetStatus: '%env(JIRA_TARGET_STATUS)%'
+
     App\Interface\TicketProviderInterface: '@App\Service\JiraTicketProvider'

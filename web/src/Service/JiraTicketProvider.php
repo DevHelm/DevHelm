@@ -15,7 +15,7 @@ class JiraTicketProvider implements TicketProviderInterface
 
     public function __construct(
         private JiraClient $jiraClient,
-        private string $targetStatus = 'Done',
+        private string $targetStatus = 'TODO',
     ) {
     }
 
