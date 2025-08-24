@@ -90,7 +90,6 @@ class AgentController
         $this->setLogger($logger);
         $this->logger->info('Agent list request received');
         try {
-            /** @var UserInterface $user */
             $user = $request->attributes->get('_user');
             $team = $user->getTeam();
 
@@ -104,11 +103,10 @@ class AgentController
                 return $agentFactory->createAgentResponseDto($agent);
             }, $agents);
             
-            // Create a list response DTO with the agent DTOs
             $responseDto = $agentFactory->createAgentListResponseDto(
                 agentResponseDtos: $agentDtos,
-                hasMore: false, // Set to true if there are more results to paginate
-                lastKey: !empty($agentDtos) ? end($agentDtos)->id : null // Use the last agent's ID as the last key if available
+                hasMore: false,
+                lastKey: !empty($agentDtos) ? end($agentDtos)->id : null
             );
 
             return new JsonResponse($serializer->serialize($responseDto, 'json'), Response::HTTP_OK, [], true);
