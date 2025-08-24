@@ -2,18 +2,21 @@
 
 namespace App\Factory;
 
-use App\Dto\CreateAgentDto;
+use App\Dto\App\Request\CreateAgentDto;
 use App\Entity\Agent;
 use App\Entity\Team;
+use App\Enum\AgentStatus;
 
 class AgentFactory
 {
     public function createFromDto(CreateAgentDto $dto, Team $team): Agent
     {
-        return Agent::createForTeam(
-            $dto->getName(),
-            $dto->getProject(),
-            $team
-        );
+        $agent = new Agent();
+        $agent->setName($dto->name);
+        $agent->setProject($dto->project);
+        $agent->setTeam($team);
+        $agent->setStatus(AgentStatus::Enabled);
+        
+        return $agent;
     }
 }
