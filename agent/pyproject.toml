@@ -10,7 +10,7 @@ readme = "README.md"
 authors = [
   { name = "DevHelm Team" }
 ]
-license = { file = "../LICENSE.md" }
+license-files = ["LICENSE.md"]
 requires-python = ">=3.8"
 dependencies = [
   "pyautogui>=0.9.54",
