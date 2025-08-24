@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -31,7 +30,7 @@ class AgentController
         ValidatorInterface $validator,
         ApiKeyGenerator $apiKeyGenerator,
         #[CurrentUser]
-        User $user
+        User $user,
     ): JsonResponse {
         try {
             $data = json_decode($request->getContent(), true);
@@ -55,7 +54,7 @@ class AgentController
 
             $agent = $agentFactory->createFromDto($dto, $team);
             $agentRepository->save($agent);
-            
+
             // Generate an API key for the agent
             $apiKey = $apiKeyGenerator->generateForAgent($agent);
 
@@ -69,7 +68,6 @@ class AgentController
 
             return new JsonResponse($responseData, Response::HTTP_CREATED, [], true);
         } catch (\Exception $e) {
-
             return new JsonResponse(['error' => 'Internal server error', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
