@@ -49,9 +49,9 @@ class AgentController
                 return new JsonResponse(['errors' => $errors], Response::HTTP_BAD_REQUEST);
             }
 
-            // Get current user and their team
+            // Get current user and their team from security token
             /** @var UserInterface $user */
-            $user = $request->getUser();
+            $user = $request->attributes->get('_user');
             $team = $user->getTeam();
             
             if (!$team instanceof Team) {
@@ -93,7 +93,7 @@ class AgentController
     ): JsonResponse {
         try {
             /** @var UserInterface $user */
-            $user = $request->getUser();
+            $user = $request->attributes->get('_user');
             $team = $user->getTeam();
             
             if (!$team instanceof Team) {
