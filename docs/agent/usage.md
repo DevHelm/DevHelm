@@ -37,6 +37,9 @@ export API_KEY="your-api-key-here"
 export LOG_FORMAT="pretty"        # Options: "pretty" or "json"
 export LOG_FILE=""                # Empty for stdout, or path to log file
 
+# Continue Limit Configuration
+export MAX_CONSECUTIVE_CONTINUES="5"  # Maximum consecutive continue prompts before terminating (default: 5)
+
 # UI Detection Configuration (advanced)
 export SCREENSHOT_PATH="./screenshots"
 export UI_CONFIDENCE_THRESHOLD="0.9"
@@ -59,6 +62,9 @@ API_KEY=your-api-key-here
 # Logging Configuration
 LOG_FORMAT=pretty
 LOG_FILE=
+
+# Continue Limit Configuration
+MAX_CONSECUTIVE_CONTINUES=5
 
 # Optional: Advanced Configuration
 SCREENSHOT_PATH=./screenshots

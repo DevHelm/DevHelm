@@ -72,7 +72,6 @@ def main():
     
     # Counter for consecutive continue prompts (DH-8: Continue limit)
     consecutive_continue_count = 0
-    MAX_CONSECUTIVE_CONTINUES = 5
     
     # Main runtime loop
     while True:
@@ -108,10 +107,10 @@ def main():
                         
                         # Check continue limit before sending continue prompt (DH-8: Continue limit)
                         consecutive_continue_count += 1
-                        print(f"Continue count: {consecutive_continue_count}/{MAX_CONSECUTIVE_CONTINUES}")
+                        logger.debug(f"Continue count: {consecutive_continue_count}/{config.max_consecutive_continues}")
                         
-                        if consecutive_continue_count > MAX_CONSECUTIVE_CONTINUES:
-                            print(f"Maximum consecutive continue limit ({MAX_CONSECUTIVE_CONTINUES}) reached. Terminating agent to avoid quota waste.")
+                        if consecutive_continue_count > config.max_consecutive_continues:
+                            logger.warning(f"Maximum consecutive continue limit ({config.max_consecutive_continues}) reached. Terminating agent to avoid quota waste.")
                             sys.exit(0)
                         
                         success = ui.givePrompt("continue")
