@@ -3,6 +3,7 @@
 namespace App\Controller\App;
 
 use App\Dto\App\Request\CreateAgentDto;
+use App\Dto\App\Response\ErrorResponseDto;
 use App\Entity\Team;
 use App\Entity\User;
 use App\Factory\AgentFactory;
@@ -65,11 +66,16 @@ class AgentController
 
             return new JsonResponse($responseData, Response::HTTP_CREATED, [], true);
         } catch (\Exception $e) {
-            $this->logger->error('Error creating agent: '.$e->getMessage(), [
-                'exception' => $e,
+            $this->logger->error('Error creating agent', [
+                'exception_message' => $e->getMessage(),
             ]);
 
-            return new JsonResponse(['error' => 'Internal server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $errorDto = new ErrorResponseDto(
+                error: 'Internal server error',
+                status_code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
         }
     }
 
@@ -94,17 +100,29 @@ class AgentController
 
             $agents = $agentRepository->findByTeam($team);
 
-            $data = array_map(function ($agent) use ($agentFactory) {
+            $agentDtos = array_map(function ($agent) use ($agentFactory) {
                 return $agentFactory->createAgentResponseDto($agent);
             }, $agents);
+            
+            // Create a list response DTO with the agent DTOs
+            $responseDto = $agentFactory->createAgentListResponseDto(
+                agentResponseDtos: $agentDtos,
+                hasMore: false, // Set to true if there are more results to paginate
+                lastKey: !empty($agentDtos) ? end($agentDtos)->id : null // Use the last agent's ID as the last key if available
+            );
 
-            return new JsonResponse($serializer->serialize($data, 'json'), Response::HTTP_OK, [], true);
+            return new JsonResponse($serializer->serialize($responseDto, 'json'), Response::HTTP_OK, [], true);
         } catch (\Exception $e) {
-            $this->logger->error('Error retrieving agent list: '.$e->getMessage(), [
-                'exception' => $e,
+            $this->logger->error('Error retrieving agent list', [
+                'exception_message' => $e->getMessage(),
             ]);
 
-            return new JsonResponse(['error' => 'Internal server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $errorDto = new ErrorResponseDto(
+                error: 'Internal server error',
+                status_code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+            return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
         }
     }
 }
