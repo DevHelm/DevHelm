@@ -127,12 +127,12 @@ class Agent
         return $this;
     }
 
-    public function getStatus(): string
+    public function getStatus(): AgentStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(AgentStatus $status): self
     {
         $this->status = $status;
 
@@ -239,6 +239,34 @@ class Agent
         return $this;
     }
 
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function setTasks(Collection $tasks): void
+    {
+        $this->tasks = $tasks;
+    }
+
+    public function setApiKeys(Collection $apiKeys): void
+    {
+        $this->apiKeys = $apiKeys;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
@@ -261,17 +289,4 @@ class Agent
         return $this;
     }
 
-    #[ORM\PrePersist]
-    public function onPrePersist(): void
-    {
-        $now = new \DateTimeImmutable('now');
-        $this->createdAt = $now;
-        $this->updatedAt = $now;
-    }
-
-    #[ORM\PreUpdate]
-    public function onPreUpdate(): void
-    {
-        $this->updatedAt = new \DateTimeImmutable('now');
-    }
 }

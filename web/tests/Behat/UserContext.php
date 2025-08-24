@@ -33,6 +33,8 @@ class UserContext implements Context
     private int $count;
 
     private string $passwordHash;
+    
+    private ?User $currentUser = null;
 
     public function __construct(
         private Session $session,
@@ -51,7 +53,7 @@ class UserContext implements Context
     public function iTryToSignUp()
     {
         $this->count = $this->repository->count([]);
-        $this->sendJsonRequest('POST', '/api/user/signup', $this->formFields);
+        $this->sendJsonRequest('POST', '/app/user/signup', $this->formFields);
     }
 
     /**
@@ -113,7 +115,10 @@ class UserContext implements Context
      */
     public function iLoginAsWithThePassword($username, $password)
     {
-        $this->sendJsonRequest('POST', '/api/authenticate', ['username' => $username, 'password' => $password]);
+        $this->sendJsonRequest('POST', '/app/authenticate', ['username' => $username, 'password' => $password]);
+        
+        // Store the user for later access
+        $this->currentUser = $this->repository->findOneBy(['email' => $username]);
     }
 
     /**
@@ -185,7 +190,7 @@ class UserContext implements Context
      */
     public function iConfirmTheCode($code)
     {
-        $this->sendJsonRequest('GET', '/api/user/confirm/'.$code);
+        $this->sendJsonRequest('GET', '/app/user/confirm/'.$code);
     }
 
     /**
@@ -218,7 +223,7 @@ class UserContext implements Context
     public function iRequestToResetMyPasswordFor($username)
     {
         $this->count = $this->passwordResetRepository->count([]);
-        $this->sendJsonRequest('POST', '/api/user/reset', ['email' => $username]);
+        $this->sendJsonRequest('POST', '/app/user/reset', ['email' => $username]);
     }
 
     /**
@@ -251,7 +256,7 @@ class UserContext implements Context
         $user = $this->repository->findOneBy(['email' => $email]);
         $this->passwordHash = $user->getPassword();
 
-        $this->sendJsonRequest('POST', '/api/user/reset/'.$code, ['password' => $password]);
+        $this->sendJsonRequest('POST', '/app/user/reset/'.$code, ['password' => $password]);
 
         $this->count = $this->passwordResetRepository->count([]);
     }
@@ -320,7 +325,7 @@ class UserContext implements Context
      */
     public function iEditMyProfileWithTheName($arg1)
     {
-        $this->sendJsonRequest('GET', '/api/user/profile');
+        $this->sendJsonRequest('GET', '/app/user/profile');
         $content = $this->getJsonContent()['form'];
         $output = [];
         foreach ($content as $key => $options) {
@@ -328,7 +333,7 @@ class UserContext implements Context
         }
 
         $output['name'] = $arg1;
-        $this->sendJsonRequest('POST', '/api/user/profile', $output);
+        $this->sendJsonRequest('POST', '/app/user/profile', $output);
     }
 
     /**
@@ -355,7 +360,7 @@ class UserContext implements Context
      */
     public function iVisitTheProfiilePage()
     {
-        $this->session->visit('/api/user/profile');
+        $this->session->visit('/app/user/profile');
     }
 
     /**
@@ -387,7 +392,7 @@ class UserContext implements Context
      */
     public function iChangeMyPasswordToGivingMyCurrentPasswordAs($newPassword, $currentPassword)
     {
-        $this->sendJsonRequest('POST', '/api/user/password', ['password' => $currentPassword, 'new_password' => $newPassword]);
+        $this->sendJsonRequest('POST', '/app/user/password', ['password' => $currentPassword, 'new_password' => $newPassword]);
     }
 
     /**
@@ -604,7 +609,7 @@ class UserContext implements Context
      */
     public function iInvite($email)
     {
-        $this->sendJsonRequest('POST', '/api/user/invite', ['email' => $email]);
+        $this->sendJsonRequest('POST', '/app/user/invite', ['email' => $email]);
     }
 
     /**
@@ -652,7 +657,7 @@ class UserContext implements Context
         $this->count = $this->repository->count([]);
 
         $this->count = $this->repository->count([]);
-        $this->sendJsonRequest('POST', '/api/user/signup/'.$code, $this->formFields);
+        $this->sendJsonRequest('POST', '/app/user/signup/'.$code, $this->formFields);
     }
 
     /**
@@ -771,7 +776,7 @@ class UserContext implements Context
      */
     public function iSentAnInviteTo($email)
     {
-        $this->sendJsonRequest('POST', '/api/user/team/invite', ['email' => $email]);
+        $this->sendJsonRequest('POST', '/app/user/team/invite', ['email' => $email]);
     }
 
     /**
@@ -797,7 +802,7 @@ class UserContext implements Context
      */
     public function iEditMySettingsWithTheName($arg1)
     {
-        $this->sendJsonRequest('GET', '/api/user/settings');
+        $this->sendJsonRequest('GET', '/app/user/settings');
         $content = $this->getJsonContent()['form'];
         $output = [];
         foreach ($content as $key => $options) {
@@ -805,7 +810,7 @@ class UserContext implements Context
         }
 
         $output['name'] = $arg1;
-        $this->sendJsonRequest('POST', '/api/user/settings', $output);
+        $this->sendJsonRequest('POST', '/app/user/settings', $output);
     }
 
     /**
@@ -813,6 +818,16 @@ class UserContext implements Context
      */
     public function iVisitTheSettingsPage()
     {
-        $this->session->visit('/api/user/settings');
+        $this->session->visit('/app/user/settings');
+    }
+    
+    /**
+     * Returns the currently logged-in user.
+     *
+     * @return User|null The current user or null if no user is logged in
+     */
+    public function getCurrentUser(): ?User
+    {
+        return $this->currentUser;
     }
 }

@@ -16,6 +16,8 @@ class AgentFactory
         $agent->setProject($dto->project);
         $agent->setTeam($team);
         $agent->setStatus(AgentStatus::Enabled);
+        $agent->setCreatedAt(new \DateTimeImmutable());
+        $agent->setUpdatedAt(new \DateTimeImmutable());
 
         return $agent;
     }

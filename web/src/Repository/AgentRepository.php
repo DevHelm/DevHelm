@@ -10,19 +10,11 @@ class AgentRepository extends DoctrineCrudRepository implements AgentRepositoryI
 {
     public function findByTeam(Team $team): array
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.team = :team')
-            ->setParameter('team', $team)
-            ->getQuery()
-            ->getResult();
+        return $this->entityRepository->findBy(['team' => $team]);
     }
 
     public function findByName(string $name): ?Agent
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.name = :name')
-            ->setParameter('name', $name)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->entityRepository->findOneBy(['name' => $name]);
     }
 }

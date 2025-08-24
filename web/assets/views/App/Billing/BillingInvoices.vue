@@ -60,7 +60,7 @@ export default {
     }
   },
   mounted() {
-    axios.get("/api/billing/invoices").then((response) => {
+    axios.get("/app/billing/invoices").then((response) => {
       this.ready = true;
       this.invoices = response.data.invoices;
       this.supported = response.data.supported;
@@ -77,7 +77,7 @@ export default {
 
       this.downloadInProgress = true;
       this.showError = false;
-      axios.post('/api/billing/invoices/'+invoice.id+'/charge').then(response => {
+      axios.post('/app/billing/invoices/'+invoice.id+'/charge').then(response => {
         invoice.paid = response.data.paid;
         this.downloadInProgress = false;
       }).catch(error => {
@@ -89,7 +89,7 @@ export default {
 
       this.downloadInProgress = true;
       this.showError = false;
-      axios.get('/api/billing/invoices/'+id+'/download', {  responseType: 'blob'}).then(response => {
+      axios.get('/app/billing/invoices/'+id+'/download', {  responseType: 'blob'}).then(response => {
         var fileDownload = require('js-file-download');
         fileDownload(response.data, 'invoice-'+id+'.pdf');
         this.downloadInProgress = false;
