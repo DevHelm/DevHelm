@@ -196,7 +196,8 @@ docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-
 
 ### Repositories
 
-The repository pattern that is used throughout this project is documented in repository-pattern.md
+* The repository pattern that is used throughout this project is documented in repository-pattern.md
+* DOCTRINE MUST NOT BE USED OUTSIDE OF THE `App\Repository` NAMESPACE
 
 ### DTOs
 
