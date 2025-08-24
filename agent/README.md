@@ -24,6 +24,8 @@ The agent runs continuously on your development machine, monitoring for complete
 - IntelliJ IDEA with Junie plugin
 
 ### Installation
+
+#### Production Installation
 ```bash
 # Clone repository and navigate to agent
 git clone https://github.com/DevHelm/monorepo.git devhelm
@@ -33,6 +35,21 @@ cd devhelm/agent
 python3 -m venv .venv
 source .venv/bin/activate
 pip install .
+```
+
+#### Development Installation
+```bash
+# Clone repository and navigate to agent
+git clone https://github.com/DevHelm/monorepo.git devhelm
+cd devhelm/agent
+
+# Create virtual environment and install in editable mode with dev dependencies
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .[dev]
+
+# Setup pre-commit hooks (optional but recommended)
+pre-commit install
 ```
 
 ### Configuration
@@ -61,6 +78,50 @@ The agent implements a continuous monitoring loop:
    - **No Tasks**: Waits for next cycle
 
 This creates a fully automated workflow where Junie can work continuously on tasks provided by the DevHelm platform.
+
+## Development
+
+### Running Tests
+```bash
+# Run all tests with coverage
+pytest
+
+# Run tests with verbose output
+pytest -v
+
+# Run specific test file
+pytest tests/test_main.py
+```
+
+### Code Quality
+```bash
+# Format code with black
+black src/ tests/
+
+# Sort imports with isort
+isort src/ tests/
+
+# Run linting with flake8
+flake8 src/ tests/
+
+# Type checking with mypy
+mypy src/
+
+# Run all pre-commit hooks
+pre-commit run --all-files
+```
+
+### Building and Installing
+```bash
+# Build the package
+python -m build
+
+# Install in editable mode
+pip install -e .
+
+# Install with development dependencies
+pip install -e .[dev]
+```
 
 ## Documentation
 

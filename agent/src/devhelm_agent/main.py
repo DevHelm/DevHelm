@@ -3,10 +3,10 @@ import sys
 import time
 from typing import Optional, Tuple, Dict
 
-from task_requester import TaskRequester, Task, TaskStatus, TaskRequesterException
-from ui_interaction import UIInteraction
-from logger_factory import LoggerFactory
-from config import get_config
+from .task_requester import TaskRequester, Task, TaskStatus, TaskRequesterException
+from .ui_interaction import UIInteraction
+from .logger_factory import LoggerFactory
+from .config import get_config
 
 # Logger will be initialized after environment variables are read
 
