@@ -4,9 +4,9 @@ namespace App\Service;
 
 use App\Interface\TicketProviderInterface;
 use App\ValueObject\Ticket;
-use LessTif\JiraCloud\Issue\IssueService;
-use LessTif\JiraCloud\JiraClient;
-use LessTif\JiraCloud\JQL\JqlQuery;
+use JiraCloud\Issue\IssueService;
+use JiraCloud\JiraClient;
+use JiraCloud\JQL\JqlQuery;
 use Parthenon\Common\LoggerAwareTrait;
 
 class JiraTicketProvider implements TicketProviderInterface

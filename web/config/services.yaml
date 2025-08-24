@@ -73,10 +73,16 @@ services:
             - connect: ['%env(REDIS_HOST)%']
 
     # Jira Integration Services
-    LessTif\JiraCloud\JiraClient:
+    jira.configuration:
+        class: JiraCloud\Configuration\ArrayConfiguration
         arguments:
-            $host: '%env(JIRA_HOST)%'
-            $username: '%env(JIRA_USERNAME)%'
-            $password: '%env(JIRA_PERSONAL_ACCESS_TOKEN)%'
+            - jiraHost: '%env(JIRA_HOST)%'
+              jiraUser: '%env(JIRA_USERNAME)%'
+              personalAccessToken: '%env(JIRA_PERSONAL_ACCESS_TOKEN)%'
+              jiraLogEnabled: false
+
+    JiraCloud\JiraClient:
+        arguments:
+            $configuration: '@jira.configuration'
 
     App\Interface\TicketProviderInterface: '@App\Service\JiraTicketProvider'

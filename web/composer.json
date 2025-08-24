@@ -9,7 +9,7 @@
         "ext-iconv": "*",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
-        "lesstif/jira-cloud-restapi": "^1.8",
+        "lesstif/jira-cloud-restapi": "*",
         "monolog/monolog": "3.5.*",
         "parthenon/parthenon": "^2.2.19",
         "ramsey/uuid": "^4.7",
