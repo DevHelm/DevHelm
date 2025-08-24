@@ -186,6 +186,169 @@ docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-
 3. **Integration Tests**: Use `tests/Integration/` directory
 4. **BDD Tests**: Create `.feature` files in `features/` directory
 
+## Architecture
+
+### Repositories
+
+The repository pattern that is used throughout this project is documented in repository-pattern.md
+
+### DTOs
+
+The DTOS are held within the App\Dto namespace. They are readonly classes that use the constructor promotion and only contain public members.
+
+DTOs are organised by endpoint type api, app, and webhook which is decided based on the route of the controller action. And then organised further into Request and Response based upon if they are used to represent the request body or response body. Webhooks may not have a DTO for all endpoints, but API and APP MUST have DTOs for their Request and Response.
+
+DTOs are to use the Symfony Serializer component. And members are to be snake_case and not camelCase.
+
+Response DTOs are to be created within the Factory relating to that domain item.
+
+And Generic will be things such as ListResponse.
+
+Structure:
+
+|- Generic
+|- Api
+|   | - Request
+|   | - Response
+|- App
+|   | - Request
+|   | - Response
+
+
+### Controllers
+
+Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action. 
+
+Controllers MUST NOT use doctrine entity manager directly and MUST use a repository interface. Dependencies should be injected into the action and not the constructor.
+
+### CRUD Actions
+
+**Create:**
+```php
+    #[IsGranted('ROLE_ACCOUNT_MANAGER')]
+    #[Route('/app/product/{id}/price', name: 'app_product_price_create', methods: ['POST'])]
+    public function createPrice(
+        Request $request,
+        SerializerInterface $serializer,
+        ValidatorInterface $validator,
+        PriceRepositoryInterface $priceRepository,
+        ProductRepositoryInterface $productRepository,
+        PriceFactory $priceFactory,
+    ) {
+        $this->getLogger()->info('Received request to create price', ['product_id' => $request->get('id')]);
+
+        try {
+            /** @var Product $product */
+            $product = $productRepository->getById($request->get('id'));
+        } catch (NoEntityFoundException $e) {
+            return new JsonResponse([], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        /** @var CreatePrice $dto */
+        $dto = $serializer->deserialize($request->getContent(), CreatePrice::class, 'json');
+        $errors = $validator->validate($dto);
+
+        if (count($errors) > 0) {
+            $errorOutput = [];
+            foreach ($errors as $error) {
+                $propertyPath = $error->getPropertyPath();
+                $errorOutput[$propertyPath] = $error->getMessage();
+            }
+
+            return new JsonResponse([
+                'errors' => $errorOutput,
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $price = $priceFactory->createPriceFromDto($dto);
+        $price->setProduct($product);
+
+        $priceRepository->save($price);
+        $dto = $priceFactory->createAppDto($price);
+        $jsonResponse = $serializer->serialize($dto, 'json');
+
+        return new JsonResponse($jsonResponse, JsonResponse::HTTP_CREATED, json: true);
+    }
+```
+
+**List:**
+
+The list should the generic ListResponse. 
+
+```php
+    #[Route('/app/price', name: 'app_price_list', methods: ['GET'])]
+    public function listPrices(
+        Request $request,
+        ProductRepositoryInterface $productRepository,
+        PriceRepositoryInterface $priceRepository,
+        SerializerInterface $serializer,
+        PriceDataMapper $priceFactory,
+    ): Response {
+        $this->getLogger()->info('Received request to lsit prices');
+
+        $lastKey = $request->get('last_key');
+        $resultsPerPage = (int) $request->get('limit', 10);
+
+        if ($resultsPerPage < 1) {
+            return new JsonResponse([
+                'reason' => 'limit is below 1',
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        if ($resultsPerPage > 100) {
+            return new JsonResponse([
+                'reason' => 'limit is above 100',
+            ], JsonResponse::HTTP_REQUEST_ENTITY_TOO_LARGE);
+        }
+        // TODO add filters
+        $filters = [];
+
+        $resultSet = $priceRepository->getList(
+            filters: $filters,
+            limit: $resultsPerPage,
+            lastId: $lastKey,
+        );
+
+        $dtos = array_map([$priceFactory, 'createAppDto'], $resultSet->getResults());
+
+        $listResponse = new ListResponse();
+        $listResponse->setHasMore($resultSet->hasMore());
+        $listResponse->setData($dtos);
+        $listResponse->setLastKey($resultSet->getLastKey());
+
+        $json = $serializer->serialize($listResponse, 'json');
+
+        return new JsonResponse($json, json: true);
+    }
+```
+
+**Update:**
+
+```php
+    #[IsGranted('ROLE_ACCOUNT_MANAGER')]
+    #[Route('/app/product/{id}/price/{priceId}/delete', name: 'app_product_price_delete', methods: ['POST'])]
+    public function deletePrice(
+        Request $request,
+        PriceRepositoryInterface $priceRepository,
+    ) {
+        $this->getLogger()->info('Received request to delete price', ['product_id' => $request->get('id'), 'price_id' => $request->get('priceId')]);
+
+        try {
+            /** @var Price $price */
+            $price = $priceRepository->findById($request->get('priceId'));
+        } catch (NoEntityFoundException $exception) {
+            return new JsonResponse([], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $price->markAsDeleted();
+        $priceRepository->save($price);
+
+        return new JsonResponse([], JsonResponse::HTTP_ACCEPTED);
+    }
+```
+
+**Delete**
+
 ## Development Workflow
 
 ### Creating New Tests
