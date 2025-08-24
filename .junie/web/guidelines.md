@@ -219,13 +219,13 @@ Structure:
 
 Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action. 
 
-Controllers MUST NOT use doctrine entity manager directly and MUST use a repository interface. Dependencies should be injected into the action and not the constructor.
+Controllers MUST NOT use doctrine EntityManager directly and MUST use a repository interface. Dependencies should be injected into the action and not the constructor.
 
 ### CRUD Actions
 
 **Create:**
 ```php
-    #[IsGranted('ROLE_ACCOUNT_MANAGER')]
+    #[IsGranted('ROLE_LEAD')]
     #[Route('/app/product/{id}/price', name: 'app_product_price_create', methods: ['POST'])]
     public function createPrice(
         Request $request,
@@ -273,7 +273,7 @@ Controllers MUST NOT use doctrine entity manager directly and MUST use a reposit
 
 **List:**
 
-The list should the generic ListResponse. 
+The list should be the generic ListResponse. 
 
 ```php
     #[Route('/app/price', name: 'app_price_list', methods: ['GET'])]
@@ -325,7 +325,7 @@ The list should the generic ListResponse.
 **Update:**
 
 ```php
-    #[IsGranted('ROLE_ACCOUNT_MANAGER')]
+    #[IsGranted('ROLE_LEAD')]
     #[Route('/app/product/{id}/price/{priceId}/delete', name: 'app_product_price_delete', methods: ['POST'])]
     public function deletePrice(
         Request $request,
@@ -348,6 +348,104 @@ The list should the generic ListResponse.
 ```
 
 **Delete**
+```php
+    #[IsGranted('ROLE_LEAD')]
+    #[Route('/app/product/{id}/price/{priceId}/delete', name: 'app_product_price_delete', methods: ['POST'])]
+    public function deletePrice(
+        Request $request,
+        PriceRepositoryInterface $priceRepository,
+    ) {
+        $this->getLogger()->info('Received request to delete price', ['product_id' => $request->get('id'), 'price_id' => $request->get('priceId')]);
+
+        try {
+            /** @var Price $price */
+            $price = $priceRepository->findById($request->get('priceId'));
+        } catch (NoEntityFoundException $exception) {
+            return new JsonResponse([], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $price->markAsDeleted();
+        $priceRepository->save($price);
+
+        return new JsonResponse([], JsonResponse::HTTP_ACCEPTED);
+    }
+```
+
+**Edit:**
+
+```php
+ #[IsGranted('ROLE_LEAD')]
+    #[Route('/app/product/{id}/update', name: 'app_product_update_view', methods: ['GET'])]
+    public function viewUpdateProduct(
+        Request $request,
+        ProductRepositoryInterface $productRepository,
+        ProductDataMapper $dataMapper,
+        TaxTypeRepositoryInterface $taxTypeRepository,
+        TaxTypeDataMapper $taxTypeDataMapper,
+        SerializerInterface $serializer,
+    ): Response {
+        $this->getLogger()->info('Received request to read update products', ['product_id' => $request->get('id')]);
+
+        try {
+            $product = $productRepository->getById($request->get('id'));
+        } catch (NoEntityFoundException $exception) {
+            return new JsonResponse(['success' => false], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $taxTypes = $taxTypeRepository->getAll();
+        $taxTypeDtos = array_map([$taxTypeDataMapper, 'createAppDto'], $taxTypes);
+        $view = new UpdateProductView();
+        $view->setProduct($dataMapper->createAppDtoFromProduct($product));
+        $view->setTaxTypes($taxTypeDtos);
+
+        $json = $serializer->serialize($view, 'json');
+
+        return new JsonResponse($json, json: true);
+    }
+
+    #[IsGranted('ROLE_LEAD')]
+    #[Route('/app/product/{id}', name: 'app_product_update', methods: ['POST'])]
+    public function updateProduct(
+        Request $request,
+        ProductRepositoryInterface $productRepository,
+        SerializerInterface $serializer,
+        ValidatorInterface $validator,
+        ProductDataMapper $productFactory,
+    ): Response {
+        $this->getLogger()->info('Received request to write update products', ['product_id' => $request->get('id')]);
+
+        try {
+            /** @var Product $product */
+            $product = $productRepository->getById($request->get('id'));
+        } catch (NoEntityFoundException $e) {
+            return new JsonResponse([], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        /** @var CreateProduct $dto */
+        $dto = $serializer->deserialize($request->getContent(), CreateProduct::class, 'json');
+        $errors = $validator->validate($dto);
+
+        if (count($errors) > 0) {
+            $errorOutput = [];
+            foreach ($errors as $error) {
+                $propertyPath = $error->getPropertyPath();
+                $errorOutput[$propertyPath] = $error->getMessage();
+            }
+
+            return new JsonResponse([
+                'errors' => $errorOutput,
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $newProduct = $productFactory->createFromAppCreate($dto, $product);
+
+        $productRepository->save($newProduct);
+        $dto = $productFactory->createAppDtoFromProduct($newProduct);
+        $jsonResponse = $serializer->serialize($dto, 'json');
+
+        return new JsonResponse($jsonResponse, JsonResponse::HTTP_ACCEPTED, json: true);
+    }
+```
 
 ## Development Workflow
 
