@@ -21,7 +21,7 @@ Basic Flow for a feature is as follows:
 
 When committing changes, ensure that:
 
-* If there are PHP changes run `vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes` to ensure the code style is correct
+* YOU MUST If there are PHP changes, run `vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes` to ensure the code style is correct
 * The commit message MUST start with a prefix for the JIRA ticket if there is one if not DH-NIL
 * The commit message is clear and descriptive.
 * That you're committing using the gpg key that is located at ~/agent.signing
