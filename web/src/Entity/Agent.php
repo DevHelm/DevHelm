@@ -20,7 +20,10 @@ class Agent
     #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: 'agents')]
     #[ORM\JoinColumn(name: 'lead_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Lead $lead = null;
-    
+
+    /**
+     * The team this agent belongs to
+     */
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'agents')]
     #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id', nullable: false)]
     private Team $team;
@@ -28,6 +31,9 @@ class Agent
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
+    /**
+     * The project identifier this agent is associated with
+     */
     #[ORM\Column(type: 'string', length: 10)]
     private string $project;
 
@@ -156,11 +162,22 @@ class Agent
         return $this;
     }
 
+    /**
+     * Get the project identifier
+     *
+     * @return string The project identifier
+     */
     public function getProject(): string
     {
         return $this->project;
     }
 
+    /**
+     * Set the project identifier
+     *
+     * @param string $project The project identifier
+     * @return self
+     */
     public function setProject(string $project): self
     {
         $this->project = $project;
@@ -168,11 +185,22 @@ class Agent
         return $this;
     }
 
+    /**
+     * Get the team this agent belongs to
+     *
+     * @return Team The team entity
+     */
     public function getTeam(): Team
     {
         return $this->team;
     }
 
+    /**
+     * Set the team this agent belongs to
+     *
+     * @param Team $team The team entity
+     * @return self
+     */
     public function setTeam(Team $team): self
     {
         $this->team = $team;
@@ -247,7 +275,15 @@ class Agent
     {
         $this->updatedAt = new \DateTimeImmutable('now');
     }
-    
+
+    /**
+     * Factory method to create a new Agent for a specific team
+     *
+     * @param string $name The name of the agent
+     * @param string $project The project identifier the agent is associated with
+     * @param Team $team The team the agent belongs to
+     * @return self The newly created Agent instance
+     */
     public static function createForTeam(string $name, string $project, Team $team): self
     {
         $agent = new self();
