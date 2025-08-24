@@ -23,44 +23,14 @@ class AgentContext implements Context
     use SendRequestTrait;
     use TeamTrait;
 
-    private $session;
-    private $entityManager;
-    private $agentRepository;
-    private $serializer;
-    private $validator;
-    private $agentFactory;
-    private $dtoFactory;
-    private $response;
-    private $userContext;
-    private $teamContext;
 
     public function __construct(
-        Session $session,
-        EntityManagerInterface $entityManager,
-        AgentRepositoryInterface $agentRepository,
-        SerializerInterface $serializer,
-        ValidatorInterface $validator,
-        AgentFactory $agentFactory,
-        CreateAgentDtoFactory $dtoFactory
+        private Session $session,
+        private EntityManagerInterface $entityManager,
+        private AgentRepositoryInterface $agentRepository,
     ) {
-        $this->session = $session;
-        $this->entityManager = $entityManager;
-        $this->agentRepository = $agentRepository;
-        $this->serializer = $serializer;
-        $this->validator = $validator;
-        $this->agentFactory = $agentFactory;
-        $this->dtoFactory = $dtoFactory;
     }
 
-    /**
-     * @BeforeScenario
-     */
-    public function gatherContexts(\Behat\Behat\Hook\Scope\BeforeScenarioScope $scope)
-    {
-        $environment = $scope->getEnvironment();
-        $this->userContext = $environment->getContext(UserContext::class);
-        $this->teamContext = $environment->getContext(TeamContext::class);
-    }
 
     /**
      * @When I create an agent:
@@ -68,26 +38,15 @@ class AgentContext implements Context
     public function iCreateAnAgent(TableNode $table)
     {
         $data = $table->getRowsHash();
-        $user = $this->userContext->getCurrentUser();
-        $team = $user->getTeam();
-
-        // Create DTO from data
-        $dto = $this->dtoFactory->createFromArray([
-            'name' => $data['Name'] ?? '',
-            'project' => $data['Project'] ?? ''
-        ]);
-
         // Send API request
         $this->sendJsonRequest(
             'POST',
             '/app/agents',
             [
-                'name' => $dto->name,
-                'project' => $dto->project
+                'name' => $data['Name'],
+                'project' => $data['Project']
             ]
         );
-        
-        $this->response = $this->session->getPage()->getContent();
     }
 
     /**
@@ -96,7 +55,11 @@ class AgentContext implements Context
     public function thereShouldBeAnAgentCalled($name)
     {
         $agent = $this->agentRepository->findByName($name);
-        Assert::notNull($agent, "Agent with name '$name' was not found");
+
+        if (!$agent) {
+            var_dump($this->getJsonContent());
+            throw new \Exception("Agent with name '$name' was not found");
+        }
     }
 
     /**
@@ -105,7 +68,9 @@ class AgentContext implements Context
     public function thereShouldNotBeAnAgentCalled($name)
     {
         $agent = $this->agentRepository->findByName($name);
-        Assert::null($agent, "Agent with name '$name' was found but should not exist");
+        if ($agent) {
+            throw new \Exception("Agent with name '$name' was found");
+        }
     }
 
     /**
@@ -113,8 +78,9 @@ class AgentContext implements Context
      */
     public function thereShouldBeAnValidationForNoProject()
     {
-        $responseData = json_decode($this->response, true);
-        Assert::keyExists($responseData, 'errors', 'Validation errors not found in response');
-        Assert::keyExists($responseData['errors'], 'project', 'No validation error for project field');
+        $responseData = $this->getJsonContent();
+        if (!isset($responseData['errors'])) {
+            throw new \Exception('No validation errors found in response');
+        }
     }
 }

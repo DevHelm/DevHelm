@@ -113,7 +113,7 @@ export default {
       this.errors = {};
 
       try {
-        const response = await axios.post('/api/agents', this.newAgent);
+        const response = await axios.post('/app/agents', this.newAgent);
         this.agents.push(response.data);
         this.showCreateForm = false;
         this.resetForm();
@@ -133,7 +133,7 @@ export default {
     async loadAgents() {
       this.isLoading = true;
       try {
-        const response = await axios.get('/api/agents');
+        const response = await axios.get('/app/agents');
         this.agents = response.data;
       } catch (error) {
         console.error('Error loading agents:', error);
