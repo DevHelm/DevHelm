@@ -2,13 +2,15 @@
 
 namespace App\Controller\App;
 
+use App\Dto\App\Request\CreateAgentDto;
 use App\Entity\Team;
 use App\Entity\User;
 use App\Factory\AgentFactory;
-use App\Factory\CreateAgentDtoFactory;
 use App\Repository\AgentRepositoryInterface;
 use App\Service\ApiKeyGenerator;
 use Parthenon\User\Entity\UserInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,25 +22,28 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[Route('/app/agents')]
 class AgentController
 {
+    use LoggerAwareTrait;
+
     #[Route('', name: 'app_agent_create', methods: ['POST'])]
     public function create(
         Request $request,
         AgentRepositoryInterface $agentRepository,
         AgentFactory $agentFactory,
-        CreateAgentDtoFactory $dtoFactory,
         SerializerInterface $serializer,
         ValidatorInterface $validator,
         ApiKeyGenerator $apiKeyGenerator,
+        LoggerInterface $logger,
         #[CurrentUser]
         User $user,
     ): JsonResponse {
+        $this->setLogger($logger);
+        $this->logger->info('Agent creation request received');
         try {
-            $data = json_decode($request->getContent(), true);
-
-            if (!$data) {
-                return new JsonResponse(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
-            }
-            $dto = $dtoFactory->createFromArray($data);
+            $dto = $serializer->deserialize(
+                $request->getContent(),
+                CreateAgentDto::class,
+                'json'
+            );
 
             $violations = $validator->validate($dto);
             if (count($violations) > 0) {
@@ -55,18 +60,16 @@ class AgentController
             $agent = $agentFactory->createFromDto($dto, $team);
             $agentRepository->save($agent);
 
-            $apiKey = $apiKeyGenerator->generateForAgent($agent);
-            $responseData = $serializer->serialize([
-                'id' => (string) $agent->getId(),
-                'name' => $agent->getName(),
-                'project' => $agent->getProject(),
-                'team_id' => (string) $agent->getTeam()->getId(),
-                'created_at' => $agent->getCreatedAt()->format('Y-m-d H:i:s'),
-            ], 'json');
+            $agentResponseDto = $agentFactory->createAgentResponseDto($agent);
+            $responseData = $serializer->serialize($agentResponseDto, 'json');
 
             return new JsonResponse($responseData, Response::HTTP_CREATED, [], true);
         } catch (\Exception $e) {
-            return new JsonResponse(['error' => 'Internal server error', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            $this->logger->error('Error creating agent: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            return new JsonResponse(['error' => 'Internal server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -74,8 +77,12 @@ class AgentController
     public function list(
         Request $request,
         AgentRepositoryInterface $agentRepository,
+        AgentFactory $agentFactory,
         SerializerInterface $serializer,
+        LoggerInterface $logger,
     ): JsonResponse {
+        $this->setLogger($logger);
+        $this->logger->info('Agent list request received');
         try {
             /** @var UserInterface $user */
             $user = $request->attributes->get('_user');
@@ -87,17 +94,16 @@ class AgentController
 
             $agents = $agentRepository->findByTeam($team);
 
-            $data = array_map(function ($agent) {
-                return [
-                    'id' => $agent->getId()->toString(),
-                    'name' => $agent->getName(),
-                    'project' => $agent->getProject(),
-                    'created_at' => $agent->getCreatedAt()->format('Y-m-d H:i:s'),
-                ];
+            $data = array_map(function ($agent) use ($agentFactory) {
+                return $agentFactory->createAgentResponseDto($agent);
             }, $agents);
 
             return new JsonResponse($serializer->serialize($data, 'json'), Response::HTTP_OK, [], true);
         } catch (\Exception $e) {
+            $this->logger->error('Error retrieving agent list: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return new JsonResponse(['error' => 'Internal server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
