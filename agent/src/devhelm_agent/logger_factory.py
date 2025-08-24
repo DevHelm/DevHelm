@@ -2,7 +2,7 @@ import os
 import sys
 from loguru import logger
 from typing import Optional
-from config import Config
+from .config import Config
 
 
 class LoggerFactory:
