@@ -15,6 +15,12 @@ class AgentRepository extends DoctrineCrudRepository implements AgentRepositoryI
 
     public function findByName(string $name): ?Agent
     {
-        return $this->entityRepository->findOneBy(['name' => $name]);
+        $agent = $this->entityRepository->findOneBy(['name' => $name]);
+
+        if (!$agent instanceof Agent) {
+            return null;
+        }
+
+        return $agent;
     }
 }
