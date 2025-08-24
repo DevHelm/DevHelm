@@ -156,13 +156,13 @@ class ExampleTest extends TestCase
 #### Running Behat Tests
 ```bash
 # Run all BDD tests
-vendor/bin/behat
+docker compose exec php-fpm vendor/bin/behat
 
 # Dry run to check syntax
-vendor/bin/behat --dry-run
+docker compose exec php-fpm vendor/bin/behat --dry-run
 
 # Run specific feature
-vendor/bin/behat features/demo.feature
+docker compose exec php-fpm vendor/bin/behat features/demo.feature
 ```
 
 ## Code Quality
@@ -172,7 +172,7 @@ The project uses PHP CS Fixer for code style enforcement:
 
 ```bash
 # Fix code style (as per git guidelines)
-vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes
+docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes
 ```
 
 ### Testing Guidelines
