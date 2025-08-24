@@ -1,4 +1,4 @@
-# ComControl Web Development Guidelines
+# DevHelm Web Development Guidelines
 
 This document provides essential information for developing the ComControl web application, a Symfony 7.2 + Vue.js 3 project with comprehensive testing setup.
 
