@@ -20,9 +20,16 @@ class Agent
     #[ORM\ManyToOne(targetEntity: Lead::class, inversedBy: 'agents')]
     #[ORM\JoinColumn(name: 'lead_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Lead $lead = null;
+    
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'agents')]
+    #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id', nullable: false)]
+    private Team $team;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
+
+    #[ORM\Column(type: 'string', length: 10)]
+    private string $project;
 
     #[ORM\Column(name: 'github_profile', type: 'string', length: 255, nullable: true)]
     private ?string $githubProfile = null;
@@ -149,6 +156,30 @@ class Agent
         return $this;
     }
 
+    public function getProject(): string
+    {
+        return $this->project;
+    }
+
+    public function setProject(string $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    public function getTeam(): Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(Team $team): self
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
     /** @return ApiKey[] */
     public function getApiKeys(): array
     {
@@ -215,5 +246,16 @@ class Agent
     public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTimeImmutable('now');
+    }
+    
+    public static function createForTeam(string $name, string $project, Team $team): self
+    {
+        $agent = new self();
+        $agent->setName($name);
+        $agent->setProject($project);
+        $agent->setTeam($team);
+        $agent->setStatus('inactive');
+        
+        return $agent;
     }
 }
