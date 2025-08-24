@@ -70,6 +70,9 @@ def main():
     
     logger.info("Entering main runtime loop...")
     
+    # Counter for consecutive continue prompts (DH-8: Continue limit)
+    consecutive_continue_count = 0
+    
     # Main runtime loop
     while True:
         try:
@@ -89,6 +92,9 @@ def main():
                         current_task = result
                         logger.info(f"New task received: {current_task.ticket_id} - {current_task.prompt}")
                         
+                        # Reset continue counter when new task is received (DH-8: Continue limit)
+                        consecutive_continue_count = 0
+                        
                         success = ui.givePrompt(current_task.prompt)
                         if success:
                             logger.info("Successfully entered new task prompt")
@@ -98,6 +104,14 @@ def main():
                     elif result == TaskStatus.BUSY:
                         # DevHelm says still busy - tell Junie to continue
                         logger.info("DevHelm indicates task still in progress - telling Junie to continue")
+                        
+                        # Check continue limit before sending continue prompt (DH-8: Continue limit)
+                        consecutive_continue_count += 1
+                        logger.debug(f"Continue count: {consecutive_continue_count}/{config.max_consecutive_continues}")
+                        
+                        if consecutive_continue_count > config.max_consecutive_continues:
+                            logger.warning(f"Maximum consecutive continue limit ({config.max_consecutive_continues}) reached. Terminating agent to avoid quota waste.")
+                            sys.exit(0)
                         
                         success = ui.givePrompt("continue")
                         if success:
