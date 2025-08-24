@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <LoadingScreen :ready="!isLoading" :loading-message="$t('app.agents.list.loading')">
     <h1 class="page-title">{{ $t('app.agents.main.title') }}</h1>
 
     <div class="top-button-container">
@@ -39,10 +39,9 @@
         </div>
 
         <div class="form-actions">
-          <button type="submit" class="btn--main" :disabled="isCreating">
-            <i v-if="isCreating" class="fa-solid fa-spinner fa-spin"></i>
-            {{ isCreating ? $t('app.agents.create.creating') : $t('app.agents.create.submit') }}
-          </button>
+          <SubmitButton :in-progress="isCreating" :loading-text="$t('app.agents.create.creating')">
+            {{ $t('app.agents.create.submit') }}
+          </SubmitButton>
           <button type="button" class="btn--secondary" @click="cancelCreate">
             {{ $t('app.agents.create.cancel') }}
           </button>
@@ -52,10 +51,7 @@
 
     <div class="agents-list">
       <h2>{{ $t('app.agents.list.title') }}</h2>
-      <div v-if="isLoading" class="loading">
-        <i class="fa-solid fa-spinner fa-spin"></i> {{ $t('app.agents.list.loading') }}
-      </div>
-      <div v-else-if="agents.length === 0" class="empty-state">
+      <div v-if="agents.length === 0" class="empty-state">
         {{ $t('app.agents.list.empty') }}
       </div>
       <div v-else class="agents-grid">
@@ -70,7 +66,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </LoadingScreen>
 </template>
 
 <script>
@@ -153,14 +149,6 @@ export default {
 </script>
 
 <style scoped>
-.form-container {
-  background: #f9f9f9;
-  padding: 1.5rem;
-  margin: 1rem 0;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-}
-
 .form-group {
   margin-bottom: 1rem;
 }
@@ -183,37 +171,17 @@ export default {
   border-color: #dc3545;
 }
 
-.error-message {
-  color: #dc3545;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
-
 .form-actions {
   display: flex;
   gap: 1rem;
   margin-top: 1.5rem;
 }
 
-.btn--secondary {
-  background: #6c757d;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn--secondary:hover {
-  background: #5a6268;
-}
-
 .agents-list {
   margin-top: 2rem;
 }
 
-.loading, .empty-state {
+.empty-state {
   text-align: center;
   padding: 2rem;
   color: #666;

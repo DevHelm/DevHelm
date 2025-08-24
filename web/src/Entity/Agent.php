@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\AgentStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -43,8 +44,8 @@ class Agent
     #[ORM\Column(name: 'jira_profile', type: 'string', length: 255, nullable: true)]
     private ?string $jiraProfile = null;
 
-    #[ORM\Column(type: 'string', length: 50)]
-    private string $status = 'inactive';
+    #[ORM\Column(type: 'string', enumType: AgentStatus::class)]
+    private AgentStatus $status = AgentStatus::Enabled;
 
     #[ORM\Column(name: 'last_seen', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $lastSeen = null;
@@ -276,22 +277,4 @@ class Agent
         $this->updatedAt = new \DateTimeImmutable('now');
     }
 
-    /**
-     * Factory method to create a new Agent for a specific team
-     *
-     * @param string $name The name of the agent
-     * @param string $project The project identifier the agent is associated with
-     * @param Team $team The team the agent belongs to
-     * @return self The newly created Agent instance
-     */
-    public static function createForTeam(string $name, string $project, Team $team): self
-    {
-        $agent = new self();
-        $agent->setName($name);
-        $agent->setProject($project);
-        $agent->setTeam($team);
-        $agent->setStatus('inactive');
-        
-        return $agent;
-    }
 }

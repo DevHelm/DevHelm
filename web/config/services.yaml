@@ -56,12 +56,6 @@ services:
     app.repository.orm.team_invite_code:
         class: App\Repository\Orm\TeamInviteCodeRepository
 
-    App\Repository\AgentRepository:
-        arguments:
-            $entityRepository: '@app.repository.orm.agent'
-    app.repository.orm.agent:
-        class: App\Repository\Orm\AgentRepository
-
 
     parthenon.user.repository.forgot_password_code_repository:
         class: Parthenon\User\Repository\ForgotPasswordCodeRepository

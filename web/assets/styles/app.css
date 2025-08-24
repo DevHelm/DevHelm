@@ -184,6 +184,14 @@
     @apply block text-red-500;
 }
 
+.form-container {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
 .menu-link {
     @apply no-underline text-black hover:text-slate-800 hover:no-underline;
 }
