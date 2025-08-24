@@ -50,4 +50,6 @@ When creating a pull request, follow these guidelines:
 * It should reference the JIRA ticket if applicable.
 * It should be assigned to the appropriate reviewer (that-guy-iain).
 * It should be linked to the relevant JIRA ticket.
+* If there is already a pull request for the same branch, you should not create a new one. Instead, update the existing pull request with your changes.
+* There should only be one pull request per JIRA ticket.
 * * You will check the status of the build with a 1 minute pause inbetween checks and address any issues that arise

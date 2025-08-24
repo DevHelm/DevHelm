@@ -71,3 +71,80 @@ mcp/profile.out
 
 # Vendored dependencies (if used)
 mcp/vendor/
+
+# Python (agent) Ignores
+# Byte-compiled / optimized / DLL files
+agent/__pycache__/
+agent/**/__pycache__/
+agent/*.py[cod]
+agent/**/*.py[cod]
+agent/*$py.class
+agent/**/*$py.class
+
+# C extensions
+agent/*.so
+agent/**/*.so
+
+# Distribution / packaging
+agent/.Python
+agent/build/
+agent/develop-eggs/
+agent/dist/
+agent/downloads/
+agent/eggs/
+agent/.eggs/
+agent/lib/
+agent/lib64/
+agent/parts/
+agent/sdist/
+agent/var/
+agent/wheels/
+agent/*.egg-info/
+agent/.installed.cfg
+agent/*.egg
+agent/MANIFEST
+
+# PyInstaller
+agent/*.manifest
+agent/*.spec
+
+# Unit test / coverage reports
+agent/htmlcov/
+agent/.coverage
+agent/.coverage.*
+agent/.cache
+agent/.pytest_cache/
+agent/nosetests.xml
+agent/coverage.xml
+agent/*.cover
+agent/.hypothesis/
+agent/.pytest_cache
+
+# Environments
+agent/.env
+agent/.venv
+agent/env/
+agent/venv/
+agent/ENV/
+agent/env.bak/
+agent/venv.bak/
+
+# mypy
+agent/.mypy_cache/
+agent/.dmypy.json
+agent/dmypy.json
+
+# Pyre type checker
+agent/.pyre/
+
+# IDE
+agent/.vscode/
+agent/.idea/
+
+# OS
+agent/.DS_Store
+agent/Thumbs.db
+
+# Development tools
+agent/.tox/
+agent/.pre-commit-config.yaml.backup

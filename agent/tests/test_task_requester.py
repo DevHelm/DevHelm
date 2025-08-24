@@ -8,7 +8,7 @@ and ensure it handles different response scenarios correctly.
 import json
 import unittest
 from unittest.mock import Mock, patch
-from task_requester import TaskRequester, Task, TaskRequesterException, TaskStatus
+from devhelm_agent.task_requester import TaskRequester, Task, TaskRequesterException, TaskStatus
 
 
 class TestTaskRequester(unittest.TestCase):

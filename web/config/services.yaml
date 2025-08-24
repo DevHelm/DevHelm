@@ -72,8 +72,77 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
+    # --- ComControl domain repositories ---
+    # Agent
+    App\Repository\AgentRepositoryInterface: '@App\Repository\AgentRepository'
+    App\Repository\AgentRepository:
+        arguments:
+            $entityRepository: '@app.repository.orm.agent'
+    app.repository.orm.agent:
+        class: App\Repository\Orm\AgentRepository
+
+    # Lead
+    App\Repository\LeadRepositoryInterface: '@App\Repository\LeadRepository'
+    App\Repository\LeadRepository:
+        arguments:
+            $entityRepository: '@app.repository.orm.lead'
+    app.repository.orm.lead:
+        class: App\Repository\Orm\LeadRepository
+
+    # ApiKey
+    App\Repository\ApiKeyRepositoryInterface: '@App\Repository\ApiKeyRepository'
+    App\Repository\ApiKeyRepository:
+        arguments:
+            $entityRepository: '@app.repository.orm.api_key'
+    app.repository.orm.api_key:
+        class: App\Repository\Orm\ApiKeyRepository
+
+    # Task
+    App\Repository\TaskRepositoryInterface: '@App\Repository\TaskRepository'
+    App\Repository\TaskRepository:
+        arguments:
+            $entityRepository: '@app.repository.orm.task'
+    app.repository.orm.task:
+        class: App\Repository\Orm\TaskRepository
+
+    # Feedback
+    App\Repository\FeedbackRepositoryInterface: '@App\Repository\FeedbackRepository'
+    App\Repository\FeedbackRepository:
+        arguments:
+            $entityRepository: '@app.repository.orm.feedback'
+    app.repository.orm.feedback:
+        class: App\Repository\Orm\FeedbackRepository
+
+    # Question
+    App\Repository\QuestionRepositoryInterface: '@App\Repository\QuestionRepository'
+    App\Repository\QuestionRepository:
+        arguments:
+            $entityRepository: '@app.repository.orm.question'
+    app.repository.orm.question:
+        class: App\Repository\Orm\QuestionRepository
+
 
     Redis:
         class: Redis
         calls:
             - connect: ['%env(REDIS_HOST)%']
+
+    # Jira Integration Services
+    jira.configuration:
+        class: JiraCloud\Configuration\ArrayConfiguration
+        arguments:
+            - jiraHost: '%env(JIRA_HOST)%'
+              jiraUser: '%env(JIRA_USERNAME)%'
+              personalAccessToken: '%env(JIRA_PERSONAL_ACCESS_TOKEN)%'
+              jiraLogEnabled: false
+
+    JiraCloud\JiraClient:
+        arguments:
+            $configuration: '@jira.configuration'
+
+    App\Service\JiraTicketProvider:
+        arguments:
+            $jiraClient: '@JiraCloud\JiraClient'
+            $targetStatus: '%env(JIRA_TARGET_STATUS)%'
+
+    App\Interface\TicketProviderInterface: '@App\Service\JiraTicketProvider'

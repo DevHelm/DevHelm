@@ -21,8 +21,8 @@ The project is structured as follows:
 
 ## Model Context Provider (MCP)
 
-All the information about the MCP server is contained in the `mcp/` directory and ".junie/mcp". This includes the server code, configuration files, and any related documentation.
+All the information about the MCP server is contained in the `mcp/` directory and ".junie/mcp". This includes the server code, configuration files, and any related documentation. All the information about the web application is contained in the `web/` directory and ".junie/web". This includes the web application code, configuration files, and any related documentation. YOU MUST FOLLOW THESE WHEN WORKING ON THE MCP PROJECT.
 
 ## Web Application
 
-All the information about the web application is contained in the `web/` directory and ".junie/web". This includes the web application code, configuration files, and any related documentation.
+All the information about the web application is contained in the `web/` directory and ".junie/web". This includes the web application code, configuration files, and any related documentation. YOU MUST FOLLOW THESE WHEN WORKING ON THE WEB PROJECT.

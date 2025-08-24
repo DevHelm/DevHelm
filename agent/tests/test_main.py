@@ -9,9 +9,6 @@ import sys
 import os
 from unittest.mock import Mock, patch
 
-# Add the agent directory to the Python path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
 # Mock pyautogui before importing modules that depend on it
 # This prevents the DISPLAY environment variable error in headless environments
 mock_pyautogui = Mock()
@@ -26,8 +23,7 @@ mock_pyautogui.ImageNotFoundException = Exception
 sys.modules['pyautogui'] = mock_pyautogui
 
 # Import modules to test (after mocking)
-import main
-import ui_interaction
+from devhelm_agent import main, ui_interaction
 
 
 def test_imports():
@@ -37,8 +33,8 @@ def test_imports():
 
 
 def test_main_module_exists():
-    """Test that main module has expected functions."""
-    assert hasattr(main, 'main'), "main module should have a main() function"
+    """Test that main function is available and callable."""
+    assert callable(main), "main should be a callable function"
 
 
 def test_ui_interaction_module_exists():
