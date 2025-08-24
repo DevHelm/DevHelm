@@ -35,6 +35,9 @@ cp behat.yml.dist behat.yml
 
 #### Development
 ```bash
+# Start the docker environment
+docker compose up -d 
+
 # Build assets for development
 npm run dev
 
@@ -111,6 +114,9 @@ describe('Test Suite Name', () => {
 
 #### Running PHP Tests
 ```bash
+# Start the docker environment
+docker compose up -d 
+
 # Run all unit tests
 vendor/bin/phpunit
 
