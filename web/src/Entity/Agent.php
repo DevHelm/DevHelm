@@ -23,7 +23,7 @@ class Agent
     private ?Lead $lead = null;
 
     /**
-     * The team this agent belongs to
+     * The team this agent belongs to.
      */
     #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'agents')]
     #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id', nullable: false)]
@@ -33,7 +33,7 @@ class Agent
     private string $name;
 
     /**
-     * The project identifier this agent is associated with
+     * The project identifier this agent is associated with.
      */
     #[ORM\Column(type: 'string', length: 10)]
     private string $project;
@@ -164,7 +164,7 @@ class Agent
     }
 
     /**
-     * Get the project identifier
+     * Get the project identifier.
      *
      * @return string The project identifier
      */
@@ -174,10 +174,9 @@ class Agent
     }
 
     /**
-     * Set the project identifier
+     * Set the project identifier.
      *
      * @param string $project The project identifier
-     * @return self
      */
     public function setProject(string $project): self
     {
@@ -187,7 +186,7 @@ class Agent
     }
 
     /**
-     * Get the team this agent belongs to
+     * Get the team this agent belongs to.
      *
      * @return Team The team entity
      */
@@ -197,10 +196,9 @@ class Agent
     }
 
     /**
-     * Set the team this agent belongs to
+     * Set the team this agent belongs to.
      *
      * @param Team $team The team entity
-     * @return self
      */
     public function setTeam(Team $team): self
     {
@@ -276,5 +274,4 @@ class Agent
     {
         $this->updatedAt = new \DateTimeImmutable('now');
     }
-
 }

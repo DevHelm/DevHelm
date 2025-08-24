@@ -2,11 +2,10 @@
 
 namespace App\Controller\App;
 
-use App\Dto\App\Request\CreateAgentDto;
+use App\Entity\Team;
 use App\Factory\AgentFactory;
 use App\Factory\CreateAgentDtoFactory;
 use App\Repository\AgentRepositoryInterface;
-use App\Entity\Team;
 use Parthenon\User\Entity\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,11 +26,11 @@ class AgentController
         AgentFactory $agentFactory,
         CreateAgentDtoFactory $dtoFactory,
         SerializerInterface $serializer,
-        ValidatorInterface $validator
+        ValidatorInterface $validator,
     ): JsonResponse {
         try {
             $data = json_decode($request->getContent(), true);
-            
+
             if (!$data) {
                 return new JsonResponse(['error' => 'Invalid JSON data'], Response::HTTP_BAD_REQUEST);
             }
@@ -46,6 +45,7 @@ class AgentController
                 foreach ($violations as $violation) {
                     $errors[$violation->getPropertyPath()] = $violation->getMessage();
                 }
+
                 return new JsonResponse(['errors' => $errors], Response::HTTP_BAD_REQUEST);
             }
 
@@ -53,7 +53,7 @@ class AgentController
             /** @var UserInterface $user */
             $user = $request->attributes->get('_user');
             $team = $user->getTeam();
-            
+
             if (!$team instanceof Team) {
                 return new JsonResponse(['error' => 'User must belong to a team'], Response::HTTP_FORBIDDEN);
             }
@@ -74,11 +74,10 @@ class AgentController
                 'name' => $agent->getName(),
                 'project' => $agent->getProject(),
                 'team_id' => $agent->getTeam()->getId()->toString(),
-                'created_at' => $agent->getCreatedAt()->format('Y-m-d H:i:s')
+                'created_at' => $agent->getCreatedAt()->format('Y-m-d H:i:s'),
             ], 'json');
 
             return new JsonResponse($responseData, Response::HTTP_CREATED, [], true);
-
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Internal server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -89,30 +88,29 @@ class AgentController
     public function list(
         Request $request,
         AgentRepositoryInterface $agentRepository,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
     ): JsonResponse {
         try {
             /** @var UserInterface $user */
             $user = $request->attributes->get('_user');
             $team = $user->getTeam();
-            
+
             if (!$team instanceof Team) {
                 return new JsonResponse(['error' => 'User must belong to a team'], Response::HTTP_FORBIDDEN);
             }
 
             $agents = $agentRepository->findByTeam($team);
-            
-            $data = array_map(function($agent) {
+
+            $data = array_map(function ($agent) {
                 return [
                     'id' => $agent->getId()->toString(),
                     'name' => $agent->getName(),
                     'project' => $agent->getProject(),
-                    'created_at' => $agent->getCreatedAt()->format('Y-m-d H:i:s')
+                    'created_at' => $agent->getCreatedAt()->format('Y-m-d H:i:s'),
                 ];
             }, $agents);
 
             return new JsonResponse($serializer->serialize($data, 'json'), Response::HTTP_OK, [], true);
-
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Internal server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
