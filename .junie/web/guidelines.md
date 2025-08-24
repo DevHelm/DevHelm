@@ -154,7 +154,11 @@ class ExampleTest extends TestCase
 - `TeamContext`
 
 #### Running Behat Tests
+
 ```bash
+# Start up docker
+docker compose up -d
+
 # Run all BDD tests
 docker compose exec php-fpm vendor/bin/behat
 
