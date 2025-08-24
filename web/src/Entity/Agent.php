@@ -259,9 +259,6 @@ class Agent
         $this->apiKeys = $apiKeys;
     }
 
-    /**
-     * @param mixed $id
-     */
     public function setId($id): void
     {
         $this->id = $id;
@@ -288,5 +285,4 @@ class Agent
 
         return $this;
     }
-
 }
