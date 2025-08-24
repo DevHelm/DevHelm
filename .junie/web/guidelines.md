@@ -194,15 +194,11 @@ The repository pattern that is used throughout this project is documented in rep
 
 ### DTOs
 
-The DTOS are held within the App\Dto namespace. They are readonly classes that use the constructor promotion and only contain public members.
-
-DTOs are organised by endpoint type api, app, and webhook which is decided based on the route of the controller action. And then organised further into Request and Response based upon if they are used to represent the request body or response body. Webhooks may not have a DTO for all endpoints, but API and APP MUST have DTOs for their Request and Response.
-
-DTOs are to use the Symfony Serializer component. And members are to be snake_case and not camelCase.
-
-Response DTOs are to be created within the Factory relating to that domain item.
-
-And Generic will be things such as ListResponse.
+* The DTOS are held within the App\Dto namespace. They are readonly classes that use the constructor promotion and only contain public members.
+* DTOs are organised by endpoint type api, app, and webhook which is decided based on the route of the controller action. And then organised further into Request and Response based upon if they are used to represent the request body or response body. Webhooks may not have a DTO for all endpoints, but API and APP MUST have DTOs for their Request and Response.
+* DTOs are to use the Symfony Serializer component. And members are to be snake_case and not camelCase.
+* Response DTOs are to be created within the Factory relating to that domain item.
+* And Generic will be things such as ListResponse.
 
 Structure:
 
@@ -217,9 +213,15 @@ Structure:
 
 ### Controllers
 
-Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action. 
+* Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action. 
+* Controllers *MUST NOT* use doctrine EntityManager directly and MUST use a repository interface. Dependencies should be injected into the action and not the constructor.
 
-Controllers MUST NOT use doctrine EntityManager directly and MUST use a repository interface. Dependencies should be injected into the action and not the constructor.
+**Structure:**
+
+|- Api
+|- App
+|- Webhooks
+
 
 ### CRUD Actions
 
@@ -446,6 +448,13 @@ The list should be the generic ListResponse.
         return new JsonResponse($jsonResponse, JsonResponse::HTTP_ACCEPTED, json: true);
     }
 ```
+
+### Frontend
+
+* Within the Frontend submit buttons should use the Parthenon SubmitButton component.
+* When loading pages or changing views it should use LoadingScreen component.
+* THERE SHOULD NEVER BE RAW STRINGS IN THE TEMPLATE. EVERYTHING *MUST* BE A LOCALISATION ID
+* Translations
 
 ## Development Workflow
 
