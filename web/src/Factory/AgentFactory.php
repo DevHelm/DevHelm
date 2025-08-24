@@ -16,7 +16,7 @@ class AgentFactory
         $agent->setProject($dto->project);
         $agent->setTeam($team);
         $agent->setStatus(AgentStatus::Enabled);
-        
+
         return $agent;
     }
 }

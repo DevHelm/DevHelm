@@ -23,7 +23,7 @@ readonly class CreateAgentDto
             minMessage: 'Project must be at least {{ limit }} characters long',
             maxMessage: 'Project cannot be longer than {{ limit }} characters'
         )]
-        public string $project
+        public string $project,
     ) {
     }
 }
