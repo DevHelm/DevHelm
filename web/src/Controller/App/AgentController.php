@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Factory\AgentFactory;
 use App\Factory\CreateAgentDtoFactory;
 use App\Repository\AgentRepositoryInterface;
+use App\Service\ApiKeyGenerator;
 use Parthenon\User\Entity\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,7 @@ class AgentController
         CreateAgentDtoFactory $dtoFactory,
         SerializerInterface $serializer,
         ValidatorInterface $validator,
+        ApiKeyGenerator $apiKeyGenerator,
         #[CurrentUser]
         User $user
     ): JsonResponse {
@@ -53,6 +55,9 @@ class AgentController
 
             $agent = $agentFactory->createFromDto($dto, $team);
             $agentRepository->save($agent);
+            
+            // Generate an API key for the agent
+            $apiKey = $apiKeyGenerator->generateForAgent($agent);
 
             $responseData = $serializer->serialize([
                 'id' => (string) $agent->getId(),

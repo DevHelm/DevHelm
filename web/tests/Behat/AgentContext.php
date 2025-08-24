@@ -4,6 +4,7 @@ namespace App\Tests\Behat;
 
 use App\Dto\App\Request\CreateAgentDto;
 use App\Entity\Agent;
+use App\Entity\ApiKey;
 use App\Entity\Team;
 use App\Factory\AgentFactory;
 use App\Factory\CreateAgentDtoFactory;
@@ -81,6 +82,27 @@ class AgentContext implements Context
         $responseData = $this->getJsonContent();
         if (!isset($responseData['errors'])) {
             throw new \Exception('No validation errors found in response');
+        }
+    }
+    
+    /**
+     * @Then there will be an API key for the agent called :name
+     */
+    public function thereWillBeAnApiKeyForTheAgentCalled($name)
+    {
+        $agent = $this->agentRepository->findByName($name);
+        
+        if (!$agent) {
+            throw new \Exception("Agent with name '$name' was not found");
+        }
+        
+        // Refresh the entity to ensure we have the latest data
+        $this->entityManager->refresh($agent);
+        
+        $apiKeys = $agent->getApiKeys();
+        
+        if (empty($apiKeys)) {
+            throw new \Exception("No API keys found for agent with name '$name'");
         }
     }
 }
