@@ -12,14 +12,14 @@ export const planservice = {
 
 
 function fetchPlanInfo() {
-    return axios.get(`/api/billing/plans`, {
+    return axios.get(`/app/billing/plans`, {
         headers: {'Content-Type': 'application/json'},
         data: {}
     }).then(handleResponse);
 }
 
 function startSubscriptionFromPaymentDetails(planName, paymentSchedule, currency, numberOfSeats = 1) {
-    return axios.post('/api/billing/subscription/start', {
+    return axios.post('/app/billing/subscription/start', {
         plan_name: planName,
         schedule: paymentSchedule,
         currency: currency,
@@ -28,18 +28,18 @@ function startSubscriptionFromPaymentDetails(planName, paymentSchedule, currency
 }
 
 function createCheckout(planName, paymentSchedule, currency) {
-    return axios.post(`/api/billing/plans/checkout/` + planName + '/' + paymentSchedule + '/' + currency, {}, {
+    return axios.post(`/app/billing/plans/checkout/` + planName + '/' + paymentSchedule + '/' + currency, {}, {
         headers: {'Content-Type': 'application/json'},
     }).then(handleResponse);
 }
 
 function createPerSeatCheckout(planName, paymentSchedule, currency, seats) {
-    return axios.post(`/api/billing/plans/checkout/` + planName + '/' + paymentSchedule + '/' + currency, {seats})
+    return axios.post(`/app/billing/plans/checkout/` + planName + '/' + paymentSchedule + '/' + currency, {seats})
         .then(handleResponse);
 }
 
 function changePlan(subscriptionId, planName, paymentSchedule, currency) {
-    return axios.post(`/api/billing/subscription/`+subscriptionId+`/change/` + planName + '/' + paymentSchedule+'/'+currency, {
+    return axios.post(`/app/billing/subscription/`+subscriptionId+`/change/` + planName + '/' + paymentSchedule+'/'+currency, {
         headers: {'Content-Type': 'application/json'},
         data: {}
     }).then(handleResponse);
@@ -47,5 +47,5 @@ function changePlan(subscriptionId, planName, paymentSchedule, currency) {
 
 
 function cancel(subscriptionId) {
-    return axios.post(`/api/billing/subscription/`+subscriptionId+`/cancel`, {}).then(handleResponse);
+    return axios.post(`/app/billing/subscription/`+subscriptionId+`/cancel`, {}).then(handleResponse);
 }
