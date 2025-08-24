@@ -120,3 +120,23 @@ services:
         class: Redis
         calls:
             - connect: ['%env(REDIS_HOST)%']
+
+    # Jira Integration Services
+    jira.configuration:
+        class: JiraCloud\Configuration\ArrayConfiguration
+        arguments:
+            - jiraHost: '%env(JIRA_HOST)%'
+              jiraUser: '%env(JIRA_USERNAME)%'
+              personalAccessToken: '%env(JIRA_PERSONAL_ACCESS_TOKEN)%'
+              jiraLogEnabled: false
+
+    JiraCloud\JiraClient:
+        arguments:
+            $configuration: '@jira.configuration'
+
+    App\Service\JiraTicketProvider:
+        arguments:
+            $jiraClient: '@JiraCloud\JiraClient'
+            $targetStatus: '%env(JIRA_TARGET_STATUS)%'
+
+    App\Interface\TicketProviderInterface: '@App\Service\JiraTicketProvider'
