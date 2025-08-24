@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Entity\Agent;
 use App\Entity\ApiKey;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\ApiKeyRepositoryInterface;
 
 /**
  * Service for generating API keys for agents.
@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class ApiKeyGenerator
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private ApiKeyRepositoryInterface $apiKeyRepository,
     ) {
     }
 
@@ -36,9 +36,8 @@ class ApiKeyGenerator
         // Associate the API key with the agent
         $agent->addApiKey($apiKey);
 
-        // Persist the API key
-        $this->entityManager->persist($apiKey);
-        $this->entityManager->flush();
+        // Save the API key using the repository
+        $this->apiKeyRepository->save($apiKey);
 
         return $apiKey;
     }
