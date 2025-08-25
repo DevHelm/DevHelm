@@ -1,4 +1,4 @@
-# comcontrol MCP Server (Go)
+# DevHelm MCP Server (Go)
 
 This is a minimal MCP server built with Go using the `github.com/mark3labs/mcp-go` library.
 
