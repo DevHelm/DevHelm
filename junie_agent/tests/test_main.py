@@ -23,7 +23,7 @@ mock_pyautogui.ImageNotFoundException = Exception
 sys.modules['pyautogui'] = mock_pyautogui
 
 # Import modules to test (after mocking)
-from devhelm_agent import main, ui_interaction
+from devhelm_junie_agent import main, ui_interaction
 
 
 def test_imports():

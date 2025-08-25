@@ -21,7 +21,7 @@ The agent project already has several good practices in place:
 ```
 agent/
 ├── src/
-│   └── devhelm_agent/
+│   └── devhelm_junie_agent/
 │       ├── __init__.py
 │       ├── main.py
 │       ├── config.py
@@ -72,7 +72,7 @@ agent/
 ## Implementation Steps
 
 ### Step 1: Restructure Package Layout
-1. Create `src/devhelm_agent/` directory
+1. Create `src/devhelm_junie_agent/` directory
 2. Move Python modules to package directory
 3. Add `__init__.py` files
 4. Update import statements
@@ -124,7 +124,7 @@ agent/
 ```
 agent/
 ├── src/
-│   └── devhelm_agent/
+│   └── devhelm_junie_agent/
 │       ├── __init__.py
 │       ├── main.py
 │       ├── config.py

@@ -34,7 +34,7 @@ dev = [
 Homepage = "https://github.com/devhelm/devhelm-monorepo"
 
 [project.scripts]
-devhelm-agent = "devhelm_agent.main:main"
+devhelm-junie-agent = "devhelm_junie_agent.main:main"
 
 [tool.setuptools]
 # Use src layout with package discovery
@@ -45,7 +45,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --cov=devhelm_agent --cov-report=term-missing"
+addopts = "-ra -q --cov=devhelm_junie_agent --cov-report=term-missing"
 testpaths = ["tests"]
 pythonpath = ["src"]
 
@@ -64,7 +64,15 @@ exclude_lines = [
 [tool.black]
 line-length = 88
 target-version = ["py38"]
-include = '\.pyi?$'
+include = '\.pyi?
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+
 extend-exclude = '''
 /(
   # directories
@@ -83,7 +91,7 @@ extend-exclude = '''
 profile = "black"
 multi_line_output = 3
 line_length = 88
-known_first_party = ["devhelm_agent"]
+known_first_party = ["devhelm_junie_agent"]
 
 [tool.mypy]
 python_version = "3.8"

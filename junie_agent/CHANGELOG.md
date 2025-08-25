@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Standard Python package structure with `src/devhelm_agent/` layout
+- Standard Python package structure with `src/devhelm_junie_agent/` layout
 - Comprehensive development tools configuration (black, isort, flake8, mypy)
 - Pre-commit hooks for code quality enforcement
 - Pytest configuration with coverage reporting
@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Restructured project from flat module layout to standard Python package
-- Moved all Python modules to `src/devhelm_agent/` directory
+- Moved all Python modules to `src/devhelm_junie_agent/` directory
 - Updated import statements to use relative imports within package
 - Moved test files to `tests/` directory with proper package imports
 - Updated `pyproject.toml` for src layout and added development dependencies
@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Consolidated all dependencies in `pyproject.toml` (added urllib3)
 
 ### Fixed
-- Package entry point now correctly references `devhelm_agent.main:main`
+- Package entry point now correctly references `devhelm_junie_agent.main:main`
 - Import paths updated for new package structure
 - Test mocking improved with shared fixtures
 

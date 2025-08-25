@@ -56,7 +56,7 @@ def task_requester():
     Returns:
         TaskRequester: Configured TaskRequester instance
     """
-    from devhelm_agent.task_requester import TaskRequester
+    from devhelm_junie_agent.task_requester import TaskRequester
     return TaskRequester(
         base_url="https://api.devhelm.example.com",
         api_key="test-api-key-123"

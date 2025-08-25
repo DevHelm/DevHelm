@@ -93,7 +93,7 @@ pytest -v
 pytest tests/test_main.py
 
 # Run tests with coverage report
-pytest --cov=devhelm_agent --cov-report=html
+pytest --cov=devhelm_junie_agent --cov-report=html
 ```
 
 ### Writing Tests
@@ -216,7 +216,7 @@ Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
 ```
 agent/
 ├── src/
-│   └── devhelm_agent/
+│   └── devhelm_junie_agent/
 │       ├── __init__.py
 │       ├── main.py          # Entry point and main logic
 │       ├── config.py        # Configuration management
