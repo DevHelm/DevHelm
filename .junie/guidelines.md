@@ -15,9 +15,9 @@ There are three main components in the ComControl project:
 
 The project is structured as follows:
 
-* `mcp/` - Contains the Model Context Provider (MCP) server code
-* `web/` - Contains the web application code
-* `agent/` - Containers the agent code
+* `mcp/` - Contains the Model Context Provider (MCP) server code - the guidelines can be found in `mcp/guidelines.md`
+* `web/` - Contains the web application code - the guidelines can be found in `web/guidelines.md`
+* `junie_agent/` - Containers the agent code - the guidelines can be found in `junie_agent/guidelines.md`
 
 ## Model Context Provider (MCP)
 
