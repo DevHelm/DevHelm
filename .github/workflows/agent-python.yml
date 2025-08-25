@@ -1,4 +1,4 @@
-name: Agent Python CI
+name: Junie Agent Python CI
 
 on:
   push:
