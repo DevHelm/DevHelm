@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="450px" src="./logo-small.png?cache">
+  <img width="450px" src="./readme-logo.png">
 </p>
 
 Helping automate code writing.
