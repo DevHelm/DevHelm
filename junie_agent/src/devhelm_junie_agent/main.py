@@ -113,11 +113,8 @@ def main():
                             logger.warning(f"Maximum consecutive continue limit ({config.max_consecutive_continues}) reached. Terminating agent to avoid quota waste.")
                             sys.exit(0)
                         
-                        success = ui.givePrompt("continue")
-                        if success:
-                            logger.info("Successfully entered 'continue' prompt")
-                        else:
-                            logger.error("Failed to enter 'continue' prompt")
+                        ui.continuePrompt()
+                        logger.info("Successfully entered 'continue' prompt")
                             
                     elif result == TaskStatus.NONE:
                         # DevHelm has no tasks - do nothing
