@@ -64,7 +64,7 @@ exclude_lines = [
 [tool.black]
 line-length = 88
 target-version = ["py38"]
-include = '\.pyi?
+include = "\.pyi?"
 
 [tool.mypy]
 python_version = "3.8"
