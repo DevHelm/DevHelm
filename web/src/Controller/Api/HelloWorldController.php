@@ -27,21 +27,23 @@ class HelloWorldController extends AbstractController
     #[Route('/hello-world', name: 'api_hello_world', methods: ['GET'])]
     public function helloWorld(): JsonResponse
     {
-        $response = [
-            'hello' => 'world'
-        ];
+        $response = [];
         
-        // Add agent info if available
+        // Add greeting based on authenticated agent
         if ($this->security->getUser() instanceof AgentUser) {
             /** @var AgentUser $user */
             $user = $this->security->getUser();
             $agent = $user->getAgent();
             
+            $response['hello'] = $agent->getName();
             $response['agent'] = [
                 'id' => $agent->getId(),
                 'name' => $agent->getName(),
                 'authenticated' => true
             ];
+        } else {
+            // Default greeting if no agent is authenticated
+            $response['hello'] = 'world';
         }
         
         return new JsonResponse($response);
