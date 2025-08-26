@@ -19,7 +19,7 @@ declare(strict_types=1);
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace App\Entity;
+namespace DevHelm\Control\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

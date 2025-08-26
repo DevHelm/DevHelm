@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace DevHelm\Control\Repository;
 
 interface UserRepositoryInterface extends \Parthenon\User\Repository\UserRepositoryInterface
 {

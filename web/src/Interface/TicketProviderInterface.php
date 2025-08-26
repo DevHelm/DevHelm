@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Interface;
+namespace DevHelm\Control\Interface;
 
-use App\ValueObject\Ticket;
+use DevHelm\Control\ValueObject\Ticket;
 
 interface TicketProviderInterface
 {

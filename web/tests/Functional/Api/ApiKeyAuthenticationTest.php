@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Tests\Functional\Api;
+namespace Test\DevHelm\Control\Functional\Api;
 
-use App\Entity\Agent;
-use App\Entity\ApiKey;
-use App\Entity\Team;
-use App\Enum\AgentStatus;
+use DevHelm\Control\Entity\Agent;
+use DevHelm\Control\Entity\ApiKey;
+use DevHelm\Control\Entity\Team;
+use DevHelm\Control\Enum\AgentStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

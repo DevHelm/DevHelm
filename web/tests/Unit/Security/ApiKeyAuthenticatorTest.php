@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Unit\Security;
+namespace Test\DevHelm\Control\Unit\Security;
 
-use App\Security\AgentUser;
-use App\Security\AgentUserProvider;
-use App\Security\ApiKeyAuthenticator;
+use DevHelm\Control\Security\AgentUser;
+use DevHelm\Control\Security\AgentUserProvider;
+use DevHelm\Control\Security\ApiKeyAuthenticator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;

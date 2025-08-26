@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace DevHelm\Control\Entity;
 
-namespace App\Entity;
+namespace DevHelm\Control\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

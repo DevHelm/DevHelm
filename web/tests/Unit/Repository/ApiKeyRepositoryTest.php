@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Unit\Repository;
+namespace Test\DevHelm\Control\Unit\Repository;
 
-use App\Entity\ApiKey;
-use App\Repository\ApiKeyRepository;
+use DevHelm\Control\Entity\ApiKey;
+use DevHelm\Control\Repository\ApiKeyRepository;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;

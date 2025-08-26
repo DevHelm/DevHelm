@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service;
+namespace DevHelm\Control\Service;
 
-use App\Interface\TicketProviderInterface;
-use App\ValueObject\Ticket;
+use DevHelm\Control\Interface\TicketProviderInterface;
+use DevHelm\Control\ValueObject\Ticket;
 use JiraCloud\Issue\IssueService;
 use JiraCloud\JiraClient;
 use JiraCloud\JQL\JqlQuery;

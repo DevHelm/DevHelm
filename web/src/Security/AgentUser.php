@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Security;
+namespace DevHelm\Control\Security;
 
-use App\Entity\Agent;
+use DevHelm\Control\Entity\Agent;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AgentUser implements UserInterface

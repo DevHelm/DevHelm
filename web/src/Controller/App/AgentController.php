@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Controller\App;
+namespace DevHelm\Control\Controller\App;
 
-use App\Dto\App\Request\CreateAgentDto;
-use App\Dto\App\Response\ErrorResponseDto;
-use App\Entity\Team;
-use App\Entity\User;
-use App\Factory\AgentFactory;
-use App\Repository\AgentRepositoryInterface;
-use App\Service\ApiKeyGenerator;
+use DevHelm\Control\Dto\App\Request\CreateAgentDto;
+use DevHelm\Control\Dto\App\Response\ErrorResponseDto;
+use DevHelm\Control\Entity\Team;
+use DevHelm\Control\Entity\User;
+use DevHelm\Control\Factory\AgentFactory;
+use DevHelm\Control\Repository\AgentRepositoryInterface;
+use DevHelm\Control\Service\ApiKeyGenerator;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

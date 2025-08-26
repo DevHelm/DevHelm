@@ -49,12 +49,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "DevHelm\\Control\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "Test\\DevHelm\\Control\\": "tests/"
         }
     },
     "replace": {

@@ -19,13 +19,13 @@ declare(strict_types=1);
  *     along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-namespace App\Billing;
+namespace DevHelm\Control\Billing;
 
-use App\Entity\Price;
-use App\Entity\Product;
-use App\Entity\Receipt;
-use App\Entity\ReceiptLine;
-use App\Entity\SubscriptionPlan;
+use DevHelm\Control\Entity\Price;
+use DevHelm\Control\Entity\Product;
+use DevHelm\Control\Entity\Receipt;
+use DevHelm\Control\Entity\ReceiptLine;
+use DevHelm\Control\Entity\SubscriptionPlan;
 use Parthenon\Billing\Entity\ChargeBack;
 use Parthenon\Billing\Entity\Payment;
 use Parthenon\Billing\Entity\PriceInterface;

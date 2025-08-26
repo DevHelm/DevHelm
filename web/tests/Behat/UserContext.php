@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Tests\Behat;
+namespace Test\DevHelm\Control\Behat;
 
-use App\Entity\ForgotPasswordCode;
-use App\Entity\InviteCode;
-use App\Entity\Subscription;
-use App\Entity\Team;
-use App\Entity\User;
-use App\Repository\Orm\ForgotPasswordCodeRepository;
-use App\Repository\Orm\InviteCodeRepository;
-use App\Repository\Orm\TeamRepository;
-use App\Repository\Orm\UserRepository;
+use DevHelm\Control\Entity\ForgotPasswordCode;
+use DevHelm\Control\Entity\InviteCode;
+use DevHelm\Control\Entity\Subscription;
+use DevHelm\Control\Entity\Team;
+use DevHelm\Control\Entity\User;
+use DevHelm\Control\Repository\Orm\ForgotPasswordCodeRepository;
+use DevHelm\Control\Repository\Orm\InviteCodeRepository;
+use DevHelm\Control\Repository\Orm\TeamRepository;
+use DevHelm\Control\Repository\Orm\UserRepository;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Session;

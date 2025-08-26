@@ -4,9 +4,9 @@
  * Copyright 2024 all rights reserved
  */
 
-namespace App\Repository;
+namespace DevHelm\Control\Repository;
 
-use App\Entity\User;
+use DevHelm\Control\Entity\User;
 use Parthenon\Billing\Entity\CustomerInterface;
 use Parthenon\Payments\SubscriptionInterface;
 use Parthenon\User\Entity\UserInterface;

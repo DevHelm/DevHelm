@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository\Orm;
+namespace DevHelm\Control\Repository\Orm;
 
-use App\Entity\ApiKey;
+use DevHelm\Control\Entity\ApiKey;
 use Doctrine\Persistence\ManagerRegistry;
 use Parthenon\Common\Repository\CustomServiceRepository;
 

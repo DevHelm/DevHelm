@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Api;
+namespace DevHelm\Control\Controller\Api;
 
-use App\Security\AgentUser;
+use DevHelm\Control\Security\AgentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;

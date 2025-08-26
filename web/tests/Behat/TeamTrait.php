@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tests\Behat;
+namespace Test\DevHelm\Control\Behat;
 
-use App\Entity\Team;
+use DevHelm\Control\Entity\Team;
 
 trait TeamTrait
 {

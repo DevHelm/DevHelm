@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Factory;
+namespace DevHelm\Control\Factory;
 
-use App\Dto\App\Request\CreateAgentDto;
-use App\Dto\App\Response\AgentListResponseDto;
-use App\Dto\App\Response\AgentResponseDto;
-use App\Entity\Agent;
-use App\Entity\Team;
-use App\Enum\AgentStatus;
+use DevHelm\Control\Dto\App\Request\CreateAgentDto;
+use DevHelm\Control\Dto\App\Response\AgentListResponseDto;
+use DevHelm\Control\Dto\App\Response\AgentResponseDto;
+use DevHelm\Control\Entity\Agent;
+use DevHelm\Control\Entity\Team;
+use DevHelm\Control\Enum\AgentStatus;
 
 class AgentFactory
 {

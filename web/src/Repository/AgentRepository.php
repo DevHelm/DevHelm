@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace DevHelm\Control\Repository;
 
-use App\Entity\Agent;
-use App\Entity\Team;
+use DevHelm\Control\Entity\Agent;
+use DevHelm\Control\Entity\Team;
 use Parthenon\Athena\Repository\DoctrineCrudRepository;
 
 class AgentRepository extends DoctrineCrudRepository implements AgentRepositoryInterface

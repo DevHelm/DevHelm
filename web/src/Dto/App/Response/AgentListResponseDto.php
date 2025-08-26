@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto\App\Response;
+namespace DevHelm\Control\Dto\App\Response;
 
 readonly class AgentListResponseDto
 {

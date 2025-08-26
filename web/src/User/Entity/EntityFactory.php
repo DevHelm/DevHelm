@@ -4,7 +4,7 @@
  * Copyright Iain Cambridge 2020, all rights reserved.
  */
 
-namespace App\User\Entity;
+namespace DevHelm\Control\User\Entity;
 
 use Parthenon\User\Entity\ForgotPasswordCode;
 use Parthenon\User\Entity\InviteCode;

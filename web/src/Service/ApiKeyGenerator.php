@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service;
+namespace DevHelm\Control\Service;
 
-use App\Entity\Agent;
-use App\Entity\ApiKey;
-use App\Repository\ApiKeyRepositoryInterface;
+use DevHelm\Control\Entity\Agent;
+use DevHelm\Control\Entity\ApiKey;
+use DevHelm\Control\Repository\ApiKeyRepositoryInterface;
 
 /**
  * Service for generating API keys for agents.

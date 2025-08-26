@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Factory;
+namespace DevHelm\Control\Factory;
 
-use App\Dto\App\Request\CreateAgentDto;
+use DevHelm\Control\Dto\App\Request\CreateAgentDto;
 
 class CreateAgentDtoFactory
 {

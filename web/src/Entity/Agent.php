@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace DevHelm\Control\Entity;
 
-use App\Enum\AgentStatus;
+use DevHelm\Control\Enum\AgentStatus;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

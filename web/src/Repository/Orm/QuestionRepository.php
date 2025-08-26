@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository\Orm;
+namespace DevHelm\Control\Repository\Orm;
 
-use App\Entity\Question;
+use DevHelm\Control\Entity\Question;
 use Doctrine\Persistence\ManagerRegistry;
 use Parthenon\Common\Repository\CustomServiceRepository;
 

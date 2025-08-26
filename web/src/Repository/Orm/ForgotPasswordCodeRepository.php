@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository\Orm;
+namespace DevHelm\Control\Repository\Orm;
 
-use App\Entity\ForgotPasswordCode;
+use DevHelm\Control\Entity\ForgotPasswordCode;
 use Doctrine\Persistence\ManagerRegistry;
 use Parthenon\Common\Repository\CustomServiceRepository;
 

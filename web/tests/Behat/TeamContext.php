@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Behat;
+namespace Test\DevHelm\Control\Behat;
 
-use App\Repository\Orm\TeamInviteCodeRepository;
-use App\Repository\Orm\TeamRepository;
+use DevHelm\Control\Repository\Orm\TeamInviteCodeRepository;
+use DevHelm\Control\Repository\Orm\TeamRepository;
 use Behat\Behat\Context\Context;
 use Behat\Mink\Session;
 use Parthenon\User\Entity\InviteCode;

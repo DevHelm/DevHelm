@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace DevHelm\Control\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;

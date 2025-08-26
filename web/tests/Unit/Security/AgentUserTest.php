@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Unit\Security;
+namespace Test\DevHelm\Control\Unit\Security;
 
-use App\Entity\Agent;
-use App\Enum\AgentStatus;
-use App\Security\AgentUser;
+use DevHelm\Control\Entity\Agent;
+use DevHelm\Control\Enum\AgentStatus;
+use DevHelm\Control\Security\AgentUser;
 use PHPUnit\Framework\TestCase;
 
 class AgentUserTest extends TestCase

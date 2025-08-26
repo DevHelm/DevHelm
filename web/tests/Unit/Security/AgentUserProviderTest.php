@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Tests\Unit\Security;
+namespace Test\DevHelm\Control\Unit\Security;
 
-use App\Entity\Agent;
-use App\Entity\ApiKey;
-use App\Enum\AgentStatus;
-use App\Repository\AgentRepositoryInterface;
-use App\Repository\ApiKeyRepositoryInterface;
-use App\Security\AgentUser;
-use App\Security\AgentUserProvider;
+use DevHelm\Control\Entity\Agent;
+use DevHelm\Control\Entity\ApiKey;
+use DevHelm\Control\Enum\AgentStatus;
+use DevHelm\Control\Repository\AgentRepositoryInterface;
+use DevHelm\Control\Repository\ApiKeyRepositoryInterface;
+use DevHelm\Control\Security\AgentUser;
+use DevHelm\Control\Security\AgentUserProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;

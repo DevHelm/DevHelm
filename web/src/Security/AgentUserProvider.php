@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Security;
+namespace DevHelm\Control\Security;
 
-use App\Repository\AgentRepositoryInterface;
-use App\Repository\ApiKeyRepositoryInterface;
+use DevHelm\Control\Repository\AgentRepositoryInterface;
+use DevHelm\Control\Repository\ApiKeyRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;

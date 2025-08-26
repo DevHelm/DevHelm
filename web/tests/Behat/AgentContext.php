@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Tests\Behat;
+namespace Test\DevHelm\Control\Behat;
 
-use App\Dto\App\Request\CreateAgentDto;
-use App\Entity\Agent;
-use App\Entity\ApiKey;
-use App\Entity\Team;
-use App\Factory\AgentFactory;
-use App\Factory\CreateAgentDtoFactory;
-use App\Repository\AgentRepositoryInterface;
+use DevHelm\Control\Dto\App\Request\CreateAgentDto;
+use DevHelm\Control\Entity\Agent;
+use DevHelm\Control\Entity\ApiKey;
+use DevHelm\Control\Entity\Team;
+use DevHelm\Control\Factory\AgentFactory;
+use DevHelm\Control\Factory\CreateAgentDtoFactory;
+use DevHelm\Control\Repository\AgentRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Session;

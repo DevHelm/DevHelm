@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Behat;
+namespace Test\DevHelm\Control\Behat;
 
 trait SendRequestTrait
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace DevHelm\Control\Repository;
 
-use App\Entity\InviteCode;
-use App\Entity\Team;
+use DevHelm\Control\Entity\InviteCode;
+use DevHelm\Control\Entity\Team;
 
 interface InviteCodeRepositoryInterface extends \Parthenon\User\Repository\InviteCodeRepositoryInterface
 {

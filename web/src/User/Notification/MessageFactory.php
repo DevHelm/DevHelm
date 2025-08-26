@@ -1,6 +1,6 @@
 <?php
 
-namespace App\User\Notification;
+namespace DevHelm\Control\User\Notification;
 
 use Parthenon\User\Notification\MessageFactory as BaseMessageFactory;
 

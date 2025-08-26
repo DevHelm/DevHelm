@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tests\Unit\Controller\Api;
+namespace Test\DevHelm\Control\Unit\Controller\Api;
 
-use App\Controller\Api\HelloWorldController;
-use App\Entity\Agent;
-use App\Security\AgentUser;
+use DevHelm\Control\Controller\Api\HelloWorldController;
+use DevHelm\Control\Entity\Agent;
+use DevHelm\Control\Security\AgentUser;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;

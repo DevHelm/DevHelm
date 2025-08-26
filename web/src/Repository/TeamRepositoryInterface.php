@@ -4,7 +4,7 @@
  * Copyright 2024 all rights reserved
  */
 
-namespace App\Repository;
+namespace DevHelm\Control\Repository;
 
 use Parthenon\Billing\Repository\CustomerRepositoryInterface;
 use Parthenon\Payments\Repository\SubscriberRepositoryInterface;

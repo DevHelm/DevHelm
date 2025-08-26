@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\Unit\Service;
+namespace Test\DevHelm\Control\Unit\Service;
 
-use App\Service\JiraTicketProvider;
-use App\ValueObject\Ticket;
+use DevHelm\Control\Service\JiraTicketProvider;
+use DevHelm\Control\ValueObject\Ticket;
 use JiraCloud\Issue\IssueService;
 use JiraCloud\JiraClient;
 use PHPUnit\Framework\MockObject\MockObject;

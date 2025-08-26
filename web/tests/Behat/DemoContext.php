@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\Behat;
+namespace Test\DevHelm\Control\Behat;
 
 use Behat\Behat\Context\Context;
 use Symfony\Component\HttpFoundation\Request;
