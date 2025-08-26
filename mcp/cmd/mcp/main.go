@@ -21,18 +21,44 @@ const (
 	serverVersion = "0.1.0"
 )
 
-var jsonPlaceholderURL = "https://jsonplaceholder.typicode.com/todos/1"
+// Default values if environment variables are not set
+var defaultBaseURL = "https://jsonplaceholder.typicode.com"
+var defaultEndpoint = "/todos/1"
 
-// postAndExtractTitle performs a POST to the JSONPlaceholder endpoint and returns the title field.
+// getFullURL constructs the full URL by combining BASE_URL from environment variable with the endpoint
+func getFullURL(endpoint string) string {
+	baseURL := os.Getenv("BASE_URL")
+	if baseURL == "" {
+		baseURL = defaultBaseURL
+	}
+	
+	// Ensure baseURL doesn't end with a slash and endpoint starts with a slash
+	if len(baseURL) > 0 && baseURL[len(baseURL)-1] == '/' && len(endpoint) > 0 && endpoint[0] == '/' {
+		return baseURL + endpoint[1:]
+	}
+	if len(baseURL) > 0 && baseURL[len(baseURL)-1] != '/' && len(endpoint) > 0 && endpoint[0] != '/' {
+		return baseURL + "/" + endpoint
+	}
+	return baseURL + endpoint
+}
+
+// postAndExtractTitle performs a POST to the endpoint and returns the title field.
 func postAndExtractTitle(ctx context.Context) (string, error) {
-	// JSONPlaceholder typically ignores body for this endpoint; we still send an empty JSON object
+	// Typically ignores body for this endpoint; we still send an empty JSON object
 	body := bytes.NewBufferString("{}")
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, jsonPlaceholderURL, body)
+	
+	fullURL := getFullURL(defaultEndpoint)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, fullURL, body)
 	if err != nil {
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/json")
+	
+	// Add X-API-KEY header if API_KEY environment variable is set
+	apiKey := os.Getenv("API_KEY")
+	if apiKey != "" {
+		req.Header.Set("X-API-KEY", apiKey)
+	}
 
 	client := &http.Client{Timeout: 15 * time.Second}
 	res, err := client.Do(req)
