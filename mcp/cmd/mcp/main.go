@@ -103,14 +103,6 @@ func handleToolCall(ctx context.Context, req mcp.CallToolRequest) (*mcp.CallTool
 func main() {
 	ctx := context.Background()
 	
-	if os.Getenv("TEST") != "" {
-		go func() {
-			time.Sleep(5 * time.Second)
-			fmt.Fprintln(os.Stderr, "Test timeout reached (5 seconds)")
-			os.Exit(1)
-		}()
-	}
-	
 	tool := mcp.NewTool(
 		"report_done",
 		mcp.WithDescription("Marks a JIRA ticket as done by calling a remote endpoint and returns the resulting title."),
