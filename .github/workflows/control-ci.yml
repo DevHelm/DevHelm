@@ -1,16 +1,16 @@
-name: Web PHP CI
+name: Control - CI
 
 on:
   push:
     branches: [ main, master ]
     paths:
-      - '../../control/**'
-      - '.github/workflows/web-php.yml'
+      - 'control/**'
+      - '.github/workflows/control-ci.yml'
   pull_request:
     branches: [ main, master ]
     paths:
-      - '../../control/**'
-      - '.github/workflows/web-php.yml'
+      - 'control/**'
+      - '.github/workflows/control-ci.yml'
 
 jobs:
   test:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: web
+        working-directory: control
 
     strategy:
       matrix:
