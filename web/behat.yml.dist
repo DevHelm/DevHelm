@@ -2,16 +2,19 @@ default:
     suites:
         default:
             contexts:
-                - App\Tests\Behat\DemoContext
-                - App\Tests\Behat\GeneralContext
-                - App\Tests\Behat\UserContext
-                - App\Tests\Behat\PlanContext
-                - App\Tests\Behat\TeamContext
-                - App\Tests\Behat\AgentContext
+                - DevHelm\Control\Tests\Behat\DemoContext
+                - DevHelm\Control\Tests\Behat\GeneralContext
+                - DevHelm\Control\Tests\Behat\UserContext
+                - DevHelm\Control\Tests\Behat\PlanContext
+                - DevHelm\Control\Tests\Behat\TeamContext
+                - DevHelm\Control\Tests\Behat\AgentContext
 
     extensions:
         FriendsOfBehat\SymfonyExtension:
             bootstrap: tests/bootstrap.php
+            kernel:
+                path: src/Kernel.php
+                class: DevHelm\Control\Kernel
         Behat\MinkExtension:
             sessions:
                 symfony:
