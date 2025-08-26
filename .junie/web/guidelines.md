@@ -194,6 +194,10 @@ docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-
 
 ## Architecture
 
+### Value Objects and Enums
+
+* Value Objects and Enums are held within the namespace that they belong to within the purposes of the domain. For example, a Money Value Object would be in the App\Entity namespace as it is used by entities. And an enum representing the status of a Subscription would be in the DevHelm\Subscription namespace.
+
 ### Repositories
 
 * The repository pattern that is used throughout this project is documented in repository-pattern.md
