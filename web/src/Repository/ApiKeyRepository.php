@@ -6,12 +6,6 @@ use Parthenon\Athena\Repository\DoctrineCrudRepository;
 
 class ApiKeyRepository extends DoctrineCrudRepository implements ApiKeyRepositoryInterface
 {
-    /**
-     * Find an enabled API key by its key value.
-     *
-     * @param string $key The API key to look for
-     * @return \App\Entity\ApiKey|null The API key entity if found and enabled, null otherwise
-     */
     public function findEnabledByKey(string $key): ?\App\Entity\ApiKey
     {
         $qb = $this->createQueryBuilder('ak');
