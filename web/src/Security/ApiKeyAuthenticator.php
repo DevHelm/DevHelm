@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 class ApiKeyAuthenticator extends AbstractAuthenticator
 {
     private AgentUserProvider $agentUserProvider;
-    
+
     private const API_KEY_HEADER = 'X-API-KEY';
     private const API_KEY_QUERY_PARAM = 'api_key';
 
@@ -33,7 +33,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
     public function authenticate(Request $request): Passport
     {
         $apiKey = $request->headers->get(self::API_KEY_HEADER);
-        
+
         if (!$apiKey) {
             $apiKey = $request->query->get(self::API_KEY_QUERY_PARAM);
         }
@@ -58,7 +58,7 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
     {
         $data = [
             'error' => 'Authentication failed',
-            'message' => $exception->getMessage()
+            'message' => $exception->getMessage(),
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);

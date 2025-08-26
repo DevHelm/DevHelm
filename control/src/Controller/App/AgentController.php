@@ -1,6 +1,6 @@
 <?php
 
-namespace DevHelm\Control\Controller\App;
+namespace App\Controller\App;
 
 use DevHelm\Control\Dto\App\Request\CreateAgentDto;
 use DevHelm\Control\Entity\Team;
@@ -104,7 +104,7 @@ class AgentController
             $agentDtos = array_map(function ($agent) use ($agentFactory) {
                 return $agentFactory->createAgentResponseDto($agent);
             }, $agents);
-
+            
             $responseDto = $agentFactory->createAgentListResponseDto(
                 agentResponseDtos: $agentDtos,
                 hasMore: false,

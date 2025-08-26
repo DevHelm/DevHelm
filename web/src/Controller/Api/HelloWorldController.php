@@ -4,9 +4,9 @@ namespace App\Controller\Api;
 
 use App\Security\AgentUser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route('/api/v1')]
 class HelloWorldController extends AbstractController
@@ -15,21 +15,21 @@ class HelloWorldController extends AbstractController
     public function helloWorld(Security $security): JsonResponse
     {
         $response = [];
-        
+
         if ($this->security->getUser() instanceof AgentUser) {
             $user = $this->security->getUser();
             $agent = $user->getAgent();
-            
+
             $response['hello'] = $agent->getName();
             $response['agent'] = [
                 'id' => $agent->getId(),
                 'name' => $agent->getName(),
-                'authenticated' => true
+                'authenticated' => true,
             ];
         } else {
             $response['hello'] = 'world';
         }
-        
+
         return new JsonResponse($response);
     }
 }

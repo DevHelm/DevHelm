@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-use App\Entity\Agent;
 use App\Repository\AgentRepositoryInterface;
 use App\Repository\ApiKeyRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -17,7 +16,7 @@ class AgentUserProvider implements UserProviderInterface
 
     public function __construct(
         AgentRepositoryInterface $agentRepository,
-        ApiKeyRepositoryInterface $apiKeyRepository
+        ApiKeyRepositoryInterface $apiKeyRepository,
     ) {
         $this->agentRepository = $agentRepository;
         $this->apiKeyRepository = $apiKeyRepository;
@@ -26,17 +25,17 @@ class AgentUserProvider implements UserProviderInterface
     public function loadUserByApiKey(string $apiKey): AgentUser
     {
         $apiKeyEntity = $this->apiKeyRepository->findEnabledByKey($apiKey);
-        
+
         if (null === $apiKeyEntity) {
             throw new UserNotFoundException('API Key not found or expired');
         }
-        
+
         $agent = $apiKeyEntity->getAgent();
-        
-        if ($agent->getStatus()->value !== 'enabled') {
+
+        if ('enabled' !== $agent->getStatus()->value) {
             throw new UserNotFoundException('Agent is not enabled');
         }
-        
+
         return new AgentUser($agent);
     }
 
@@ -52,11 +51,11 @@ class AgentUserProvider implements UserProviderInterface
         }
 
         $agent = $this->agentRepository->findById($user->getAgent()->getId());
-        
+
         if (!$agent) {
             throw new UserNotFoundException('Agent no longer exists');
         }
-        
+
         return new AgentUser($agent);
     }
 

@@ -9,7 +9,7 @@ class ApiKeyRepository extends DoctrineCrudRepository implements ApiKeyRepositor
     public function findEnabledByKey(string $key): ?\App\Entity\ApiKey
     {
         $qb = $this->createQueryBuilder('ak');
-        
+
         $qb->where('ak.key = :key')
            ->andWhere('ak.status = :status')
            ->andWhere('ak.deletedAt IS NULL')
@@ -17,7 +17,7 @@ class ApiKeyRepository extends DoctrineCrudRepository implements ApiKeyRepositor
            ->setParameter('key', $key)
            ->setParameter('status', 'active')
            ->setParameter('now', new \DateTimeImmutable('now'));
-           
+
         return $qb->getQuery()->getOneOrNullResult();
     }
 }
