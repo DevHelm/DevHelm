@@ -16,7 +16,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./docker/database/data:/home/postgres/pgdata/data
+      - db-data:/home/postgres/pgdata/data
       - ./docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - devhelm
@@ -55,15 +55,9 @@ services:
     networks:
       - devhelm
 
-###> doctrine/doctrine-bundle ###
-  # The database service is already defined above
-###< doctrine/doctrine-bundle ###
-
 networks:
   devhelm:
     driver: bridge
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
+  db-data:

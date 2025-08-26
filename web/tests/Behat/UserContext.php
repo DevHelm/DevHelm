@@ -4,7 +4,6 @@ namespace Test\DevHelm\Control\Behat;
 
 use DevHelm\Control\Entity\ForgotPasswordCode;
 use DevHelm\Control\Entity\InviteCode;
-use DevHelm\Control\Entity\Subscription;
 use DevHelm\Control\Entity\Team;
 use DevHelm\Control\Entity\User;
 use DevHelm\Control\Repository\Orm\ForgotPasswordCodeRepository;
@@ -17,8 +16,6 @@ use Behat\Mink\Session;
 use Doctrine\ORM\EntityManagerInterface;
 use Parthenon\Athena\Entity\Link;
 use Parthenon\Athena\Entity\Notification;
-use Parthenon\Billing\Entity\EmbeddedSubscription;
-use Parthenon\Billing\Enum\SubscriptionStatus;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 class UserContext implements Context
@@ -743,10 +740,6 @@ class UserContext implements Context
             $team->addMember($user);
         }
         $team->setCreatedAt(new \DateTime('now'));
-        $team->setSubscription(new EmbeddedSubscription());
-        $team->getSubscription()->setPlanName($plan);
-        $team->getSubscription()->setValidUntil(new \DateTime('+7 days'));
-        $team->getSubscription()->setActive(true);
         $team->setBillingEmail($user?->getEmail() ?? 'billing.email@example.org');
 
         $this->teamRepository->getEntityManager()->persist($team);
@@ -756,17 +749,6 @@ class UserContext implements Context
             $user->setTeam($team);
             $this->teamRepository->getEntityManager()->persist($user);
         }
-
-        $subscription = new Subscription();
-        $subscription->setCustomer($team);
-        $subscription->setPlanName($plan);
-        $subscription->setValidUntil(new \DateTime('+7 days'));
-        $subscription->setActive(true);
-        $subscription->setCreatedAt(new \DateTime());
-        $subscription->setStatus(SubscriptionStatus::ACTIVE);
-        $subscription->setStartOfCurrentPeriod(new \DateTime());
-
-        $this->teamRepository->getEntityManager()->persist($subscription);
 
         $this->teamRepository->getEntityManager()->flush();
     }
