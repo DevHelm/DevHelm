@@ -71,6 +71,7 @@ Testing
     --- PASS: TestPostAndExtractTitle_WithLocalServer (0.00s)
     PASS
 - After verification, the example test file was removed to keep the repository clean, per instructions.
+5. When testing how the executable runs ensure that it's time limited to 5 seconds.
 
 Additional Development Guidance
 1. Extending tools
