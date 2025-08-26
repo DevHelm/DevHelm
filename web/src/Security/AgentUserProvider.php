@@ -10,9 +10,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-/**
- * Provides Agent entities as Symfony users for API authentication.
- */
 class AgentUserProvider implements UserProviderInterface
 {
     private AgentRepositoryInterface $agentRepository;
@@ -26,13 +23,6 @@ class AgentUserProvider implements UserProviderInterface
         $this->apiKeyRepository = $apiKeyRepository;
     }
 
-    /**
-     * Find a user by their API key.
-     *
-     * @param string $apiKey The API key to look up
-     * @return AgentUser The user object
-     * @throws UserNotFoundException If the API key is invalid or the agent is not found
-     */
     public function loadUserByApiKey(string $apiKey): AgentUser
     {
         $apiKeyEntity = $this->apiKeyRepository->findEnabledByKey($apiKey);
@@ -50,18 +40,11 @@ class AgentUserProvider implements UserProviderInterface
         return new AgentUser($agent);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        // This method is required by the interface and should delegate to loadUserByApiKey
         return $this->loadUserByApiKey($identifier);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof AgentUser) {
@@ -77,9 +60,6 @@ class AgentUserProvider implements UserProviderInterface
         return new AgentUser($agent);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsClass(string $class): bool
     {
         return AgentUser::class === $class;
