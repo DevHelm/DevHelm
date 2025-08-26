@@ -58,7 +58,6 @@ class AgentController
 
             $agent = $agentFactory->createFromDto($dto, $team);
             $agentRepository->save($agent);
-            $apiKeyGenerator->generateForAgent($agent);
 
             $agentResponseDto = $agentFactory->createAgentResponseDto($agent);
             $responseData = $serializer->serialize($agentResponseDto, 'json');
@@ -104,7 +103,7 @@ class AgentController
             $agentDtos = array_map(function ($agent) use ($agentFactory) {
                 return $agentFactory->createAgentResponseDto($agent);
             }, $agents);
-            
+
             $responseDto = $agentFactory->createAgentListResponseDto(
                 agentResponseDtos: $agentDtos,
                 hasMore: false,

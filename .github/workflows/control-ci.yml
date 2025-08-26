@@ -87,6 +87,10 @@ jobs:
         run: |
           vendor/bin/php-cs-fixer fix src --dry-run
 
+      - name: PHPUnit
+        run: |
+          vendor/bin/phpunit
+
       - name: Behat
         run: |
           vendor/bin/behat
