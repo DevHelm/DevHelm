@@ -5,10 +5,18 @@ security:
     providers:
         parthenon:
             id: Parthenon\User\Security\UserProvider
+        agent:
+            id: App\Security\AgentUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api/
+            stateless: true
+            lazy: false
+            provider: agent
+            custom_authenticator: App\Security\ApiKeyAuthenticator
         main:
             pattern: ^/app/
             stateless: false
@@ -33,6 +41,7 @@ security:
         - { path: ^/app/(authenticate|login|logout), roles: PUBLIC_ACCESS }
         - { path: ^/app/user/(signup|password|reset|confirm), roles: PUBLIC_ACCESS }
         - { path: ^/app/, roles: ROLE_USER }
+        - { path: ^/api/, roles: ROLE_API_USER }
 
 
 when@test:
