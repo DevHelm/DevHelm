@@ -30,3 +30,12 @@ Feature: DH-10 Create Agent in the Application
      | Project |             | 
     Then there should not be an agent called "Marcus Vance"
     And there should be an validation for no project
+
+  Scenario: Successfully Create an Agent
+    Given I have logged in as "sally.brown@example.org" with the password "AF@k3P@ss"
+    And I sent an invite to "john.brown@example.org"
+    When I create an agent:
+      | Name    | Marcus Vance|
+      | Project | DH          |
+    Then there should be an agent called "Marcus Vance"
+    And there will be an API key for the agent called "Marcus Vance"

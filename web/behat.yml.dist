@@ -2,12 +2,11 @@ default:
     suites:
         default:
             contexts:
-                - DevHelm\Control\Tests\Behat\DemoContext
-                - DevHelm\Control\Tests\Behat\GeneralContext
-                - DevHelm\Control\Tests\Behat\UserContext
-                - DevHelm\Control\Tests\Behat\PlanContext
-                - DevHelm\Control\Tests\Behat\TeamContext
-                - DevHelm\Control\Tests\Behat\AgentContext
+                - Test\DevHelm\Control\Behat\DemoContext
+                - Test\DevHelm\Control\Behat\GeneralContext
+                - Test\DevHelm\Control\Behat\UserContext
+                - Test\DevHelm\Control\Behat\TeamContext
+                - Test\DevHelm\Control\Behat\AgentContext
 
     extensions:
         FriendsOfBehat\SymfonyExtension:

@@ -3,7 +3,7 @@ services:
         autowire: true
         autoconfigure: true
 
-    DevHelm\Control\Tests\Behat\:
+    Test\DevHelm\Control\Behat\:
         resource: '../tests/Behat/*'
 
     Parthenon\Notification\EmailSenderInterface: '@Parthenon\Notification\Sender\NullEmailSender'
