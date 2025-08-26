@@ -10,24 +10,14 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         resolve_target_entities:
-            Parthenon\User\Entity\UserInterface: App\Entity\User
-            Parthenon\User\Entity\TeamInterface: App\Entity\Team
-            Parthenon\Billing\Entity\CustomerInterface: App\Entity\Team
-            Parthenon\Billing\Entity\BillingAdminInterface: App\Entity\User
-            Parthenon\Billing\Entity\PaymentInterface: App\Entity\Payment
-            Parthenon\Billing\Entity\ProductInterface: App\Entity\Product
-            Parthenon\Billing\Entity\ReceiptInterface: App\Entity\Receipt
-            Parthenon\Billing\Entity\ReceiptLineInterface: App\Entity\ReceiptLine
-            Parthenon\Billing\Entity\PriceInterface: App\Entity\Price
-            Parthenon\Billing\Entity\TierComponentInterface: App\Entity\TierComponent
-            Parthenon\Billing\Entity\SubscriptionInterface: App\Entity\Subscription
-            Parthenon\Billing\Entity\SubscriptionPlanInterface: App\Entity\SubscriptionPlan
+            Parthenon\User\Entity\UserInterface: DevHelm\Control\Entity\User
+            Parthenon\User\Entity\TeamInterface: DevHelm\Control\Entity\Team
         mappings:
             App:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+                prefix: 'DevHelm\Control\Entity'
+                alias: DevHelm\Control
 
 when@test:
     doctrine:
