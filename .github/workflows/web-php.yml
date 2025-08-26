@@ -4,12 +4,12 @@ on:
   push:
     branches: [ main, master ]
     paths:
-      - 'web/**'
+      - '../../control/**'
       - '.github/workflows/web-php.yml'
   pull_request:
     branches: [ main, master ]
     paths:
-      - 'web/**'
+      - '../../control/**'
       - '.github/workflows/web-php.yml'
 
 jobs:
