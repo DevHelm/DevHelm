@@ -38,11 +38,8 @@ func getFullURL(endpoint string) string {
 }
 
 func postAndExtractTitle(ctx context.Context) (string, error) {
-	endpoint := os.Getenv("ENDPOINT")
-	if endpoint == "" {
-		fmt.Fprintln(os.Stderr, "ENDPOINT environment variable is required but not set")
-		os.Exit(1)
-	}
+	// Hard-coded endpoint as per PR #20 review
+	endpoint := "/todos/1"
 
 	body := bytes.NewBufferString("{}")
 
