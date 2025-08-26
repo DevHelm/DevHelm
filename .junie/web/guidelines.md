@@ -222,6 +222,12 @@ Structure:
 
 * Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action. 
 * Controllers *MUST NOT* use doctrine EntityManager directly and MUST use a repository interface. Dependencies should be injected into the action and not the constructor.
+* Controllers are to use the Symfony Serializer component to deserialize request bodies into DTOs and serialize response DTOs into JSON.
+* Controllers are to use the Symfony Validator component to validate request DTOs.
+* Controllers are to use the Parthenon LoggerTrait for logging.
+* Controllers should have dependencies injected into the action method rather than the constructor.
+* Controllers MUST log the receipt of requests and key actions taken, including any errors encountered.
+* Controllers MUST not be unit tested but tested via functional tests or Behat.
 
 **Structure:**
 
@@ -464,6 +470,15 @@ The list should be the generic ListResponse.
 * Translations should be in British English, American English, and German
 * CSS should use tailwind utils
 
+## Comments
+
+* All classes and methods should only have doc blocks if not type hinted.
+* Inline comments should only be used for very complex logic. Almost never.
+
+## Committing
+
+* To ensure that the code style is correct YOU MUST run `web/vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes` before committing any PHP changes.
+
 ## Development Workflow
 
 ### Creating New Tests
@@ -564,4 +579,6 @@ Available in development mode at `/_profiler` after making requests.
 
 ---
 
-*Last updated: 2025-08-24*
+
+
+*Last updated: 2025-08-26*

@@ -23,7 +23,7 @@ class AgentFactory
 
         return $agent;
     }
-    
+
     public function createAgentResponseDto(Agent $agent): AgentResponseDto
     {
         return new AgentResponseDto(
@@ -39,9 +39,6 @@ class AgentFactory
      * Create a list response DTO from an array of AgentResponseDto objects.
      *
      * @param AgentResponseDto[] $agentResponseDtos
-     * @param bool $hasMore
-     * @param string|null $lastKey
-     * @return AgentListResponseDto
      */
     public function createAgentListResponseDto(array $agentResponseDtos, bool $hasMore = false, ?string $lastKey = null): AgentListResponseDto
     {

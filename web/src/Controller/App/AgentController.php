@@ -9,7 +9,6 @@ use App\Entity\User;
 use App\Factory\AgentFactory;
 use App\Repository\AgentRepositoryInterface;
 use App\Service\ApiKeyGenerator;
-use Parthenon\User\Entity\UserInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -102,7 +101,7 @@ class AgentController
             $agentDtos = array_map(function ($agent) use ($agentFactory) {
                 return $agentFactory->createAgentResponseDto($agent);
             }, $agents);
-            
+
             $responseDto = $agentFactory->createAgentListResponseDto(
                 agentResponseDtos: $agentDtos,
                 hasMore: false,
