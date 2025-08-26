@@ -17,16 +17,16 @@ class EntityFactory extends BaseFactory
 {
     public function buildPasswordReset(UserInterface $user): ForgotPasswordCode
     {
-        return \App\Entity\ForgotPasswordCode::createForUser($user);
+        return \DevHelm\Control\Entity\ForgotPasswordCode::createForUser($user);
     }
 
     public function buildInviteCode(UserInterface $user, string $email, ?string $role = null): InviteCode
     {
-        return \App\Entity\InviteCode::createForUser($user, $email, $role);
+        return \DevHelm\Control\Entity\InviteCode::createForUser($user, $email, $role);
     }
 
     public function buildTeamInviteCode(UserInterface $user, TeamInterface $team, string $email, string $role): TeamInviteCode
     {
-        return \App\Entity\TeamInviteCode::createForUserAndTeam($user, $team, $email, $role);
+        return \DevHelm\Control\Entity\TeamInviteCode::createForUserAndTeam($user, $team, $email, $role);
     }
 }

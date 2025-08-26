@@ -6,7 +6,7 @@ security:
         parthenon:
             id: Parthenon\User\Security\UserProvider
         agent:
-            id: App\Security\AgentUserProvider
+            id: DevHelm\Control\Security\AgentUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -16,7 +16,7 @@ security:
             stateless: true
             lazy: false
             provider: agent
-            custom_authenticator: App\Security\ApiKeyAuthenticator
+            custom_authenticator: DevHelm\Control\Security\ApiKeyAuthenticator
         main:
             pattern: ^/app/
             stateless: false

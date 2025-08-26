@@ -1,7 +1,7 @@
 # This file is the entry point to configure your own services.
 # Files in the packages/ subdirectory configure your dependencies.
 
-# Put parameters here that don't need to change on each machine where the app is deployed
+# Put parameters here that don't need to change on each machine where the DevHelm\Control is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
 
@@ -13,7 +13,7 @@ services:
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    App\:
+    DevHelm\Control\:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
@@ -22,7 +22,7 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    App\Controller\:
+    DevHelm\Control\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
@@ -30,89 +30,89 @@ services:
     #####
     ## Parthenon user services
     #####
-    Parthenon\User\Factory\EntityFactory: '@App\User\Entity\EntityFactory'
-    Parthenon\User\Repository\UserRepositoryInterface: '@App\Repository\UserRepository'
-    Parthenon\User\Repository\TeamRepositoryInterface: '@App\Repository\TeamRepository'
-    Parthenon\User\Notification\MessageFactory: '@App\User\Notification\MessageFactory'
-    Parthenon\User\Repository\TeamInviteCodeRepositoryInterface: '@App\Repository\TeamInviteCodeRepository'
+    Parthenon\User\Factory\EntityFactory: '@DevHelm\Control\User\Entity\EntityFactory'
+    Parthenon\User\Repository\UserRepositoryInterface: '@DevHelm\Control\Repository\UserRepository'
+    Parthenon\User\Repository\TeamRepositoryInterface: '@DevHelm\Control\Repository\TeamRepository'
+    Parthenon\User\Notification\MessageFactory: '@DevHelm\Control\User\Notification\MessageFactory'
+    Parthenon\User\Repository\TeamInviteCodeRepositoryInterface: '@DevHelm\Control\Repository\TeamInviteCodeRepository'
 
-    Parthenon\Billing\Factory\EntityFactoryInterface: '@App\Billing\EntityFactory'
+    Parthenon\Billing\Factory\EntityFactoryInterface: '@DevHelm\Control\Billing\EntityFactory'
 
-    App\Repository\UserRepository:
+    DevHelm\Control\Repository\UserRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.user'
-    app.repository.orm.user:
-        class: App\Repository\Orm\UserRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.user'
+    DevHelm\Control.repository.orm.user:
+        class: DevHelm\Control\Repository\Orm\UserRepository
 
-    App\Repository\TeamRepository:
+    DevHelm\Control\Repository\TeamRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.team'
-    app.repository.orm.team:
-        class: App\Repository\Orm\TeamRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.team'
+    DevHelm\Control.repository.orm.team:
+        class: DevHelm\Control\Repository\Orm\TeamRepository
 
-    App\Repository\TeamInviteCodeRepository:
+    DevHelm\Control\Repository\TeamInviteCodeRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.team_invite_code'
-    app.repository.orm.team_invite_code:
-        class: App\Repository\Orm\TeamInviteCodeRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.team_invite_code'
+    DevHelm\Control.repository.orm.team_invite_code:
+        class: DevHelm\Control\Repository\Orm\TeamInviteCodeRepository
 
     parthenon.user.repository.forgot_password_code_repository:
         class: Parthenon\User\Repository\ForgotPasswordCodeRepository
         arguments:
-            - '@App\Repository\Orm\ForgotPasswordCodeRepository'
+            - '@DevHelm\Control\Repository\Orm\ForgotPasswordCodeRepository'
 
-    parthenon.user.repository.orm.invite_code_repository_doctrine: '@App\Repository\Orm\InviteCodeRepository'
+    parthenon.user.repository.orm.invite_code_repository_doctrine: '@DevHelm\Control\Repository\Orm\InviteCodeRepository'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
     # --- ComControl domain repositories ---
     # Agent
-    App\Repository\AgentRepositoryInterface: '@App\Repository\AgentRepository'
-    App\Repository\AgentRepository:
+    DevHelm\Control\Repository\AgentRepositoryInterface: '@DevHelm\Control\Repository\AgentRepository'
+    DevHelm\Control\Repository\AgentRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.agent'
-    app.repository.orm.agent:
-        class: App\Repository\Orm\AgentRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.agent'
+    DevHelm\Control.repository.orm.agent:
+        class: DevHelm\Control\Repository\Orm\AgentRepository
 
     # Lead
-    App\Repository\LeadRepositoryInterface: '@App\Repository\LeadRepository'
-    App\Repository\LeadRepository:
+    DevHelm\Control\Repository\LeadRepositoryInterface: '@DevHelm\Control\Repository\LeadRepository'
+    DevHelm\Control\Repository\LeadRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.lead'
-    app.repository.orm.lead:
-        class: App\Repository\Orm\LeadRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.lead'
+    DevHelm\Control.repository.orm.lead:
+        class: DevHelm\Control\Repository\Orm\LeadRepository
 
     # ApiKey
-    App\Repository\ApiKeyRepositoryInterface: '@App\Repository\ApiKeyRepository'
-    App\Repository\ApiKeyRepository:
+    DevHelm\Control\Repository\ApiKeyRepositoryInterface: '@DevHelm\Control\Repository\ApiKeyRepository'
+    DevHelm\Control\Repository\ApiKeyRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.api_key'
-    app.repository.orm.api_key:
-        class: App\Repository\Orm\ApiKeyRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.api_key'
+    DevHelm\Control.repository.orm.api_key:
+        class: DevHelm\Control\Repository\Orm\ApiKeyRepository
 
     # Task
-    App\Repository\TaskRepositoryInterface: '@App\Repository\TaskRepository'
-    App\Repository\TaskRepository:
+    DevHelm\Control\Repository\TaskRepositoryInterface: '@DevHelm\Control\Repository\TaskRepository'
+    DevHelm\Control\Repository\TaskRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.task'
-    app.repository.orm.task:
-        class: App\Repository\Orm\TaskRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.task'
+    DevHelm\Control.repository.orm.task:
+        class: DevHelm\Control\Repository\Orm\TaskRepository
 
     # Feedback
-    App\Repository\FeedbackRepositoryInterface: '@App\Repository\FeedbackRepository'
-    App\Repository\FeedbackRepository:
+    DevHelm\Control\Repository\FeedbackRepositoryInterface: '@DevHelm\Control\Repository\FeedbackRepository'
+    DevHelm\Control\Repository\FeedbackRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.feedback'
-    app.repository.orm.feedback:
-        class: App\Repository\Orm\FeedbackRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.feedback'
+    DevHelm\Control.repository.orm.feedback:
+        class: DevHelm\Control\Repository\Orm\FeedbackRepository
 
     # Question
-    App\Repository\QuestionRepositoryInterface: '@App\Repository\QuestionRepository'
-    App\Repository\QuestionRepository:
+    DevHelm\Control\Repository\QuestionRepositoryInterface: '@DevHelm\Control\Repository\QuestionRepository'
+    DevHelm\Control\Repository\QuestionRepository:
         arguments:
-            $entityRepository: '@app.repository.orm.question'
-    app.repository.orm.question:
-        class: App\Repository\Orm\QuestionRepository
+            $entityRepository: '@DevHelm\Control.repository.orm.question'
+    DevHelm\Control.repository.orm.question:
+        class: DevHelm\Control\Repository\Orm\QuestionRepository
 
 
     Redis:
@@ -133,9 +133,9 @@ services:
         arguments:
             $configuration: '@jira.configuration'
 
-    App\Service\JiraTicketProvider:
+    DevHelm\Control\Service\JiraTicketProvider:
         arguments:
             $jiraClient: '@JiraCloud\JiraClient'
             $targetStatus: '%env(JIRA_TARGET_STATUS)%'
 
-    App\Interface\TicketProviderInterface: '@App\Service\JiraTicketProvider'
+    DevHelm\Control\Interface\TicketProviderInterface: '@DevHelm\Control\Service\JiraTicketProvider'

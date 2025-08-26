@@ -56,12 +56,12 @@ class EntityFactory implements EntityFactoryInterface
 
     public function getSubscriptionEntity(): Subscription
     {
-        return new \App\Entity\Subscription();
+        return new \DevHelm\Control\Entity\Subscription();
     }
 
     public function getPaymentEntity(): Payment
     {
-        return new \App\Entity\Payment();
+        return new \DevHelm\Control\Entity\Payment();
     }
 
     public function getChargeBackEntity(): ChargeBack
@@ -81,6 +81,6 @@ class EntityFactory implements EntityFactoryInterface
 
     public function getRefundEntity(): Refund
     {
-        return new \App\Entity\Refund();
+        return new \DevHelm\Control\Entity\Refund();
     }
 }
