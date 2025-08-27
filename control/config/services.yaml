@@ -1,0 +1,141 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the DevHelm\Control is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    DevHelm\Control\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    DevHelm\Control\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+
+    #####
+    ## Parthenon user services
+    #####
+    Parthenon\User\Factory\EntityFactory: '@DevHelm\Control\User\Entity\EntityFactory'
+    Parthenon\User\Repository\UserRepositoryInterface: '@DevHelm\Control\Repository\UserRepository'
+    Parthenon\User\Repository\TeamRepositoryInterface: '@DevHelm\Control\Repository\TeamRepository'
+    Parthenon\User\Notification\MessageFactory: '@DevHelm\Control\User\Notification\MessageFactory'
+    Parthenon\User\Repository\TeamInviteCodeRepositoryInterface: '@DevHelm\Control\Repository\TeamInviteCodeRepository'
+
+    Parthenon\Billing\Factory\EntityFactoryInterface: '@DevHelm\Control\Billing\EntityFactory'
+
+    DevHelm\Control\Repository\UserRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.user'
+    DevHelm\Control.repository.orm.user:
+        class: DevHelm\Control\Repository\Orm\UserRepository
+
+    DevHelm\Control\Repository\TeamRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.team'
+    DevHelm\Control.repository.orm.team:
+        class: DevHelm\Control\Repository\Orm\TeamRepository
+
+    DevHelm\Control\Repository\TeamInviteCodeRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.team_invite_code'
+    DevHelm\Control.repository.orm.team_invite_code:
+        class: DevHelm\Control\Repository\Orm\TeamInviteCodeRepository
+
+    parthenon.user.repository.forgot_password_code_repository:
+        class: Parthenon\User\Repository\ForgotPasswordCodeRepository
+        arguments:
+            - '@DevHelm\Control\Repository\Orm\ForgotPasswordCodeRepository'
+
+    parthenon.user.repository.orm.invite_code_repository_doctrine: '@DevHelm\Control\Repository\Orm\InviteCodeRepository'
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    # --- ComControl domain repositories ---
+    # Agent
+    DevHelm\Control\Repository\AgentRepositoryInterface: '@DevHelm\Control\Repository\AgentRepository'
+    DevHelm\Control\Repository\AgentRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.agent'
+    DevHelm\Control.repository.orm.agent:
+        class: DevHelm\Control\Repository\Orm\AgentRepository
+
+    # Lead
+    DevHelm\Control\Repository\LeadRepositoryInterface: '@DevHelm\Control\Repository\LeadRepository'
+    DevHelm\Control\Repository\LeadRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.lead'
+    DevHelm\Control.repository.orm.lead:
+        class: DevHelm\Control\Repository\Orm\LeadRepository
+
+    # ApiKey
+    DevHelm\Control\Repository\ApiKeyRepositoryInterface: '@DevHelm\Control\Repository\ApiKeyRepository'
+    DevHelm\Control\Repository\ApiKeyRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.api_key'
+    DevHelm\Control.repository.orm.api_key:
+        class: DevHelm\Control\Repository\Orm\ApiKeyRepository
+
+    # Task
+    DevHelm\Control\Repository\TaskRepositoryInterface: '@DevHelm\Control\Repository\TaskRepository'
+    DevHelm\Control\Repository\TaskRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.task'
+    DevHelm\Control.repository.orm.task:
+        class: DevHelm\Control\Repository\Orm\TaskRepository
+
+    # Feedback
+    DevHelm\Control\Repository\FeedbackRepositoryInterface: '@DevHelm\Control\Repository\FeedbackRepository'
+    DevHelm\Control\Repository\FeedbackRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.feedback'
+    DevHelm\Control.repository.orm.feedback:
+        class: DevHelm\Control\Repository\Orm\FeedbackRepository
+
+    # Question
+    DevHelm\Control\Repository\QuestionRepositoryInterface: '@DevHelm\Control\Repository\QuestionRepository'
+    DevHelm\Control\Repository\QuestionRepository:
+        arguments:
+            $entityRepository: '@DevHelm\Control.repository.orm.question'
+    DevHelm\Control.repository.orm.question:
+        class: DevHelm\Control\Repository\Orm\QuestionRepository
+
+
+    Redis:
+        class: Redis
+        calls:
+            - connect: ['%env(REDIS_HOST)%']
+
+    # Jira Integration Services
+    jira.configuration:
+        class: JiraCloud\Configuration\ArrayConfiguration
+        arguments:
+            - jiraHost: '%env(JIRA_HOST)%'
+              jiraUser: '%env(JIRA_USERNAME)%'
+              personalAccessToken: '%env(JIRA_PERSONAL_ACCESS_TOKEN)%'
+              jiraLogEnabled: false
+
+    JiraCloud\JiraClient:
+        arguments:
+            $configuration: '@jira.configuration'
+
+    DevHelm\Control\Service\JiraTicketProvider:
+        arguments:
+            $jiraClient: '@JiraCloud\JiraClient'
+            $targetStatus: '%env(JIRA_TARGET_STATUS)%'
+
+    DevHelm\Control\Interface\TicketProviderInterface: '@DevHelm\Control\Service\JiraTicketProvider'

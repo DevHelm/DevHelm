@@ -1,0 +1,15 @@
+parthenon:
+  user:
+    enabled: true
+    user_class: DevHelm\Control\Entity\User
+    team_class: DevHelm\Control\Entity\Team
+    user_invites_enabled: false
+    teams_enabled: true
+    login_route: "parthenon_user_login"
+    teams_invites_enabled: true
+  notification:
+    enabled: true
+    email:
+      from_name: 'DevHelm'
+      from_address: 'devhelm@devhelm.example.org'
+      provider: symfony

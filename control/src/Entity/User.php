@@ -1,0 +1,35 @@
+<?php
+
+namespace DevHelm\Control\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Parthenon\User\Entity\MemberInterface;
+use Parthenon\User\Entity\TeamInterface;
+
+#[ORM\Entity]
+#[ORM\Table('users')]
+class User extends \Parthenon\User\Entity\User implements MemberInterface
+{
+    #[ORM\ManyToOne(targetEntity: Team::class, inversedBy: 'members')]
+    private Team $team;
+
+    public function getTeam(): Team
+    {
+        return $this->team;
+    }
+
+    public function hasTeam(): bool
+    {
+        return isset($this->team);
+    }
+
+    /**
+     * @param Team $team
+     */
+    public function setTeam(TeamInterface $team): self
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+}

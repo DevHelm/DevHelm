@@ -4,8 +4,8 @@
 
 # Web Ignores
 
-web/vendor
-web/var
+control/vendor
+control/var
 
 ###> symfony/framework-bundle ###
 /web/.env.local
