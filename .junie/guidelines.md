@@ -1,5 +1,5 @@
-ComControl Development Guidelines
-=================================
+DevHelm Development Guidelines
+==============================
 
 This document outlines the development guidelines for the ComControl project. It is intended to ensure consistency, maintainability, and quality across the codebase.
 
@@ -26,3 +26,17 @@ All the information about the MCP server is contained in the `mcp/` directory an
 ## Web Application
 
 All the information about the web application is contained in the `web/` directory and ".junie/web". This includes the web application code, configuration files, and any related documentation. YOU MUST FOLLOW THESE WHEN WORKING ON THE WEB PROJECT.
+
+# Global Coding Standards
+
+## Logging
+
+With logging the aim is to have a consistent implementation for log levels throughout the project. The following guidelines should be followed:
+
+* Use `DEBUG` level for detailed information, typically of interest only when diagnosing problems.
+* Use `INFO` level to confirm that things are working as expected.
+* Use `WARNING` level to indicate that something if it happens a lot it needs fixed.
+* Use `ERROR` level to indicate a problem that needs fixed.
+* Use `CRITICAL` level to indicate something so serious it requires immediate attention.
+
+When handling the difference between `WARNING` and `ERROR`, we should use an error log and then if we see that it happens and we don't need it to be an error, it should become a warning. If it's clear that it's something that will happen and there may be nothing we can do about it, it should be a warning. For example, if a third party service is down, it should be a warning. If we can't process the response from a third party service, it should be an error.
