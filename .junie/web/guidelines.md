@@ -185,6 +185,16 @@ The project uses PHP CS Fixer for code style enforcement:
 docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes
 ```
 
+### PHP Code Standards
+
+* **Use Attributes Over Annotations**: Always prefer PHP 8 attributes over docblock annotations:
+    - ✅ DO: `#[Route('/api/users', name: 'api_users')]`
+    - ❌ DON'T: `@Route("/api/users", name="api_users")`
+    - ✅ DO: `#[Assert\NotBlank]`
+    - ❌ DON'T: `@Assert\NotBlank`
+
+  Attributes are natively supported in PHP 8+, provide better type safety, better IDE support, and are part of the language syntax rather than comments.
+
 ### Testing Guidelines
 
 1. **JavaScript Tests**: Place in `assets/services/__tests__/` with `.test.js` extension
@@ -194,7 +204,6 @@ docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-
 5. **Do Not Test Logic-less Classes**: Do not write tests for entities, DTOs, and other classes that contain no logic. These classes typically only define properties and getters/setters without business logic, making tests redundant and maintenance-heavy. Focus testing efforts on classes that contain actual business logic.
 
 ## Architecture
-
 ### Value Objects and Enums
 
 * Value Objects and Enums are held within the namespace that they belong to within the purposes of the domain. For example, a Money Value Object would be in the App\Entity namespace as it is used by entities. And an enum representing the status of a Subscription would be in the DevHelm\Subscription namespace.
@@ -618,7 +627,32 @@ Available in development mode at `/_profiler` after making requests.
 - `JIRA_*`: JIRA integration settings
 
 ---
+### General Code Practices with Enums
 
+1. **Enum Comparisons in Source Code**: When comparing or asserting enum values in source code (not just tests), always compare against the enum case directly:
+    - ✅ DO: `if ($status === AgentStatus::Enabled) { ... }`
+    - ❌ DON'T: `if ($status->value === 'enabled') { ... }`
+    - ✅ DO: `return $status === AgentStatus::Disabled;`
+    - ❌ DON'T: `return $status->value === 0;`
 
+2. **Using Enums in Match Expressions**: Prefer using match expressions with enum cases:
+    - ✅ DO:
+      ```php
+      $result = match($status) {
+          AgentStatus::Enabled => 'active',
+          AgentStatus::Disabled => 'inactive',
+          default => 'unknown'
+      };
+      ```
+    - ❌ DON'T:
+      ```php
+      $result = match($status->value) {
+          'enabled' => 'active',
+          'disabled' => 'inactive',
+          default => 'unknown'
+      };
+      ```
 
-*Last updated: 2025-08-26*
+Using enum cases directly rather than their values provides type safety, better refactoring support, and clearer code intent. It also prevents issues if the string or numeric representation of an enum changes.
+
+*Last updated: 2025-08-27*
