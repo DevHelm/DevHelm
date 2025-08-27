@@ -69,13 +69,10 @@ class AgentController
                 'exception_message' => $e->getMessage(),
             ]);
 
-            $errorDto = new class(
-                error: 'Internal server error',
-                status_code: Response::HTTP_INTERNAL_SERVER_ERROR
-            ){
+            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
                 public function __construct(
                     public string $error,
-                    public int $status_code
+                    public int $status_code,
                 ) {
                 }
             };

@@ -4,7 +4,6 @@ namespace DevHelm\Control\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Parthenon\Common\Address;
 
 #[ORM\Entity]
 #[ORM\Table('teams')]
@@ -12,7 +11,6 @@ class Team extends \Parthenon\User\Entity\Team
 {
     #[ORM\OneToMany(mappedBy: 'team', targetEntity: User::class)]
     protected Collection $members;
-
 
     public function getMembers(): array
     {

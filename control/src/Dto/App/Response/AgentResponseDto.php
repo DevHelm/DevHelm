@@ -10,6 +10,6 @@ readonly class AgentResponseDto
         public string $project,
         public string $team_id,
         public string $created_at,
-    )
-    {}
+    ) {
+    }
 }
