@@ -101,6 +101,7 @@ class UserContext implements Context
     public function thereWillBeANewUserRegistered()
     {
         if ($this->count >= $this->repository->count([])) {
+            var_dump($this->getJsonContent());
             throw new \Exception('The user count has not increased.');
         }
     }

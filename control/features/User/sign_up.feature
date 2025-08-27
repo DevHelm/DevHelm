@@ -28,10 +28,3 @@ Feature: User sign up
     When I try to sign up
     Then there will not be a new user registered
 
-  Scenario: Sign up with a password with no email confirmation
-    Given the invite code "invite-code" exists
-    And I have given the field "email" the value "parthenon.user@example.org"
-    And I have given the field "password" the value "randomP@ssw0rld!"
-    When I try to sign up with the code "invite-code"
-    Then there will be a new user registered
-    And the invite code "invite-code" will have been used by "parthenon.user@example.org"

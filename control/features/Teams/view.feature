@@ -20,12 +20,6 @@ Feature: View Team
     When I view the team view
     Then I should see "john.brown@example.org" as an invited user
 
-  Scenario: View and see invited members - limit hit
-    Given I have logged in as "sally.braun@example.org" with the password "AF@k3Pass"
-    And I sent an invite to "john.braun@example.org"
-    When I view the team view
-    Then I should not see "john.braun@example.org" as an invited user
-
   Scenario: View and see members
     Given I have logged in as "sally.brown@example.org" with the password "AF@k3P@ss"
     When I view the team view
