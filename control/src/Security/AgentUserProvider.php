@@ -32,10 +32,6 @@ class AgentUserProvider implements UserProviderInterface
 
         $agent = $apiKeyEntity->getAgent();
 
-        if ('enabled' !== $agent->getStatus()->value) {
-            throw new UserNotFoundException('Agent is not enabled');
-        }
-
         return new AgentUser($agent);
     }
 

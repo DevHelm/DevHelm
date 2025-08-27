@@ -185,15 +185,25 @@ The project uses PHP CS Fixer for code style enforcement:
 docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes
 ```
 
+### PHP Code Standards
+
+* **Use Attributes Over Annotations**: Always prefer PHP 8 attributes over docblock annotations:
+    - ✅ DO: `#[Route('/api/users', name: 'api_users')]`
+    - ❌ DON'T: `@Route("/api/users", name="api_users")`
+    - ✅ DO: `#[Assert\NotBlank]`
+    - ❌ DON'T: `@Assert\NotBlank`
+
+  Attributes are natively supported in PHP 8+, provide better type safety, better IDE support, and are part of the language syntax rather than comments.
+
 ### Testing Guidelines
 
 1. **JavaScript Tests**: Place in `assets/services/__tests__/` with `.test.js` extension
 2. **PHP Unit Tests**: Place in `tests/Unit/` with `Test.php` suffix
 3. **Integration Tests**: Use `tests/Integration/` directory
 4. **BDD Tests**: Create `.feature` files in `features/` directory
+5. **Do Not Test Logic-less Classes**: Do not write tests for entities, DTOs, and other classes that contain no logic. These classes typically only define properties and getters/setters without business logic, making tests redundant and maintenance-heavy. Focus testing efforts on classes that contain actual business logic.
 
 ## Architecture
-
 ### Value Objects and Enums
 
 * Value Objects and Enums are held within the namespace that they belong to within the purposes of the domain. For example, a Money Value Object would be in the App\Entity namespace as it is used by entities. And an enum representing the status of a Subscription would be in the DevHelm\Subscription namespace.
@@ -202,6 +212,7 @@ docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-
 
 * The repository pattern that is used throughout this project is documented in repository-pattern.md
 * DOCTRINE MUST NOT BE USED OUTSIDE OF THE `App\Repository` NAMESPACE
+* When querying entities that only need data from a single entity, use the `findOneBy` and `findBy` methods instead of QueryBuilder. QueryBuilder should only be used for complex queries involving multiple tables/entities.
 
 ### DTOs
 
@@ -517,6 +528,40 @@ class MyServiceTest extends TestCase
 }
 ```
 
+### Testing with Enums, DTOs, and Readonly Classes
+
+1. **Enums**: When testing with PHP enums, always use the actual enum cases directly instead of mocking them:
+    - ✅ DO: `$agent->method('getStatus')->willReturn(AgentStatus::Enabled);`
+    - ❌ DON'T:
+      ```php
+      $status = $this->createMock(AgentStatus::class);
+      $status->value = 'enabled';
+      $agent->method('getStatus')->willReturn($status);
+      ```
+
+   When making assertions involving enums, always compare against the enum case directly rather than its string or numeric value:
+    - ✅ DO: `$this->assertEquals(AgentStatus::Enabled, $agent->getStatus());`
+    - ✅ DO: `$this->assertSame(AgentStatus::Enabled, $agent->getStatus());`
+    - ❌ DON'T: `$this->assertEquals('enabled', $agent->getStatus()->value);`
+   - ❌ DON'T: `$this->assertEquals(1, $agent->getStatus()->value);`
+
+2. **DTOs**: When testing with DTOs (Data Transfer Objects), use the actual DTO classes rather than mocks:
+    - ✅ DO: `$dto = new SomeResponseDto('value1', 'value2');`
+    - ❌ DON'T: `$dto = $this->createMock(SomeResponseDto::class);`
+
+3. **Readonly Classes**: Similar to DTOs, readonly classes should be instantiated directly in tests, not mocked:
+    - ✅ DO: `$valueObject = new SomeValueObject('value1', 'value2');`
+    - ❌ DON'T: `$valueObject = $this->createMock(SomeValueObject::class);`
+
+Using real objects instead of mocks for these types provides several benefits:
+- Tests more closely match real application behavior
+- Eliminates subtle bugs caused by incomplete mocking
+- Improves readability and maintainability of test code
+- Reduces test fragility when refactoring these objects
+
+Exception: Only mock these objects when absolutely necessary for specific test isolation requirements, and document the reason in a comment.
+
+
 ### Common PHPUnit Assertions
 - `$this->assertTrue($condition)`
 - `$this->assertEquals($expected, $actual)`
@@ -582,7 +627,32 @@ Available in development mode at `/_profiler` after making requests.
 - `JIRA_*`: JIRA integration settings
 
 ---
+### General Code Practices with Enums
 
+1. **Enum Comparisons in Source Code**: When comparing or asserting enum values in source code (not just tests), always compare against the enum case directly:
+    - ✅ DO: `if ($status === AgentStatus::Enabled) { ... }`
+    - ❌ DON'T: `if ($status->value === 'enabled') { ... }`
+    - ✅ DO: `return $status === AgentStatus::Disabled;`
+    - ❌ DON'T: `return $status->value === 0;`
 
+2. **Using Enums in Match Expressions**: Prefer using match expressions with enum cases:
+    - ✅ DO:
+      ```php
+      $result = match($status) {
+          AgentStatus::Enabled => 'active',
+          AgentStatus::Disabled => 'inactive',
+          default => 'unknown'
+      };
+      ```
+    - ❌ DON'T:
+      ```php
+      $result = match($status->value) {
+          'enabled' => 'active',
+          'disabled' => 'inactive',
+          default => 'unknown'
+      };
+      ```
 
-*Last updated: 2025-08-26*
+Using enum cases directly rather than their values provides type safety, better refactoring support, and clearer code intent. It also prevents issues if the string or numeric representation of an enum changes.
+
+*Last updated: 2025-08-27*

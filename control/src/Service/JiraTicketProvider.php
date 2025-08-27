@@ -6,7 +6,6 @@ use DevHelm\Control\Interface\TicketProviderInterface;
 use DevHelm\Control\ValueObject\Ticket;
 use JiraCloud\Issue\IssueService;
 use JiraCloud\JiraClient;
-use JiraCloud\JQL\JqlQuery;
 use Parthenon\Common\LoggerAwareTrait;
 
 class JiraTicketProvider implements TicketProviderInterface
@@ -22,18 +21,15 @@ class JiraTicketProvider implements TicketProviderInterface
     public function getNext(string $project): ?Ticket
     {
         try {
-            $issueService = new IssueService($this->jiraClient);
+            $issueService = new IssueService($this->jiraClient->getConfiguration());
 
             // Search for the next issue in the project that is not resolved
-            $jql = new JqlQuery();
             $query = sprintf(
                 'project = "%s" AND status != "%s" ORDER BY created ASC',
                 $project,
                 $this->targetStatus
             );
-            $jql->setQuery($query);
-
-            $result = $issueService->search($jql, 0, 1);
+            $result = $issueService->search($query, 0, 1);
 
             if (empty($result->issues)) {
                 return null;

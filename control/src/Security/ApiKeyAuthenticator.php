@@ -2,6 +2,7 @@
 
 namespace DevHelm\Control\Security;
 
+use Parthenon\Common\Exception\NoEntityFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,18 +36,20 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         $apiKey = $request->headers->get(self::API_KEY_HEADER);
 
         if (!$apiKey) {
-            $apiKey = $request->query->get(self::API_KEY_QUERY_PARAM);
-        }
-
-        if (!$apiKey) {
             throw new CustomUserMessageAuthenticationException('API key is missing');
         }
 
-        return new SelfValidatingPassport(
-            new UserBadge($apiKey, function (string $apiKey) {
-                return $this->agentUserProvider->loadUserByApiKey($apiKey);
-            })
-        );
+        try {
+            $passport = new SelfValidatingPassport(
+                new UserBadge($apiKey, function (string $apiKey) {
+                    return $this->agentUserProvider->loadUserByApiKey($apiKey);
+                })
+            );
+        } catch (NoEntityFoundException) {
+            throw new CustomUserMessageAuthenticationException('No API key found');
+        }
+
+        return $passport;
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

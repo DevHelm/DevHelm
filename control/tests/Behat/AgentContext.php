@@ -2,10 +2,10 @@
 
 namespace Test\DevHelm\Control\Behat;
 
-use DevHelm\Control\Repository\AgentRepositoryInterface;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Session;
+use DevHelm\Control\Repository\AgentRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AgentContext implements Context
@@ -13,14 +13,12 @@ class AgentContext implements Context
     use SendRequestTrait;
     use TeamTrait;
 
-
     public function __construct(
         private Session $session,
         private EntityManagerInterface $entityManager,
         private AgentRepositoryInterface $agentRepository,
     ) {
     }
-
 
     /**
      * @When I create an agent:
@@ -34,7 +32,7 @@ class AgentContext implements Context
             '/app/agents',
             [
                 'name' => $data['Name'],
-                'project' => $data['Project']
+                'project' => $data['Project'],
             ]
         );
     }
@@ -73,23 +71,23 @@ class AgentContext implements Context
             throw new \Exception('No validation errors found in response');
         }
     }
-    
+
     /**
      * @Then there will be an API key for the agent called :name
      */
     public function thereWillBeAnApiKeyForTheAgentCalled($name)
     {
         $agent = $this->agentRepository->findByName($name);
-        
+
         if (!$agent) {
             throw new \Exception("Agent with name '$name' was not found");
         }
-        
+
         // Refresh the entity to ensure we have the latest data
         $this->entityManager->refresh($agent);
-        
+
         $apiKeys = $agent->getApiKeys();
-        
+
         if (empty($apiKeys)) {
             throw new \Exception("No API keys found for agent with name '$name'");
         }

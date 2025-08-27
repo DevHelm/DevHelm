@@ -90,3 +90,8 @@ jobs:
       - name: Behat
         run: |
           vendor/bin/behat
+      ## This currently depends in order because Behat sets up db
+      - name: PHPUnit
+        run: |
+          vendor/bin/phpunit
+
