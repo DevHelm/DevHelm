@@ -191,6 +191,7 @@ docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-
 2. **PHP Unit Tests**: Place in `tests/Unit/` with `Test.php` suffix
 3. **Integration Tests**: Use `tests/Integration/` directory
 4. **BDD Tests**: Create `.feature` files in `features/` directory
+5. **Do Not Test Logic-less Classes**: Do not write tests for entities, DTOs, and other classes that contain no logic. These classes typically only define properties and getters/setters without business logic, making tests redundant and maintenance-heavy. Focus testing efforts on classes that contain actual business logic.
 
 ## Architecture
 
@@ -528,6 +529,12 @@ class MyServiceTest extends TestCase
       $status->value = 'enabled';
       $agent->method('getStatus')->willReturn($status);
       ```
+
+   When making assertions involving enums, always compare against the enum case directly rather than its string or numeric value:
+    - ✅ DO: `$this->assertEquals(AgentStatus::Enabled, $agent->getStatus());`
+    - ✅ DO: `$this->assertSame(AgentStatus::Enabled, $agent->getStatus());`
+    - ❌ DON'T: `$this->assertEquals('enabled', $agent->getStatus()->value);`
+   - ❌ DON'T: `$this->assertEquals(1, $agent->getStatus()->value);`
 
 2. **DTOs**: When testing with DTOs (Data Transfer Objects), use the actual DTO classes rather than mocks:
     - ✅ DO: `$dto = new SomeResponseDto('value1', 'value2');`

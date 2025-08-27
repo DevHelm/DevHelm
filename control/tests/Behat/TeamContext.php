@@ -2,10 +2,10 @@
 
 namespace Test\DevHelm\Control\Behat;
 
-use DevHelm\Control\Repository\Orm\TeamInviteCodeRepository;
-use DevHelm\Control\Repository\Orm\TeamRepository;
 use Behat\Behat\Context\Context;
 use Behat\Mink\Session;
+use DevHelm\Control\Repository\Orm\TeamInviteCodeRepository;
+use DevHelm\Control\Repository\Orm\TeamRepository;
 use Parthenon\User\Entity\InviteCode;
 
 class TeamContext implements Context

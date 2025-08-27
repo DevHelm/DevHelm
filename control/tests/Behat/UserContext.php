@@ -2,6 +2,9 @@
 
 namespace Test\DevHelm\Control\Behat;
 
+use Behat\Behat\Context\Context;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Session;
 use DevHelm\Control\Entity\ForgotPasswordCode;
 use DevHelm\Control\Entity\InviteCode;
 use DevHelm\Control\Entity\Team;
@@ -10,9 +13,6 @@ use DevHelm\Control\Repository\Orm\ForgotPasswordCodeRepository;
 use DevHelm\Control\Repository\Orm\InviteCodeRepository;
 use DevHelm\Control\Repository\Orm\TeamRepository;
 use DevHelm\Control\Repository\Orm\UserRepository;
-use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Session;
 use Doctrine\ORM\EntityManagerInterface;
 use Parthenon\Athena\Entity\Link;
 use Parthenon\Athena\Entity\Notification;
@@ -30,7 +30,7 @@ class UserContext implements Context
     private int $count;
 
     private string $passwordHash;
-    
+
     private ?User $currentUser = null;
 
     public function __construct(
@@ -114,7 +114,7 @@ class UserContext implements Context
     public function iLoginAsWithThePassword($username, $password)
     {
         $this->sendJsonRequest('POST', '/app/authenticate', ['username' => $username, 'password' => $password]);
-        
+
         // Store the user for later access
         $this->currentUser = $this->repository->findOneBy(['email' => $username]);
     }
@@ -803,7 +803,7 @@ class UserContext implements Context
     {
         $this->session->visit('/app/user/settings');
     }
-    
+
     /**
      * Returns the currently logged-in user.
      *

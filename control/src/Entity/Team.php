@@ -36,12 +36,7 @@ class Team extends \Parthenon\User\Entity\Team
     {
         return isset($this->externalCustomerReference);
     }
-    
-    public function setCode(string $code): void
-    {
-        $this->code = $code;
-    }
-    
+
     public function __construct()
     {
         parent::__construct();

@@ -3,7 +3,6 @@
 namespace Test\DevHelm\Control\Unit\Security;
 
 use DevHelm\Control\Entity\Agent;
-use DevHelm\Control\Enum\AgentStatus;
 use DevHelm\Control\Security\AgentUser;
 use PHPUnit\Framework\TestCase;
 
@@ -16,11 +15,11 @@ class AgentUserTest extends TestCase
     {
         // Create a mock Agent
         $this->agent = $this->createMock(Agent::class);
-        
+
         // Mock getId method
         $this->agent->method('getId')
             ->willReturn('agent-uuid-123');
-            
+
         // Create the AgentUser with the mocked agent
         $this->agentUser = new AgentUser($this->agent);
     }
@@ -43,7 +42,7 @@ class AgentUserTest extends TestCase
     {
         // This method should not change any state
         $this->agentUser->eraseCredentials();
-        
+
         // We can still get the agent
         $this->assertSame($this->agent, $this->agentUser->getAgent());
     }
