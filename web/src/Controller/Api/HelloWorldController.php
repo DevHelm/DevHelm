@@ -16,8 +16,8 @@ class HelloWorldController extends AbstractController
     {
         $response = [];
 
-        if ($this->security->getUser() instanceof AgentUser) {
-            $user = $this->security->getUser();
+        if ($security->getUser() instanceof AgentUser) {
+            $user = $security->getUser();
             $agent = $user->getAgent();
 
             $response['hello'] = $agent->getName();
