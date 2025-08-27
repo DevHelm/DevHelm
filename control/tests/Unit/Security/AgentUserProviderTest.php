@@ -37,13 +37,8 @@ class AgentUserProviderTest extends TestCase
         // Create mock objects
         $apiKey = $this->createMock(ApiKey::class);
         $agent = $this->createMock(Agent::class);
-        $status = $this->createMock(AgentStatus::class);
-        
-        // Configure mocks
-        $status->value = 'enabled';
-        
         $agent->method('getStatus')
-            ->willReturn($status);
+            ->willReturn(AgentStatus::Enabled);
             
         $apiKey->method('getAgent')
             ->willReturn($agent);
@@ -80,13 +75,8 @@ class AgentUserProviderTest extends TestCase
         // Create mock objects
         $apiKey = $this->createMock(ApiKey::class);
         $agent = $this->createMock(Agent::class);
-        $status = $this->createMock(AgentStatus::class);
-        
-        // Configure mocks
-        $status->value = 'disabled';
-        
         $agent->method('getStatus')
-            ->willReturn($status);
+            ->willReturn(AgentStatus::Disabled);
             
         $apiKey->method('getAgent')
             ->willReturn($agent);
@@ -108,17 +98,9 @@ class AgentUserProviderTest extends TestCase
         // Create mock objects
         $apiKey = $this->createMock(ApiKey::class);
         $agent = $this->createMock(Agent::class);
-        $status = $this->createMock(AgentStatus::class);
-        
-        // Configure mocks
-        $status->value = 'enabled';
-        
         $agent->method('getStatus')
-            ->willReturn($status);
-            
-        $apiKey->method('getAgent')
-            ->willReturn($agent);
-            
+            ->willReturn(AgentStatus::Enabled);
+
         $this->apiKeyRepository->method('findEnabledByKey')
             ->with('valid-api-key')
             ->willReturn($apiKey);

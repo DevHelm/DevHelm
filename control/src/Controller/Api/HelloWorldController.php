@@ -2,8 +2,8 @@
 
 namespace DevHelm\Control\Controller\Api;
 
-use App\Dto\Api\Response\HelloWorldResponseDto;
-use App\Security\AgentUser;
+use DevHelm\Control\Dto\Api\Response\HelloWorldResponseDto;
+use DevHelm\Control\Security\AgentUser;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;

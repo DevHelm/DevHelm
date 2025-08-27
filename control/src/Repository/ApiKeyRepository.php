@@ -6,9 +6,9 @@ use Parthenon\Athena\Repository\DoctrineCrudRepository;
 
 class ApiKeyRepository extends DoctrineCrudRepository implements ApiKeyRepositoryInterface
 {
-    public function findEnabledByKey(string $key): ?\App\Entity\ApiKey
+    public function findEnabledByKey(string $key): ?\DevHelm\Control\Entity\ApiKey
     {
-        $qb = $this->createQueryBuilder('ak');
+        $qb = $this->entityRepository->createQueryBuilder('ak');
 
         $qb->where('ak.key = :key')
            ->andWhere('ak.status = :status')

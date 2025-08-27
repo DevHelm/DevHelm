@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Dto\Api\Response;
+namespace DevHelm\Control\Dto\Api\Response;
 
 readonly class HelloWorldResponseDto
 {

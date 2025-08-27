@@ -133,6 +133,7 @@ class ApiKeyAuthenticationTest extends WebTestCase
         $team = new Team();
         $team->setName('Test Team');
         $team->setCode('TEST');
+        $team->setBillingEmail('test@example.com');
         
         $this->entityManager->persist($team);
         

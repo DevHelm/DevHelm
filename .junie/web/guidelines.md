@@ -202,6 +202,7 @@ docker compose exec php-fpm vendor/bin/php-cs-fixer fix --allow-unsupported-php-
 
 * The repository pattern that is used throughout this project is documented in repository-pattern.md
 * DOCTRINE MUST NOT BE USED OUTSIDE OF THE `App\Repository` NAMESPACE
+* When querying entities that only need data from a single entity, use the `findOneBy` and `findBy` methods instead of QueryBuilder. QueryBuilder should only be used for complex queries involving multiple tables/entities.
 
 ### DTOs
 
@@ -516,6 +517,34 @@ class MyServiceTest extends TestCase
     }
 }
 ```
+
+### Testing with Enums, DTOs, and Readonly Classes
+
+1. **Enums**: When testing with PHP enums, always use the actual enum cases directly instead of mocking them:
+    - ✅ DO: `$agent->method('getStatus')->willReturn(AgentStatus::Enabled);`
+    - ❌ DON'T:
+      ```php
+      $status = $this->createMock(AgentStatus::class);
+      $status->value = 'enabled';
+      $agent->method('getStatus')->willReturn($status);
+      ```
+
+2. **DTOs**: When testing with DTOs (Data Transfer Objects), use the actual DTO classes rather than mocks:
+    - ✅ DO: `$dto = new SomeResponseDto('value1', 'value2');`
+    - ❌ DON'T: `$dto = $this->createMock(SomeResponseDto::class);`
+
+3. **Readonly Classes**: Similar to DTOs, readonly classes should be instantiated directly in tests, not mocked:
+    - ✅ DO: `$valueObject = new SomeValueObject('value1', 'value2');`
+    - ❌ DON'T: `$valueObject = $this->createMock(SomeValueObject::class);`
+
+Using real objects instead of mocks for these types provides several benefits:
+- Tests more closely match real application behavior
+- Eliminates subtle bugs caused by incomplete mocking
+- Improves readability and maintainability of test code
+- Reduces test fragility when refactoring these objects
+
+Exception: Only mock these objects when absolutely necessary for specific test isolation requirements, and document the reason in a comment.
+
 
 ### Common PHPUnit Assertions
 - `$this->assertTrue($condition)`
