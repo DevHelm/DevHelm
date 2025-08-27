@@ -87,10 +87,11 @@ jobs:
         run: |
           vendor/bin/php-cs-fixer fix src --dry-run
 
+      - name: Behat
+        run: |
+          vendor/bin/behat
+      ## This currently depends in order because Behat sets up db
       - name: PHPUnit
         run: |
           vendor/bin/phpunit
 
-      - name: Behat
-        run: |
-          vendor/bin/behat
