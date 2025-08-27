@@ -18,7 +18,7 @@ class HelloWorldController extends AbstractController
     public function helloWorld(
         Security $security,
         SerializerInterface $serializer,
-        LoggerInterface $logger
+        LoggerInterface $logger,
     ): JsonResponse {
         $logger->info('Received request to hello-world endpoint');
 
@@ -35,10 +35,10 @@ class HelloWorldController extends AbstractController
                 'name' => $agentEntity->getName(),
                 'authenticated' => true,
             ];
-            
+
             $logger->info('Authenticated user accessing hello-world endpoint', [
                 'agent_id' => $agentEntity->getId(),
-                'agent_name' => $agentEntity->getName()
+                'agent_name' => $agentEntity->getName(),
             ]);
         } else {
             $logger->info('Unauthenticated access to hello-world endpoint');
