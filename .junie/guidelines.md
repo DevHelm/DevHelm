@@ -35,8 +35,13 @@ With logging the aim is to have a consistent implementation for log levels throu
 
 * Use `DEBUG` level for detailed information, typically of interest only when diagnosing problems.
 * Use `INFO` level to confirm that things are working as expected.
-* Use `WARNING` level to indicate that something if it happens a lot it needs fixed.
-* Use `ERROR` level to indicate a problem that needs fixed.
+* Use `WARNING` level to indicate that something, if it happens a lot it needs fixed.
+* Use `ERROR` level to indicate a problem that needs to be fixed.
 * Use `CRITICAL` level to indicate something so serious it requires immediate attention.
 
-When handling the difference between `WARNING` and `ERROR`, we should use an error log and then if we see that it happens and we don't need it to be an error, it should become a warning. If it's clear that it's something that will happen and there may be nothing we can do about it, it should be a warning. For example, if a third party service is down, it should be a warning. If we can't process the response from a third party service, it should be an error.
+When handling the difference between WARNING and ERROR, we should use an error log and then if we see that it happens and we don't need it to be an error, it should become a warning. It's easier to downgrade a log level than to notice one that needs to be upgraded. If it's clear when it happens, it doesn't require any work from us, it should be a warning. For example, if a third party service is down, it should be a warning. If we can't process the response from a third party service, it should be an error.
+
+
+
+
+
