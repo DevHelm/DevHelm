@@ -56,7 +56,7 @@ class AgentController
 
             $team = $user->getTeam();
 
-            $agent = $agentFactory->createFromDto($dto, $team);
+            $agent = $agentFactory->createEntity($dto, $team);
             $agentRepository->save($agent);
             $apiKeyGenerator->generateForAgent($agent);
 
