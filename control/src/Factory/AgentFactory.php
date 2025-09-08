@@ -11,7 +11,7 @@ use DevHelm\Control\Enum\AgentStatus;
 
 class AgentFactory
 {
-    public function createFromDto(CreateAgentDto $dto, Team $team): Agent
+    public function createEntity(CreateAgentDto $dto, Team $team): Agent
     {
         $agent = new Agent();
         $agent->setName($dto->name);
@@ -22,6 +22,14 @@ class AgentFactory
         $agent->setUpdatedAt(new \DateTimeImmutable());
 
         return $agent;
+    }
+
+    public function createAppDto(array $data): CreateAgentDto
+    {
+        return new CreateAgentDto(
+            $data['name'] ?? '',
+            $data['project'] ?? ''
+        );
     }
 
     public function createAgentResponseDto(Agent $agent): AgentResponseDto
