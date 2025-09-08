@@ -14,7 +14,7 @@ Basic Flow for a feature is as follows:
 * Make changes to the code.
 * Stage the changes with `git add .` or `git add <specific files>`.
 * Commit the changes with a descriptive message using `git commit -m "Your message here"
-* Push the changes to the remote repository with `git push origin <branch-name>` using the ssh key located at `~/agent`.
+* Push the changes to the remote repository with `git push origin <branch-name>`
 * Create a pull request (PR) to merge your changes into the main branch if one doesn't exist
 
 # Git Commit Requirements
@@ -24,8 +24,6 @@ When committing changes, ensure that:
 * YOU MUST If there are PHP changes, run `vendor/bin/php-cs-fixer fix --allow-unsupported-php-version=yes` to ensure the code style is correct
 * The commit message MUST start with a prefix for the JIRA ticket if there is one if not DH-NIL
 * The commit message is clear and descriptive.
-* That you're committing using the gpg key that is located at ~/agent.signing
-* That you're committing using the name and email located in ~/agent_info.txt
 
 # Pull Requests
 
@@ -38,7 +36,7 @@ You only create pull requests for new tasks. When handling code review for exist
 * Make any necessary changes or additions to the code.
 * Stage the changes with `git add .` or `git add <specific files>`.
 * Commit the changes with a descriptive message using `git commit -m "Your message here"
-* Push the changes to the remote repository with `git push origin <branch-name>` using the ssh key located at `~/agent`.
+* Push the changes to the remote repository with `git push origin <branch-name>`
 * The existing pull request will automatically update with the new commits
 * You will check the status of the build with a 1 minute pause inbetween checks and address any issues that arise
 
