@@ -4,6 +4,7 @@ namespace DevHelm\Control\Controller\App;
 
 use DevHelm\Control\Dto\App\Request\CreateAgentDto;
 use DevHelm\Control\Dto\App\Request\UpdateAgentDto;
+use DevHelm\Control\Dto\Response\ErrorResponseDto;
 use DevHelm\Control\Entity\Team;
 use DevHelm\Control\Entity\User;
 use DevHelm\Control\Factory\AgentFactory;
@@ -70,13 +71,7 @@ class AgentController
                 'exception_message' => $e->getMessage(),
             ]);
 
-            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
-                public function __construct(
-                    public string $error,
-                    public int $status_code,
-                ) {
-                }
-            };
+            $errorDto = new ErrorResponseDto('Internal server error', Response::HTTP_INTERNAL_SERVER_ERROR);
 
             return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
         }
@@ -118,13 +113,7 @@ class AgentController
                 'exception_message' => $e->getMessage(),
             ]);
 
-            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
-                public function __construct(
-                    public string $error,
-                    public int $status_code,
-                ) {
-                }
-            };
+            $errorDto = new ErrorResponseDto('Internal server error', Response::HTTP_INTERNAL_SERVER_ERROR);
 
             return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
         }
@@ -158,13 +147,7 @@ class AgentController
                 'agent_id' => $id,
             ]);
 
-            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
-                public function __construct(
-                    public string $error,
-                    public int $status_code,
-                ) {
-                }
-            };
+            $errorDto = new ErrorResponseDto('Internal server error', Response::HTTP_INTERNAL_SERVER_ERROR);
 
             return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
         }
@@ -222,13 +205,7 @@ class AgentController
                 'agent_id' => $id,
             ]);
 
-            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
-                public function __construct(
-                    public string $error,
-                    public int $status_code,
-                ) {
-                }
-            };
+            $errorDto = new ErrorResponseDto('Internal server error', Response::HTTP_INTERNAL_SERVER_ERROR);
 
             return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
         }
