@@ -137,6 +137,7 @@ class AgentSingleController
 
     #[Route('', name: 'app_agent_single_list', methods: ['GET'])]
     public function listSingle(
+        Request $request,
         AgentRepositoryInterface $agentRepository,
         AgentFactory $agentFactory,
         SerializerInterface $serializer,
@@ -147,16 +148,43 @@ class AgentSingleController
         try {
             $team = $user->getTeam();
 
-            $agents = $agentRepository->findByTeam($team);
+            $lastKey = $request->get('last_key');
+            $firstKey = $request->get('first_key');
+            $resultsPerPage = (int) $request->get('limit', 10);
+
+            if ($resultsPerPage < 1) {
+                return new JsonResponse([
+                    'reason' => 'limit is below 1',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            if ($resultsPerPage > 100) {
+                return new JsonResponse([
+                    'reason' => 'limit is above 100',
+                ], Response::HTTP_REQUEST_ENTITY_TOO_LARGE);
+            }
+
+            $filters = [
+                'team' => $team->getId(),
+            ];
+
+            $resultSet = $agentRepository->getList(
+                filters: $filters,
+                limit: $resultsPerPage,
+                lastId: $lastKey,
+                firstId: $firstKey,
+                sortKey: 'id',
+                sortType: 'DESC',
+            );
 
             $agentDtos = array_map(function ($agent) use ($agentFactory) {
                 return $agentFactory->createAgentResponseDto($agent);
-            }, $agents);
+            }, $resultSet->getResults());
 
             $responseDto = $agentFactory->createAgentListResponseDto(
                 agentResponseDtos: $agentDtos,
-                hasMore: false,
-                lastKey: !empty($agentDtos) ? end($agentDtos)->id : null
+                hasMore: $resultSet->hasMore(),
+                lastKey: $resultSet->getLastKey()
             );
 
             return new JsonResponse($serializer->serialize($responseDto, 'json'), Response::HTTP_OK, [], true);

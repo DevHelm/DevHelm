@@ -317,20 +317,20 @@ Structure:
 
 **List:**
 
-The list should be the generic ListResponse. 
+All CRUD list pages MUST follow this pattern using the CrudRepositoryInterface getList method with proper pagination and filtering:
 
 ```php
     #[Route('/app/price', name: 'app_price_list', methods: ['GET'])]
     public function listPrices(
         Request $request,
-        ProductRepositoryInterface $productRepository,
         PriceRepositoryInterface $priceRepository,
         SerializerInterface $serializer,
         PriceDataMapper $priceFactory,
     ): Response {
-        $this->getLogger()->info('Received request to lsit prices');
+        $this->getLogger()->info('Received request to list prices');
 
         $lastKey = $request->get('last_key');
+        $firstKey = $request->get('first_key');
         $resultsPerPage = (int) $request->get('limit', 10);
 
         if ($resultsPerPage < 1) {
@@ -344,13 +344,19 @@ The list should be the generic ListResponse.
                 'reason' => 'limit is above 100',
             ], JsonResponse::HTTP_REQUEST_ENTITY_TOO_LARGE);
         }
-        // TODO add filters
-        $filters = [];
+
+        // Add filters based on business logic (e.g., team filtering, user access, etc.)
+        $filters = [
+            // Example: 'team' => $user->getTeam()->getId(),
+        ];
 
         $resultSet = $priceRepository->getList(
             filters: $filters,
             limit: $resultsPerPage,
             lastId: $lastKey,
+            firstId: $firstKey,
+            sortKey: 'id', // or relevant sorting field
+            sortType: 'DESC',
         );
 
         $dtos = array_map([$priceFactory, 'createAppDto'], $resultSet->getResults());
@@ -365,6 +371,13 @@ The list should be the generic ListResponse.
         return new JsonResponse($json, json: true);
     }
 ```
+
+**Key Requirements for CRUD List Pattern:**
+- MUST use CrudRepositoryInterface getList method with all parameters
+- MUST include pagination validation (limit 1-100)
+- MUST include proper filtering based on user context
+- MUST use firstId, lastId, sortKey, and sortType parameters
+- MUST return proper ListResponse with hasMore and lastKey
 
 **Update:**
 
