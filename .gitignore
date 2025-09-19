@@ -8,42 +8,44 @@ control/vendor
 control/var
 
 ###> symfony/framework-bundle ###
-/web/.env.local
-/web/.env.local.php
-/web/.env.*.local
-/web/config/secrets/prod/prod.decrypt.private.php
-/web/public/bundles/
-/web/var/
-/web/vendor/
+/control/.env.local
+/control/.env.local.php
+/control/.env.*.local
+/control/config/secrets/prod/prod.decrypt.private.php
+/control/public/bundles/
+/control/var/
+/control/vendor/
 ###< symfony/framework-bundle ###
 
 # dev
 
-/web/docker/nginx/logs/
-/web/docker/database/data/
+/control/docker/nginx/logs/
+/control/docker/database/data/
 ###> symfony/webpack-encore-bundle ###
-/web/node_modules/
-/web/public/build/
-/web/npm-debug.log
-/web/yarn-error.log
+/control/node_modules/
+/control/public/build/
+/control/npm-debug.log
+/control/yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
 ###> friends-of-behat/symfony-extension ###
-/web/behat.yml
+/control/behat.yml
 ###< friends-of-behat/symfony-extension ###
 
 ###> friendsofphp/php-cs-fixer ###
-/web/.php-cs-fixer.php
-/web/.php-cs-fixer.cache
+/control/.php-cs-fixer.php
+/control/.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
 
-/web/composer.lock
-/web/yarn.lock
-/web/symfony.lock
+/control/composer.lock
+/control/yarn.lock
+/control/symfony.lock
 ###> phpunit/phpunit ###
-/web/phpunit.xml
-/web/.phpunit.cache/
+/control/phpunit.xml
+/control/.phpunit.cache/
 ###< phpunit/phpunit ###
+
+/control/docker-compose.override.yml
 
 # Go (mcp) Ignores
 # Build artifacts and binaries
