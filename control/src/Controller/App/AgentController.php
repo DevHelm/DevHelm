@@ -3,6 +3,7 @@
 namespace DevHelm\Control\Controller\App;
 
 use DevHelm\Control\Dto\App\Request\CreateAgentDto;
+use DevHelm\Control\Dto\App\Request\UpdateAgentDto;
 use DevHelm\Control\Entity\Team;
 use DevHelm\Control\Entity\User;
 use DevHelm\Control\Factory\AgentFactory;
@@ -179,6 +180,110 @@ class AgentController
         } catch (\Exception $e) {
             $this->getLogger()->error('Error retrieving agent list', [
                 'exception_message' => $e->getMessage(),
+            ]);
+
+            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
+                public function __construct(
+                    public string $error,
+                    public int $status_code,
+                ) {
+                }
+            };
+
+            return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
+        }
+    }
+
+    #[Route('/app/agent/{id}/edit', name: 'app_agent_edit_get', methods: ['GET'])]
+    public function getEditData(
+        string $id,
+        AgentRepositoryInterface $agentRepository,
+        AgentFactory $agentFactory,
+        SerializerInterface $serializer,
+        #[CurrentUser]
+        User $user,
+    ): JsonResponse {
+        $this->getLogger()->info('Agent edit data request received', ['agent_id' => $id]);
+        try {
+            $team = $user->getTeam();
+            $agent = $agentRepository->getById($id);
+
+            if (!$agent || $agent->getTeam() !== $team) {
+                return new JsonResponse(['error' => 'Agent not found'], Response::HTTP_NOT_FOUND);
+            }
+
+            $agentResponseDto = $agentFactory->createAgentResponseDto($agent);
+            $responseData = $serializer->serialize($agentResponseDto, 'json');
+
+            return new JsonResponse($responseData, Response::HTTP_OK, [], true);
+        } catch (\Exception $e) {
+            $this->getLogger()->error('Error retrieving agent edit data', [
+                'exception_message' => $e->getMessage(),
+                'agent_id' => $id,
+            ]);
+
+            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
+                public function __construct(
+                    public string $error,
+                    public int $status_code,
+                ) {
+                }
+            };
+
+            return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
+        }
+    }
+
+    #[Route('/app/agent/{id}/edit', name: 'app_agent_edit_post', methods: ['POST'])]
+    public function editAgent(
+        string $id,
+        Request $request,
+        AgentRepositoryInterface $agentRepository,
+        AgentFactory $agentFactory,
+        SerializerInterface $serializer,
+        ValidatorInterface $validator,
+        #[CurrentUser]
+        User $user,
+    ): JsonResponse {
+        $this->getLogger()->info('Agent edit request received', ['agent_id' => $id]);
+        try {
+            $team = $user->getTeam();
+            $agent = $agentRepository->getById($id);
+
+            if (!$agent || $agent->getTeam() !== $team) {
+                return new JsonResponse(['error' => 'Agent not found'], Response::HTTP_NOT_FOUND);
+            }
+
+            $dto = $serializer->deserialize(
+                $request->getContent(),
+                UpdateAgentDto::class,
+                'json'
+            );
+
+            $violations = $validator->validate($dto);
+            if (count($violations) > 0) {
+                $errors = [];
+                foreach ($violations as $violation) {
+                    $errors[$violation->getPropertyPath()] = $violation->getMessage();
+                }
+
+                return new JsonResponse(['errors' => $errors], Response::HTTP_BAD_REQUEST);
+            }
+
+            $agent->setName($dto->name);
+            $agent->setProject($dto->project);
+            $agent->setUpdatedAt(new \DateTimeImmutable());
+
+            $agentRepository->save($agent);
+
+            $agentResponseDto = $agentFactory->createAgentResponseDto($agent);
+            $responseData = $serializer->serialize($agentResponseDto, 'json');
+
+            return new JsonResponse($responseData, Response::HTTP_OK, [], true);
+        } catch (\Exception $e) {
+            $this->getLogger()->error('Error updating agent', [
+                'exception_message' => $e->getMessage(),
+                'agent_id' => $id,
             ]);
 
             $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {

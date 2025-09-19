@@ -3,6 +3,7 @@
 namespace DevHelm\Control\Factory;
 
 use DevHelm\Control\Dto\App\Request\CreateAgentDto;
+use DevHelm\Control\Dto\App\Request\UpdateAgentDto;
 use DevHelm\Control\Dto\App\Response\AgentListResponseDto;
 use DevHelm\Control\Dto\App\Response\AgentResponseDto;
 use DevHelm\Control\Entity\Agent;
@@ -27,6 +28,14 @@ class AgentFactory
     public function createAppDto(array $data): CreateAgentDto
     {
         return new CreateAgentDto(
+            $data['name'] ?? '',
+            $data['project'] ?? ''
+        );
+    }
+
+    public function createUpdateAppDto(array $data): UpdateAgentDto
+    {
+        return new UpdateAgentDto(
             $data['name'] ?? '',
             $data['project'] ?? ''
         );

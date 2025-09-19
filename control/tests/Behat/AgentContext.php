@@ -151,4 +151,28 @@ class AgentContext implements Context
             throw new \Exception("Agent with name '$name' was not found in the list");
         }
     }
+
+    /**
+     * @When I update the agent info via the APP for :originalName:
+     */
+    public function iUpdateTheAgentInfoViaTheAppFor($originalName, TableNode $table)
+    {
+        $data = $table->getRowsHash();
+
+        // First find the agent by name to get its ID
+        $agent = $this->agentRepository->findByName($originalName);
+        if (!$agent) {
+            throw new \Exception("Agent with name '$originalName' was not found");
+        }
+
+        // Send API request to update the agent
+        $this->sendJsonRequest(
+            'POST',
+            '/app/agent/'.$agent->getId().'/edit',
+            [
+                'name' => $data['Name'],
+                'project' => $data['Project'],
+            ]
+        );
+    }
 }
