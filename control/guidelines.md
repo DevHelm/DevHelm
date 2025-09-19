@@ -16,13 +16,21 @@ Namespaces must describe the domain aspect of the code, not just technical imple
 
 **Avoid generic namespaces:**
 - `DevHelm\Control\Interfaces\*` - too generic, doesn't indicate domain
+- `DevHelm\Control\Services\*` - too generic, classes should be grouped by domain
 - `DevHelm\Control\Helpers\*` - too generic, doesn't indicate purpose
 - `DevHelm\Control\Utils\*` - too generic, doesn't indicate domain
 
+**Domain-based grouping rule:**
+All classes should be grouped by their domain aspect, not by technical implementation pattern. For example:
+- `ApiKeyGenerator` belongs in `Security\*` (domain: security/authentication)
+- `JiraProvider` belongs in `Ticket\*` (domain: ticket management)
+- `UserManager` belongs in `User\*` (domain: user management)
+
 **Namespace structure conventions:**
-- Use plural forms for collections: `Services`, `ValueObjects`, `Entities`
+- Use plural forms for collections of value objects: `ValueObjects`, `Entities`
 - Use domain-specific names for interfaces: `Ticket\ProviderInterface` instead of `Interfaces\TicketProviderInterface`
-- Group related functionality together under domain namespaces
+- Group all functionality by domain first, then by type if needed within the domain
+- Avoid technical implementation namespaces like `Services`, `Managers`, `Handlers`
 
 ### Factory Guidelines
 
