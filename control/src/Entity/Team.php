@@ -24,17 +24,7 @@ class Team extends \Parthenon\User\Entity\Team
 
     public function getDisplayName(): string
     {
-        return $this->getBillingEmail();
-    }
-
-    public function hasBillingAddress(): bool
-    {
-        return isset($this->billingAddress);
-    }
-
-    public function hasExternalCustomerReference(): bool
-    {
-        return isset($this->externalCustomerReference);
+        return $this->getName() ?? 'Team';
     }
 
     public function __construct()

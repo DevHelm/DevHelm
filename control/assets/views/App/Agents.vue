@@ -189,8 +189,8 @@ export default {
     async loadAgents() {
       this.isLoading = true;
       try {
-        const response = await axios.get('/app/agents');
-        this.agents = response.data;
+        const response = await axios.get('/app/agent');
+        this.agents = response.data.data;
       } catch (error) {
         console.error('Error loading agents:', error);
       } finally {

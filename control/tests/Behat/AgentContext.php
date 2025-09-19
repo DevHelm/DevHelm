@@ -5,7 +5,9 @@ namespace Test\DevHelm\Control\Behat;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Session;
+use DevHelm\Control\Entity\Agent;
 use DevHelm\Control\Repository\AgentRepositoryInterface;
+use DevHelm\Control\Repository\Orm\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AgentContext implements Context
@@ -17,6 +19,7 @@ class AgentContext implements Context
         private Session $session,
         private EntityManagerInterface $entityManager,
         private AgentRepositoryInterface $agentRepository,
+        private TeamRepository $teamRepository,
     ) {
     }
 

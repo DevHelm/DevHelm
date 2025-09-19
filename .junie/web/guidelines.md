@@ -235,7 +235,7 @@ Structure:
 
 ### Controllers
 
-* Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action. 
+* Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action.
 * Controllers *MUST NOT* use doctrine EntityManager directly and MUST use a repository interface. Dependencies should be injected into the action and not the constructor.
 * Controllers are to use the Symfony Serializer component to deserialize request bodies into DTOs and serialize response DTOs into JSON.
 * Controllers are to use the Symfony Validator component to validate request DTOs.
@@ -243,6 +243,30 @@ Structure:
 * Controllers should have dependencies injected into the action method rather than the constructor.
 * Controllers MUST log the receipt of requests and key actions taken, including any errors encountered.
 * Controllers MUST not be unit tested but tested via functional tests or Behat.
+
+#### File and Class Organization Requirements
+
+* **Single Class Per File**: PHP files MUST contain only a single class. Multiple classes in one file are not permitted:
+    - ✅ DO: One controller class per file
+    - ❌ DON'T: Multiple controller classes in the same file
+
+* **Controller Action Grouping**: All controller actions for a single entity/domain MUST be grouped into a single controller class:
+    - ✅ DO: All agent-related actions (create, list, update, delete) in `AgentController`
+    - ❌ DON'T: Separate controller classes for different routes of the same entity (e.g., `AgentController` and `AgentSingleController`)
+
+#### Controller-Specific Logging and User Injection Guidelines
+
+* **Logger Usage with LoggerAwareTrait**: When using `LoggerAwareTrait`, do NOT inject `LoggerInterface` into controller actions. Instead, access the logger via `$this->getLogger()`:
+    - ✅ DO: `$this->getLogger()->info('Message');`
+    - ❌ DON'T: Inject `LoggerInterface $logger` and use `$this->setLogger($logger);`
+
+* **User Injection**: Always inject the current user using the `#[CurrentUser]` attribute, not by manually retrieving from request attributes:
+    - ✅ DO: `#[CurrentUser] User $user` in action parameter
+    - ❌ DON'T: `$user = $request->attributes->get('_user');`
+
+* **Team Access**: Do not add unnecessary sanity checks for user team relationships. If the user is authenticated and authorized, assume valid team relationships exist:
+    - ✅ DO: `$team = $user->getTeam();` (direct access)
+    - ❌ DON'T: `if (!$team instanceof Team) { return new JsonResponse(['error' => 'User must belong to a team'], Response::HTTP_FORBIDDEN); }`
 
 **Structure:**
 
@@ -303,20 +327,20 @@ Structure:
 
 **List:**
 
-The list should be the generic ListResponse. 
+All CRUD list pages MUST follow this pattern using the CrudRepositoryInterface getList method with proper pagination and filtering:
 
 ```php
     #[Route('/app/price', name: 'app_price_list', methods: ['GET'])]
     public function listPrices(
         Request $request,
-        ProductRepositoryInterface $productRepository,
         PriceRepositoryInterface $priceRepository,
         SerializerInterface $serializer,
         PriceDataMapper $priceFactory,
     ): Response {
-        $this->getLogger()->info('Received request to lsit prices');
+        $this->getLogger()->info('Received request to list prices');
 
         $lastKey = $request->get('last_key');
+        $firstKey = $request->get('first_key');
         $resultsPerPage = (int) $request->get('limit', 10);
 
         if ($resultsPerPage < 1) {
@@ -330,13 +354,19 @@ The list should be the generic ListResponse.
                 'reason' => 'limit is above 100',
             ], JsonResponse::HTTP_REQUEST_ENTITY_TOO_LARGE);
         }
-        // TODO add filters
-        $filters = [];
+
+        // Add filters based on business logic (e.g., team filtering, user access, etc.)
+        $filters = [
+            // Example: 'team' => $user->getTeam()->getId(),
+        ];
 
         $resultSet = $priceRepository->getList(
             filters: $filters,
             limit: $resultsPerPage,
             lastId: $lastKey,
+            firstId: $firstKey,
+            sortKey: 'id', // or relevant sorting field
+            sortType: 'DESC',
         );
 
         $dtos = array_map([$priceFactory, 'createAppDto'], $resultSet->getResults());
@@ -351,6 +381,13 @@ The list should be the generic ListResponse.
         return new JsonResponse($json, json: true);
     }
 ```
+
+**Key Requirements for CRUD List Pattern:**
+- MUST use CrudRepositoryInterface getList method with all parameters
+- MUST include pagination validation (limit 1-100)
+- MUST include proper filtering based on user context
+- MUST use firstId, lastId, sortKey, and sortType parameters
+- MUST return proper ListResponse with hasMore and lastKey
 
 **Update:**
 
@@ -654,5 +691,49 @@ Available in development mode at `/_profiler` after making requests.
       ```
 
 Using enum cases directly rather than their values provides type safety, better refactoring support, and clearer code intent. It also prevents issues if the string or numeric representation of an enum changes.
+
+This document outlines the development guidelines specific to the control application component of the DevHelm project.
+
+## Code Organization
+
+### Namespace Guidelines
+
+Namespaces must describe the domain aspect of the code, not just technical implementation details. This ensures better organization and maintainability.
+
+**Good examples:**
+- `DevHelm\Control\Ticket\*` - for ticket/task related functionality
+- `DevHelm\Control\Agent\*` - for agent-related functionality
+- `DevHelm\Control\User\*` - for user-related functionality
+- `DevHelm\Control\Security\*` - for security-related functionality
+
+**Avoid generic namespaces:**
+- `DevHelm\Control\Interfaces\*` - too generic, doesn't indicate domain
+- `DevHelm\Control\Services\*` - too generic, classes should be grouped by domain
+- `DevHelm\Control\ValueObjects\*` - too generic, classes should be grouped by domain
+- `DevHelm\Control\Helpers\*` - too generic, doesn't indicate purpose
+- `DevHelm\Control\Utils\*` - too generic, doesn't indicate domain
+
+**Domain-based grouping rule:**
+All classes should be grouped by their domain aspect, not by technical implementation pattern. For example:
+- `ApiKeyGenerator` belongs in `Security\*` (domain: security/authentication)
+- `JiraProvider` belongs in `Ticket\*` (domain: ticket management)
+- `Ticket` value object belongs in `Ticket\*` (domain: ticket management)
+- `UserManager` belongs in `User\*` (domain: user management)
+
+**Namespace structure conventions:**
+- Use domain-specific names for interfaces: `Ticket\ProviderInterface` instead of `Interfaces\TicketProviderInterface`
+- Group all functionality by domain first, then by type if needed within the domain
+- Avoid ALL technical implementation namespaces like `Services`, `Managers`, `Handlers`, `ValueObjects`, `Entities`
+- Every class, regardless of implementation pattern (service, value object, entity, etc.), should be grouped by its business domain
+
+### Factory Guidelines
+
+Factories should be merged when they serve the same domain concept. For example, `AgentFactory` should handle both entity creation and DTO creation for agents rather than having separate factories.
+
+### Exception Handling
+
+- Symfony interfaces should throw Symfony exceptions
+- DevHelm domain code should throw DevHelm exceptions when appropriate
+- Do not create custom exceptions unless there's a clear domain-specific need
 
 *Last updated: 2025-08-27*
