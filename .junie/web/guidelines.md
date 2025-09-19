@@ -235,7 +235,7 @@ Structure:
 
 ### Controllers
 
-* Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action. 
+* Controllers are organised by endpoint type api, app, and webhook, which is decided based on the route of the controller action.
 * Controllers *MUST NOT* use doctrine EntityManager directly and MUST use a repository interface. Dependencies should be injected into the action and not the constructor.
 * Controllers are to use the Symfony Serializer component to deserialize request bodies into DTOs and serialize response DTOs into JSON.
 * Controllers are to use the Symfony Validator component to validate request DTOs.
@@ -243,6 +243,16 @@ Structure:
 * Controllers should have dependencies injected into the action method rather than the constructor.
 * Controllers MUST log the receipt of requests and key actions taken, including any errors encountered.
 * Controllers MUST not be unit tested but tested via functional tests or Behat.
+
+#### File and Class Organization Requirements
+
+* **Single Class Per File**: PHP files MUST contain only a single class. Multiple classes in one file are not permitted:
+    - ✅ DO: One controller class per file
+    - ❌ DON'T: Multiple controller classes in the same file
+
+* **Controller Action Grouping**: All controller actions for a single entity/domain MUST be grouped into a single controller class:
+    - ✅ DO: All agent-related actions (create, list, update, delete) in `AgentController`
+    - ❌ DON'T: Separate controller classes for different routes of the same entity (e.g., `AgentController` and `AgentSingleController`)
 
 #### Controller-Specific Logging and User Injection Guidelines
 

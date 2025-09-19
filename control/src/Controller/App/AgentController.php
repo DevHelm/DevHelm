@@ -18,12 +18,11 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/app/agents')]
 class AgentController
 {
     use LoggerAwareTrait;
 
-    #[Route('', name: 'app_agent_create', methods: ['POST'])]
+    #[Route('/app/agents', name: 'app_agent_create', methods: ['POST'])]
     public function create(
         Request $request,
         AgentRepositoryInterface $agentRepository,
@@ -81,7 +80,7 @@ class AgentController
         }
     }
 
-    #[Route('', name: 'app_agent_list', methods: ['GET'])]
+    #[Route('/app/agents', name: 'app_agent_list', methods: ['GET'])]
     public function list(
         Request $request,
         AgentRepositoryInterface $agentRepository,
@@ -128,14 +127,8 @@ class AgentController
             return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
         }
     }
-}
 
-#[Route('/app/agent')]
-class AgentSingleController
-{
-    use LoggerAwareTrait;
-
-    #[Route('', name: 'app_agent_single_list', methods: ['GET'])]
+    #[Route('/app/agent', name: 'app_agent_single_list', methods: ['GET'])]
     public function listSingle(
         Request $request,
         AgentRepositoryInterface $agentRepository,
