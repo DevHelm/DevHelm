@@ -1,9 +1,9 @@
 <?php
 
-namespace DevHelm\Control\Service;
+namespace DevHelm\Control\Services;
 
-use DevHelm\Control\Interface\TicketProviderInterface;
-use DevHelm\Control\ValueObject\Ticket;
+use DevHelm\Control\Interfaces\TicketProviderInterface;
+use DevHelm\Control\ValueObjects\Ticket;
 use JiraCloud\Issue\IssueService;
 use JiraCloud\JiraClient;
 use Parthenon\Common\LoggerAwareTrait;

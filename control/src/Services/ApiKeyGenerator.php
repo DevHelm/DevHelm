@@ -1,6 +1,6 @@
 <?php
 
-namespace DevHelm\Control\Service;
+namespace DevHelm\Control\Services;
 
 use DevHelm\Control\Entity\Agent;
 use DevHelm\Control\Entity\ApiKey;
