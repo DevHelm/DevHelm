@@ -2,7 +2,6 @@
 
 namespace DevHelm\Control\Ticket;
 
-
 interface ProviderInterface
 {
     /**
