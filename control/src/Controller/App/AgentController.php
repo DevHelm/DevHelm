@@ -8,8 +8,7 @@ use DevHelm\Control\Entity\User;
 use DevHelm\Control\Factory\AgentFactory;
 use DevHelm\Control\Repository\AgentRepositoryInterface;
 use DevHelm\Control\Security\ApiKeyGenerator;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
+use Parthenon\Common\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,12 +29,10 @@ class AgentController
         SerializerInterface $serializer,
         ValidatorInterface $validator,
         ApiKeyGenerator $apiKeyGenerator,
-        LoggerInterface $logger,
         #[CurrentUser]
         User $user,
     ): JsonResponse {
-        $this->setLogger($logger);
-        $this->logger->info('Agent creation request received');
+        $this->getLogger()->info('Agent creation request received');
         try {
             $dto = $serializer->deserialize(
                 $request->getContent(),
@@ -64,7 +61,7 @@ class AgentController
 
             return new JsonResponse($responseData, Response::HTTP_CREATED, [], true);
         } catch (\Exception $e) {
-            $this->logger->error('Error creating agent', [
+            $this->getLogger()->error('Error creating agent', [
                 'exception_message' => $e->getMessage(),
             ]);
 
@@ -86,10 +83,8 @@ class AgentController
         AgentRepositoryInterface $agentRepository,
         AgentFactory $agentFactory,
         SerializerInterface $serializer,
-        LoggerInterface $logger,
     ): JsonResponse {
-        $this->setLogger($logger);
-        $this->logger->info('Agent list request received');
+        $this->getLogger()->info('Agent list request received');
         try {
             $user = $request->attributes->get('_user');
             $team = $user->getTeam();
