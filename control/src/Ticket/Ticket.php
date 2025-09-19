@@ -1,6 +1,6 @@
 <?php
 
-namespace DevHelm\Control\ValueObjects;
+namespace DevHelm\Control\Ticket;
 
 readonly class Ticket
 {

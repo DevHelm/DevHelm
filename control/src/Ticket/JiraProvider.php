@@ -2,7 +2,6 @@
 
 namespace DevHelm\Control\Ticket;
 
-use DevHelm\Control\ValueObjects\Ticket;
 use JiraCloud\Issue\IssueService;
 use JiraCloud\JiraClient;
 use Parthenon\Common\LoggerAwareTrait;

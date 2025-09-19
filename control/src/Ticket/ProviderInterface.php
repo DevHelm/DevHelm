@@ -2,7 +2,6 @@
 
 namespace DevHelm\Control\Ticket;
 
-use DevHelm\Control\ValueObjects\Ticket;
 
 interface ProviderInterface
 {
