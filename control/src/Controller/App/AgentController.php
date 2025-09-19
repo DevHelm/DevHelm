@@ -7,7 +7,7 @@ use DevHelm\Control\Entity\Team;
 use DevHelm\Control\Entity\User;
 use DevHelm\Control\Factory\AgentFactory;
 use DevHelm\Control\Repository\AgentRepositoryInterface;
-use DevHelm\Control\Service\ApiKeyGenerator;
+use DevHelm\Control\Security\ApiKeyGenerator;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
