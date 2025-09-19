@@ -129,3 +129,57 @@ class AgentController
         }
     }
 }
+
+#[Route('/app/agent')]
+class AgentSingleController
+{
+    use LoggerAwareTrait;
+
+    #[Route('', name: 'app_agent_single_list', methods: ['GET'])]
+    public function listSingle(
+        Request $request,
+        AgentRepositoryInterface $agentRepository,
+        AgentFactory $agentFactory,
+        SerializerInterface $serializer,
+        LoggerInterface $logger,
+    ): JsonResponse {
+        $this->setLogger($logger);
+        $this->logger->info('Agent list request received');
+        try {
+            $user = $request->attributes->get('_user');
+            $team = $user->getTeam();
+
+            if (!$team instanceof Team) {
+                return new JsonResponse(['error' => 'User must belong to a team'], Response::HTTP_FORBIDDEN);
+            }
+
+            $agents = $agentRepository->findByTeam($team);
+
+            $agentDtos = array_map(function ($agent) use ($agentFactory) {
+                return $agentFactory->createAgentResponseDto($agent);
+            }, $agents);
+
+            $responseDto = $agentFactory->createAgentListResponseDto(
+                agentResponseDtos: $agentDtos,
+                hasMore: false,
+                lastKey: !empty($agentDtos) ? end($agentDtos)->id : null
+            );
+
+            return new JsonResponse($serializer->serialize($responseDto, 'json'), Response::HTTP_OK, [], true);
+        } catch (\Exception $e) {
+            $this->logger->error('Error retrieving agent list', [
+                'exception_message' => $e->getMessage(),
+            ]);
+
+            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
+                public function __construct(
+                    public string $error,
+                    public int $status_code,
+                ) {
+                }
+            };
+
+            return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
+        }
+    }
+}
