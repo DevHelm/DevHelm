@@ -92,4 +92,84 @@ class AgentContext implements Context
             throw new \Exception("No API keys found for agent with name '$name'");
         }
     }
+
+    /**
+     * @Given there are the following agents:
+     */
+    public function thereAreTheFollowingAgents(TableNode $table)
+    {
+        foreach ($table->getColumnsHash() as $row) {
+            $agent = new Agent();
+            $agent->setName($row['Name']);
+            $agent->setProject($row['Project']);
+
+            // Get the team (assuming "Example" team exists from background)
+            $team = $this->getTeamByName('Example');
+            $agent->setTeam($team);
+
+            $agent->setCreatedAt(new \DateTimeImmutable());
+            $agent->setUpdatedAt(new \DateTimeImmutable());
+
+            $this->entityManager->persist($agent);
+        }
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @When I view the list of agents
+     */
+    public function iViewTheListOfAgents()
+    {
+        $this->sendJsonRequest('GET', '/app/agent');
+    }
+
+    /**
+     * @Then I should see the agent :name in the list
+     */
+    public function iShouldSeeTheAgentInTheList($name)
+    {
+        $responseData = $this->getJsonContent();
+
+        if (!isset($responseData['data'])) {
+            throw new \Exception('Response does not contain data field');
+        }
+
+        $agents = $responseData['data'];
+        $found = false;
+
+        foreach ($agents as $agent) {
+            if ($agent['name'] === $name) {
+                $found = true;
+                break;
+            }
+        }
+
+        if (!$found) {
+            throw new \Exception("Agent with name '$name' was not found in the list");
+        }
+    }
+
+    /**
+     * @When I update the agent info via the APP for :originalName:
+     */
+    public function iUpdateTheAgentInfoViaTheAppFor($originalName, TableNode $table)
+    {
+        $data = $table->getRowsHash();
+
+        // First find the agent by name to get its ID
+        $agent = $this->agentRepository->findByName($originalName);
+        if (!$agent) {
+            throw new \Exception("Agent with name '$originalName' was not found");
+        }
+
+        // Send API request to update the agent
+        $this->sendJsonRequest(
+            'POST',
+            '/app/agent/'.$agent->getId().'/edit',
+            [
+                'name' => $data['Name'],
+                'project' => $data['Project'],
+            ]
+        );
+    }
 }

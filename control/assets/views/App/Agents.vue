@@ -49,6 +49,47 @@
       </form>
     </div>
 
+    <div v-if="showEditForm" class="form-container">
+      <h2>{{ $t('app.agents.edit.title') }}</h2>
+      <form @submit.prevent="updateAgent">
+        <div class="form-group">
+          <label for="edit-agent-name">{{ $t('app.agents.edit.name') }}</label>
+          <input
+            id="edit-agent-name"
+            v-model="editAgent.name"
+            type="text"
+            class="form-control"
+            :class="{'form-control--error': errors.name}"
+            required
+          />
+          <div v-if="errors.name" class="error-message">{{ errors.name }}</div>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-agent-project">{{ $t('app.agents.edit.project') }}</label>
+          <input
+            id="edit-agent-project"
+            v-model="editAgent.project"
+            type="text"
+            class="form-control"
+            :class="{'form-control--error': errors.project}"
+            maxlength="10"
+            required
+          />
+          <div v-if="errors.project" class="error-message">{{ errors.project }}</div>
+        </div>
+
+        <div class="form-actions">
+          <SubmitButton :in-progress="isUpdating" :loading-text="$t('app.agents.edit.updating')">
+            {{ $t('app.agents.edit.submit') }}
+          </SubmitButton>
+          <button type="button" class="btn--secondary" @click="cancelEdit">
+            {{ $t('app.agents.edit.cancel') }}
+          </button>
+        </div>
+      </form>
+    </div>
+
     <div class="agents-list">
       <h2>{{ $t('app.agents.list.title') }}</h2>
       <div v-if="agents.length === 0" class="empty-state">
@@ -59,6 +100,14 @@
           <div class="agent-card-header">
             <h3>{{ agent.name }}</h3>
             <span class="agent-project">{{ agent.project }}</span>
+          </div>
+          <div class="agent-card-actions">
+            <button
+              class="btn--secondary btn--small"
+              @click="startEditAgent(agent)"
+              :disabled="showEditForm || showCreateForm">
+              <i class="fa-solid fa-edit"></i> Edit
+            </button>
           </div>
           <div class="agent-card-footer">
             <small>{{ $t('app.agents.list.created_at') }}: {{ formatDate(agent.created_at) }}</small>
@@ -77,10 +126,17 @@ export default {
   data() {
     return {
       showCreateForm: false,
+      showEditForm: false,
       isCreating: false,
+      isUpdating: false,
       isLoading: false,
       agents: [],
       newAgent: {
+        name: '',
+        project: ''
+      },
+      editAgent: {
+        id: '',
         name: '',
         project: ''
       },
@@ -139,6 +195,59 @@ export default {
         console.error('Error loading agents:', error);
       } finally {
         this.isLoading = false;
+      }
+    },
+    startEditAgent(agent) {
+      this.showEditForm = true;
+      this.showCreateForm = false;
+      this.editAgent = {
+        id: agent.id,
+        name: agent.name,
+        project: agent.project
+      };
+      this.errors = {};
+    },
+    cancelEdit() {
+      this.showEditForm = false;
+      this.resetEditForm();
+    },
+    resetEditForm() {
+      this.editAgent = {
+        id: '',
+        name: '',
+        project: ''
+      };
+      this.errors = {};
+    },
+    async updateAgent() {
+      this.isUpdating = true;
+      this.errors = {};
+
+      try {
+        const response = await axios.post(`/app/agent/${this.editAgent.id}/edit`, {
+          name: this.editAgent.name,
+          project: this.editAgent.project
+        });
+
+        // Find and update the agent in the list
+        const agentIndex = this.agents.findIndex(a => a.id === this.editAgent.id);
+        if (agentIndex !== -1) {
+          this.$set(this.agents, agentIndex, response.data);
+        }
+
+        this.showEditForm = false;
+        this.resetEditForm();
+        // Show success message (could integrate with notification system)
+      } catch (error) {
+        if (error.response && error.response.data.errors) {
+          this.errors = error.response.data.errors;
+        } else if (error.response && error.response.data.error) {
+          this.errors.general = error.response.data.error;
+        } else {
+          this.errors.general = 'An error occurred while updating the agent';
+        }
+      } finally {
+        this.isUpdating = false;
       }
     },
     formatDate(dateString) {
@@ -219,6 +328,17 @@ export default {
   color: white;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.agent-card-actions {
+  margin: 0.5rem 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn--small {
+  padding: 0.375rem 0.75rem;
   font-size: 0.875rem;
 }
 
