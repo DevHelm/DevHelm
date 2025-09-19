@@ -1,11 +1,11 @@
 <?php
 
-namespace Test\DevHelm\Control\Unit\Service;
+namespace Test\DevHelm\Control\Unit\Security;
 
 use DevHelm\Control\Entity\Agent;
 use DevHelm\Control\Entity\ApiKey;
 use DevHelm\Control\Repository\ApiKeyRepositoryInterface;
-use DevHelm\Control\Service\ApiKeyGenerator;
+use DevHelm\Control\Security\ApiKeyGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

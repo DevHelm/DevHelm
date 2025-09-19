@@ -1,28 +1,28 @@
 <?php
 
-namespace Test\DevHelm\Control\Unit\Service;
+namespace Test\DevHelm\Control\Unit\Ticket;
 
-use DevHelm\Control\Service\JiraTicketProvider;
+use DevHelm\Control\Ticket\JiraProvider;
 use JiraCloud\Issue\IssueService;
 use JiraCloud\JiraClient;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class JiraTicketProviderTest extends TestCase
+class JiraProviderTest extends TestCase
 {
     private MockObject|JiraClient $jiraClient;
     private MockObject|IssueService $issueService;
     private MockObject|LoggerInterface $logger;
-    private JiraTicketProvider $jiraTicketProvider;
+    private JiraProvider $jiraProvider;
 
     protected function setUp(): void
     {
         $this->jiraClient = $this->createMock(JiraClient::class);
         $this->logger = $this->createMock(LoggerInterface::class);
 
-        $this->jiraTicketProvider = new JiraTicketProvider($this->jiraClient, 'Done');
-        $this->jiraTicketProvider->setLogger($this->logger);
+        $this->jiraProvider = new JiraProvider($this->jiraClient, 'Done');
+        $this->jiraProvider->setLogger($this->logger);
 
         // Mock the IssueService constructor behavior
         $this->issueService = $this->createMock(IssueService::class);
@@ -55,7 +55,7 @@ class JiraTicketProviderTest extends TestCase
 
         // Since we can't easily mock the IssueService constructor in the method,
         // we'll create a provider that will trigger the exception path
-        $ticketProvider = new JiraTicketProvider($this->jiraClient, 'Done');
+        $ticketProvider = new JiraProvider($this->jiraClient, 'Done');
         $ticketProvider->setLogger($this->logger);
 
         // This will likely cause an exception due to the mocked JiraClient
@@ -67,14 +67,14 @@ class JiraTicketProviderTest extends TestCase
 
     public function testConstructorSetsDefaultTargetStatus(): void
     {
-        $provider = new JiraTicketProvider($this->jiraClient);
-        $this->assertInstanceOf(JiraTicketProvider::class, $provider);
+        $provider = new JiraProvider($this->jiraClient);
+        $this->assertInstanceOf(JiraProvider::class, $provider);
     }
 
     public function testConstructorSetsCustomTargetStatus(): void
     {
         $customStatus = 'Resolved';
-        $provider = new JiraTicketProvider($this->jiraClient, $customStatus);
-        $this->assertInstanceOf(JiraTicketProvider::class, $provider);
+        $provider = new JiraProvider($this->jiraClient, $customStatus);
+        $this->assertInstanceOf(JiraProvider::class, $provider);
     }
 }
