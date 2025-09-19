@@ -36,7 +36,6 @@ services:
     Parthenon\User\Notification\MessageFactory: '@DevHelm\Control\User\Notification\MessageFactory'
     Parthenon\User\Repository\TeamInviteCodeRepositoryInterface: '@DevHelm\Control\Repository\TeamInviteCodeRepository'
 
-    Parthenon\Billing\Factory\EntityFactoryInterface: '@DevHelm\Control\Billing\EntityFactory'
 
     DevHelm\Control\Repository\UserRepository:
         arguments:
@@ -133,9 +132,9 @@ services:
         arguments:
             $configuration: '@jira.configuration'
 
-    DevHelm\Control\Service\JiraTicketProvider:
+    DevHelm\Control\Ticket\JiraProvider:
         arguments:
             $jiraClient: '@JiraCloud\JiraClient'
             $targetStatus: '%env(JIRA_TARGET_STATUS)%'
 
-    DevHelm\Control\Interface\TicketProviderInterface: '@DevHelm\Control\Service\JiraTicketProvider'
+    DevHelm\Control\Ticket\ProviderInterface: '@DevHelm\Control\Ticket\JiraProvider'

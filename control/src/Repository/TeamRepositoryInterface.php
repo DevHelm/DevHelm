@@ -6,9 +6,6 @@
 
 namespace DevHelm\Control\Repository;
 
-use Parthenon\Billing\Repository\CustomerRepositoryInterface;
-use Parthenon\Payments\Repository\SubscriberRepositoryInterface;
-
-interface TeamRepositoryInterface extends \Parthenon\User\Repository\TeamRepositoryInterface, SubscriberRepositoryInterface, CustomerRepositoryInterface
+interface TeamRepositoryInterface extends \Parthenon\User\Repository\TeamRepositoryInterface
 {
 }
