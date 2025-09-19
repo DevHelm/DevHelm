@@ -13,8 +13,7 @@ services:
       - POSTGRES_DB=${PSQGL_DATABASE_NAME}
       - POSTGRES_USER=${PSQGL_DATABASE_USER}
       - POSTGRES_PASSWORD=${PSQGL_DATABASE_PASSWORD}
-    ports:
-      - "5432:5432"
+
     volumes:
       - db-data:/home/postgres/pgdata/data
       - ./docker/database/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -25,8 +24,6 @@ services:
     image: redis:5-alpine
     networks:
       - devhelm
-    ports:
-      - "6379:6379"
 
   php-fpm:
     image: billabear/ubuntu-php-fpm:8.4
@@ -35,7 +32,7 @@ services:
     environment:
       - APP_ENV=${APP_ENV}
       - APP_SECRET=${APP_SECRET}
-      - DATABASE_URL=pgsql://${PSQGL_DATABASE_USER}:${PSQGL_DATABASE_PASSWORD}@database:5432/${PSQGL_DATABASE_NAME}
+      - DATABASE_URL=pgsql://${PSQGL_DATABASE_USER}:${PSQGL_DATABASE_PASSWORD}@database:5436/${PSQGL_DATABASE_NAME}
     volumes:
       - .:/var/www
     networks:
@@ -50,8 +47,6 @@ services:
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d
     depends_on:
       - php-fpm
-    ports:
-      - "80:80"
     networks:
       - devhelm
 

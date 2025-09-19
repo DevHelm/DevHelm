@@ -8,8 +8,7 @@ use DevHelm\Control\Entity\User;
 use DevHelm\Control\Factory\AgentFactory;
 use DevHelm\Control\Repository\AgentRepositoryInterface;
 use DevHelm\Control\Security\ApiKeyGenerator;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
+use Parthenon\Common\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,12 +17,11 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-#[Route('/app/agents')]
 class AgentController
 {
     use LoggerAwareTrait;
 
-    #[Route('', name: 'app_agent_create', methods: ['POST'])]
+    #[Route('/app/agents', name: 'app_agent_create', methods: ['POST'])]
     public function create(
         Request $request,
         AgentRepositoryInterface $agentRepository,
@@ -31,12 +29,10 @@ class AgentController
         SerializerInterface $serializer,
         ValidatorInterface $validator,
         ApiKeyGenerator $apiKeyGenerator,
-        LoggerInterface $logger,
         #[CurrentUser]
         User $user,
     ): JsonResponse {
-        $this->setLogger($logger);
-        $this->logger->info('Agent creation request received');
+        $this->getLogger()->info('Agent creation request received');
         try {
             $dto = $serializer->deserialize(
                 $request->getContent(),
@@ -65,7 +61,7 @@ class AgentController
 
             return new JsonResponse($responseData, Response::HTTP_CREATED, [], true);
         } catch (\Exception $e) {
-            $this->logger->error('Error creating agent', [
+            $this->getLogger()->error('Error creating agent', [
                 'exception_message' => $e->getMessage(),
             ]);
 
@@ -81,16 +77,14 @@ class AgentController
         }
     }
 
-    #[Route('', name: 'app_agent_list', methods: ['GET'])]
+    #[Route('/app/agents', name: 'app_agent_list', methods: ['GET'])]
     public function list(
         Request $request,
         AgentRepositoryInterface $agentRepository,
         AgentFactory $agentFactory,
         SerializerInterface $serializer,
-        LoggerInterface $logger,
     ): JsonResponse {
-        $this->setLogger($logger);
-        $this->logger->info('Agent list request received');
+        $this->getLogger()->info('Agent list request received');
         try {
             $user = $request->attributes->get('_user');
             $team = $user->getTeam();
@@ -113,7 +107,77 @@ class AgentController
 
             return new JsonResponse($serializer->serialize($responseDto, 'json'), Response::HTTP_OK, [], true);
         } catch (\Exception $e) {
-            $this->logger->error('Error retrieving agent list', [
+            $this->getLogger()->error('Error retrieving agent list', [
+                'exception_message' => $e->getMessage(),
+            ]);
+
+            $errorDto = new class(error: 'Internal server error', status_code: Response::HTTP_INTERNAL_SERVER_ERROR) {
+                public function __construct(
+                    public string $error,
+                    public int $status_code,
+                ) {
+                }
+            };
+
+            return new JsonResponse($serializer->serialize($errorDto, 'json'), Response::HTTP_INTERNAL_SERVER_ERROR, [], true);
+        }
+    }
+
+    #[Route('/app/agent', name: 'app_agent_single_list', methods: ['GET'])]
+    public function listSingle(
+        Request $request,
+        AgentRepositoryInterface $agentRepository,
+        AgentFactory $agentFactory,
+        SerializerInterface $serializer,
+        #[CurrentUser]
+        User $user,
+    ): JsonResponse {
+        $this->getLogger()->info('Agent list request received');
+        try {
+            $team = $user->getTeam();
+
+            $lastKey = $request->get('last_key');
+            $firstKey = $request->get('first_key');
+            $resultsPerPage = (int) $request->get('limit', 10);
+
+            if ($resultsPerPage < 1) {
+                return new JsonResponse([
+                    'reason' => 'limit is below 1',
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            if ($resultsPerPage > 100) {
+                return new JsonResponse([
+                    'reason' => 'limit is above 100',
+                ], Response::HTTP_REQUEST_ENTITY_TOO_LARGE);
+            }
+
+            $filters = [
+                'team' => $team->getId(),
+            ];
+
+            $resultSet = $agentRepository->getList(
+                filters: $filters,
+                limit: $resultsPerPage,
+                lastId: $lastKey,
+                firstId: $firstKey,
+                sortKey: 'id',
+                sortType: 'DESC',
+            );
+
+            $agentDtos = array_map(function ($agent) use ($agentFactory) {
+                return $agentFactory->createAgentResponseDto($agent);
+            }, $resultSet->getResults());
+
+            $responseDto = $agentFactory->createAgentListResponseDto(
+                agentResponseDtos: $agentDtos,
+                hasMore: $resultSet->hasMore(),
+                lastKey: $resultSet->getLastKey()
+            );
+
+            return new JsonResponse($serializer->serialize($responseDto, 'json'), Response::HTTP_OK, [], true);
+        } catch (\Exception $e) {
+            $this->getLogger()->error('Error retrieving agent list', [
                 'exception_message' => $e->getMessage(),
             ]);
 

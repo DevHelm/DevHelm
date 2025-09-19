@@ -5,7 +5,9 @@ namespace Test\DevHelm\Control\Behat;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Session;
+use DevHelm\Control\Entity\Agent;
 use DevHelm\Control\Repository\AgentRepositoryInterface;
+use DevHelm\Control\Repository\Orm\TeamRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class AgentContext implements Context
@@ -17,6 +19,7 @@ class AgentContext implements Context
         private Session $session,
         private EntityManagerInterface $entityManager,
         private AgentRepositoryInterface $agentRepository,
+        private TeamRepository $teamRepository,
     ) {
     }
 
@@ -90,6 +93,62 @@ class AgentContext implements Context
 
         if (empty($apiKeys)) {
             throw new \Exception("No API keys found for agent with name '$name'");
+        }
+    }
+
+    /**
+     * @Given there are the following agents:
+     */
+    public function thereAreTheFollowingAgents(TableNode $table)
+    {
+        foreach ($table->getColumnsHash() as $row) {
+            $agent = new Agent();
+            $agent->setName($row['Name']);
+            $agent->setProject($row['Project']);
+
+            // Get the team (assuming "Example" team exists from background)
+            $team = $this->getTeamByName('Example');
+            $agent->setTeam($team);
+
+            $agent->setCreatedAt(new \DateTimeImmutable());
+            $agent->setUpdatedAt(new \DateTimeImmutable());
+
+            $this->entityManager->persist($agent);
+        }
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @When I view the list of agents
+     */
+    public function iViewTheListOfAgents()
+    {
+        $this->sendJsonRequest('GET', '/app/agent');
+    }
+
+    /**
+     * @Then I should see the agent :name in the list
+     */
+    public function iShouldSeeTheAgentInTheList($name)
+    {
+        $responseData = $this->getJsonContent();
+
+        if (!isset($responseData['data'])) {
+            throw new \Exception('Response does not contain data field');
+        }
+
+        $agents = $responseData['data'];
+        $found = false;
+
+        foreach ($agents as $agent) {
+            if ($agent['name'] === $name) {
+                $found = true;
+                break;
+            }
+        }
+
+        if (!$found) {
+            throw new \Exception("Agent with name '$name' was not found in the list");
         }
     }
 }
