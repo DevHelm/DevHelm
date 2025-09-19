@@ -113,7 +113,7 @@ class AgentController
 
             return new JsonResponse($serializer->serialize($responseDto, 'json'), Response::HTTP_OK, [], true);
         } catch (\Exception $e) {
-            $this->logger->error('Error retrieving agent list', [
+            $this->getLogger()->error('Error retrieving agent list', [
                 'exception_message' => $e->getMessage(),
             ]);
 
@@ -137,21 +137,15 @@ class AgentSingleController
 
     #[Route('', name: 'app_agent_single_list', methods: ['GET'])]
     public function listSingle(
-        Request $request,
         AgentRepositoryInterface $agentRepository,
         AgentFactory $agentFactory,
         SerializerInterface $serializer,
-        LoggerInterface $logger,
+        #[CurrentUser]
+        User $user,
     ): JsonResponse {
-        $this->setLogger($logger);
-        $this->logger->info('Agent list request received');
+        $this->getLogger()->info('Agent list request received');
         try {
-            $user = $request->attributes->get('_user');
             $team = $user->getTeam();
-
-            if (!$team instanceof Team) {
-                return new JsonResponse(['error' => 'User must belong to a team'], Response::HTTP_FORBIDDEN);
-            }
 
             $agents = $agentRepository->findByTeam($team);
 
@@ -167,7 +161,7 @@ class AgentSingleController
 
             return new JsonResponse($serializer->serialize($responseDto, 'json'), Response::HTTP_OK, [], true);
         } catch (\Exception $e) {
-            $this->logger->error('Error retrieving agent list', [
+            $this->getLogger()->error('Error retrieving agent list', [
                 'exception_message' => $e->getMessage(),
             ]);
 

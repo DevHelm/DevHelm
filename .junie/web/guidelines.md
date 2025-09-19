@@ -244,6 +244,20 @@ Structure:
 * Controllers MUST log the receipt of requests and key actions taken, including any errors encountered.
 * Controllers MUST not be unit tested but tested via functional tests or Behat.
 
+#### Controller-Specific Logging and User Injection Guidelines
+
+* **Logger Usage with LoggerAwareTrait**: When using `LoggerAwareTrait`, do NOT inject `LoggerInterface` into controller actions. Instead, access the logger via `$this->getLogger()`:
+    - ✅ DO: `$this->getLogger()->info('Message');`
+    - ❌ DON'T: Inject `LoggerInterface $logger` and use `$this->setLogger($logger);`
+
+* **User Injection**: Always inject the current user using the `#[CurrentUser]` attribute, not by manually retrieving from request attributes:
+    - ✅ DO: `#[CurrentUser] User $user` in action parameter
+    - ❌ DON'T: `$user = $request->attributes->get('_user');`
+
+* **Team Access**: Do not add unnecessary sanity checks for user team relationships. If the user is authenticated and authorized, assume valid team relationships exist:
+    - ✅ DO: `$team = $user->getTeam();` (direct access)
+    - ❌ DON'T: `if (!$team instanceof Team) { return new JsonResponse(['error' => 'User must belong to a team'], Response::HTTP_FORBIDDEN); }`
+
 **Structure:**
 
 |- Api
