@@ -1,10 +1,10 @@
 <?php
 
-namespace DevHelm\Control\Interfaces;
+namespace DevHelm\Control\Ticket;
 
 use DevHelm\Control\ValueObjects\Ticket;
 
-interface TicketProviderInterface
+interface ProviderInterface
 {
     /**
      * Get the next ticket from the provider for a given project.

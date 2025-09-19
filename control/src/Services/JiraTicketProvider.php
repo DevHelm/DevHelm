@@ -2,13 +2,13 @@
 
 namespace DevHelm\Control\Services;
 
-use DevHelm\Control\Interfaces\TicketProviderInterface;
+use DevHelm\Control\Ticket\ProviderInterface;
 use DevHelm\Control\ValueObjects\Ticket;
 use JiraCloud\Issue\IssueService;
 use JiraCloud\JiraClient;
 use Parthenon\Common\LoggerAwareTrait;
 
-class JiraTicketProvider implements TicketProviderInterface
+class JiraTicketProvider implements ProviderInterface
 {
     use LoggerAwareTrait;
 
