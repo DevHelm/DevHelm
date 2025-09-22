@@ -9,6 +9,7 @@ This flow must exist
 
 Basic Flow for a feature is as follows:
 
+* Switch to the main branch `main` then
 * Pull the latest changes from the main branch with `git pull --rebase origin main`.
 * Create a new branch from main for your feature with the name of the branch based on the feature you are working on.
 * Make changes to the code.
